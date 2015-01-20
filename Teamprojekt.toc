@@ -1,0 +1,14 @@
+\select@language {ngerman}
+\select@language {ngerman}
+\contentsline {chapter}{\numberline {1}Einleitung und Problemstellung}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Zielsetzung}{2}{section.1.1}
+\contentsline {section}{\numberline {1.2}\"Ahnliche Apps}{3}{section.1.2}
+\contentsline {chapter}{\numberline {2}Prototyp}{4}{chapter.2}
+\contentsline {chapter}{\numberline {3}Implementierung}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}App}{6}{section.3.1}
+\contentsline {section}{\numberline {3.2}Putzplan}{7}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Umsetzung}{7}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Probleme und L\"osungen}{7}{subsection.3.2.2}
+\contentsline {chapter}{\numberline {4}Zusammenfassung und Ausblick}{8}{chapter.4}
+\contentsline {chapter}{Glossar}{9}{appendix.A}
+\contentsline {chapter}{Erkl\"arung der Kandidaten}{10}{appendix.B}
