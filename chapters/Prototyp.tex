@@ -3,5 +3,115 @@ Um vermeidbare Verzögerungen in der späteren Entwicklung möglichst auszuschließe
 Dazu werden die benötigten Komponenten genauer betrachtet und auf ihre Umsetzbarkeit hin untersucht. 
 Bei einer Android-App, die auf Inhalte aus einer Datenbank zugreift, 
 ist das die Schnittstelle zur Datenbank, beziehungsweise die Netzwerkverbindung.\\
-Um bei dieser kritischen Stelle nicht in bredouille zu kommen, wurde dafür ein Prototyp entwicklt.
+Da eine direkte Verbindung zum Datenbankserver aus dem Android Betriebssystem nicht möglich ist,
+wurde die Authentifizierung des Benutzers als weitere Problemstelle markiert.
+Den die Verwendung von Datenbankbenutzern fällt dadurch weg und muss andersweitig gelöst werden.
+Um bei diesen kritischen Stellen nicht in bredouille zu geraten, wurde dafür ein Prototyp entwicklt.
+
+\section{Implementierung}\label{sect:ImplPrototyp}
+Als eine einfache und schnelle Art der Umsetzung haben wir uns für die PHP-Variante entschieden.
+Dabei werden die Daten von einem PHP-Skript aus der Datenbank gelesen und in eine JSON-Datenformat gebracht.
+Dieses Objekt wird in einem HTTP-Paket an die App übertragen.
+In der App sorgt dann ein JSON-Parser für das Auslesen der Daten, welche anschließend direkt verwertet werden oder
+zunächst in der lokalen SQLite-Datenbank vorgehalten werden. \\
+Alternativ zu dieser Lösung wäre ein RESTful Web Service gewesen. 
+Dieser Lösungsansatz wäre jedoch mit einem größeren programmiertechnischen Aufwand, sowie einer umfangreicheren
+Serverkonfiguration verbunden gewesen. \\
+Da beide Schwerpunkte in einem Prototyp getestet wurden, wird auf eine weitere Trennung verzichtet.
+\pagebreak
+
+\subsection{Datenbankstruktur}\label{subsect:DBStruktPrototyp}
+Begonnen wurde die Umsetzung mit der Definition der Datenbankstruktur sowie deren Umsetzung.
+Dazu wurden zwei einfache Tabellen angelegt. Die Tabelle \verb!tp_test!\ref{sql:tptest} wird für die Schreib- und Lesevorgänge
+verwendet. Um alle nötigen Datentypen testen zu können wurden verschiedene Spalten verwendet. 
+Dadurch konnte auch der spätere Einsatz besser simuliert werden.
+
+\begin{figure} %[hbtp]
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=sql]
+      CREATE TABLE IF NOT EXISTS `test_tp` (
+          `uid` VARCHAR(23) NOT NULL,
+          `msg` TEXT,
+          `nmbr` INT(11) DEFAULT NULL,
+          `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Aufbau der Tabelle tp\_test} 
+  \label{sql:tptest}
+\end{figure}
+
+Um die Benutzerverwaltung für den Prototypen zu simulieren wurden außerdem noch eine Tabelle \verb!users!
+\ref{sql:usersTest} angelegt.
+Darin wurden Informationen zu den Benutzern hinterlegt. Zum Beispiel eine eindeutige ID, sowie Vor- und Nachname.
+Zum Authentifizieren wurde die E-Mailadresse und ein beliebiges Passwort verwendet.
+Um das Passwort nicht im Klartext zu speichern, wurde es zusammen mit einem Salt als Hash-Wert abgelegt.
+
+\begin{figure} %[hbtp]
+  \centering
+    \begin{minipage}{1.0\textwidth} \small
+      \begin{lstlisting}[language=sql]
+        CREATE TABLE IF NOT EXISTS `users` (
+          `uid` int(11) NOT NULL AUTO_INCREMENT,
+          `unique_id` varchar(23) NOT NULL,
+          `firstname` varchar(50) NOT NULL,
+          `lastname` varchar(50) NOT NULL,
+          `username` varchar(20) NOT NULL,
+          `wgId` int(11) NOT NULL,
+          `email` varchar(100) NOT NULL,
+          `encrypted_password` varchar(80) NOT NULL,
+          `salt` varchar(10) NOT NULL,
+          `created_at` datetime DEFAULT NULL,
+          PRIMARY KEY (`uid`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+        \end{lstlisting}
+    \end{minipage}
+  \caption{Aufbau der Tabelle users}
+  \label{sql:usersTest}
+\end{figure}
+
+  %Nachdem die Struktur der Datenbank stand, wurde die \kill
+
+\subsection{PHP-Skripte}\label{subsect:PHPrototyp}
+Der Aufbau der PHP-Schnittstelle ist simpel umgesetzt, da nicht viele Funktionen für den Prototyp benötigt werden.
+Trotzdem wurde auf eine übersichtliche Datei- und Ordnerstruktur, als auch auf einen modularen Aufbau geachtet.
+Wie in Abbildung \ref{dirtree:phpPrototyp} \nameref{dirtree:phpPrototyp} zu sehen, wurden der Aufbau zunächst in zwei Kategorien aufgeteilt.
+Funktionen, die direkt auf der Datenbank ausgeführt werden, sowie das Verbinden und Bereitstellen des Datenbankobjekts
+übernehmen, sind im Ordner \verb!php/include! untergebracht.
+Alle weiteren Funktionen die aus der App heraus erreichbar sein sollen, befinden sich im Hauptordner \verb!php!.
+
+\begin{figure} %[hbtp]
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \dirtree{%
+      .1 php.
+        .2 include.
+          .3 config.php \ldots{} \begin{minipage}[t]{5cm}
+                                Verbindungsparameter für die Datenbank{.}
+                               \end{minipage}.
+          .3 DB\_Connect.php \ldots{}
+                               \begin{minipage}[t]{5cm}
+                                 Funktionen zum Aufbau und dem Bereitstellen der Datenbankverbindung{.}
+                               \end{minipage}.
+          .3 DB\_Functions.php \ldots{} \begin{minipage}[t]{5cm}
+                                  Methoden für Datenbankoperationen; zum Beispiel getTable{.}
+                                \end{minipage}.
+        .2 db.php \ldots{} \begin{minipage}[t]{5cm}
+                                  Verarbeitung des HTTP-Requests, auswerten der Anfrage, sammeln der Daten und
+                                  abschließend Daten verpacken und an Client zurücksenden{.}
+                                \end{minipage}.
+        .2 login.php \ldots{} \begin{minipage}[t]{5cm}
+                                  Authentifizieren des Benutzers{.}
+                                \end{minipage}.
+    }
+  \end{minipage}
+  \caption{Struktur der PHP-Skripte im Dateisystem}
+  \label{dirtree:phpPrototyp}
+\end{figure}
+
+Auf die einzelnen Skripte, sowie die Funktionen der Methoden, wird im Kapitel \ref{section:App} noch
+detailiert eingegangen, da diese nahezu identisch übernommen wurden.
+
+\subsection{Prototyp-App}\label{subsect:PrototypApp}
 
