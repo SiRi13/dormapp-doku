@@ -8,7 +8,7 @@ wurde die Authentifizierung des Benutzers als weitere Problemstelle markiert.
 Den die Verwendung von Datenbankbenutzern fällt dadurch weg und muss andersweitig gelöst werden.
 Um bei diesen kritischen Stellen nicht in bredouille zu geraten, wurde dafür ein Prototyp entwicklt.
 
-\section{Implementierung}\label{sect:ImplPrototyp}
+\section{Prototyp Implementierung}\label{sect:ImplPrototyp}
 Als eine einfache und schnelle Art der Umsetzung haben wir uns für die PHP-Variante entschieden.
 Dabei werden die Daten von einem PHP-Skript aus der Datenbank gelesen und in eine JSON-Datenformat gebracht.
 Dieses Objekt wird in einem HTTP-Paket an die App übertragen.
@@ -20,13 +20,13 @@ Serverkonfiguration verbunden gewesen. \\
 Da beide Schwerpunkte in einem Prototyp getestet wurden, wird auf eine weitere Trennung verzichtet.
 \pagebreak
 
-\subsection{Datenbankstruktur}\label{subsect:DBStruktPrototyp}
+\subsection{Datenbankstruktur}\label{subsect:DBStruktPrototyp} 
 Begonnen wurde die Umsetzung mit der Definition der Datenbankstruktur sowie deren Umsetzung.
 Dazu wurden zwei einfache Tabellen angelegt. Die Tabelle \verb!tp_test!\ref{sql:tptest} wird für die Schreib- und Lesevorgänge
 verwendet. Um alle nötigen Datentypen testen zu können wurden verschiedene Spalten verwendet. 
 Dadurch konnte auch der spätere Einsatz besser simuliert werden.
 
-\begin{figure} %[hbtp]
+\begin{figure} %[hbtp]  
   \centering
   \begin{minipage}{1.0\textwidth} \small
     \begin{lstlisting}[language=sql]
@@ -48,7 +48,7 @@ Darin wurden Informationen zu den Benutzern hinterlegt. Zum Beispiel eine eindeu
 Zum Authentifizieren wurde die E-Mailadresse und ein beliebiges Passwort verwendet.
 Um das Passwort nicht im Klartext zu speichern, wurde es zusammen mit einem Salt als Hash-Wert abgelegt.
 
-\begin{figure} %[hbtp]
+\begin{figure} %[hbtp] 
   \centering
     \begin{minipage}{1.0\textwidth} \small
       \begin{lstlisting}[language=sql]
@@ -73,7 +73,7 @@ Um das Passwort nicht im Klartext zu speichern, wurde es zusammen mit einem Salt
 
   %Nachdem die Struktur der Datenbank stand, wurde die \kill
 
-\subsection{PHP-Skripte}\label{subsect:PHPrototyp}
+\subsection{PHP-Skripte}\label {subsect:PHPrototyp}
 Der Aufbau der PHP-Schnittstelle ist simpel umgesetzt, da nicht viele Funktionen für den Prototyp benötigt werden.
 Trotzdem wurde auf eine übersichtliche Datei- und Ordnerstruktur, als auch auf einen modularen Aufbau geachtet.
 Wie in Abbildung \ref{dirtree:phpPrototyp} \nameref{dirtree:phpPrototyp} zu sehen, wurden der Aufbau zunächst in zwei Kategorien aufgeteilt.
@@ -81,7 +81,7 @@ Funktionen, die direkt auf der Datenbank ausgeführt werden, sowie das Verbinden 
 übernehmen, sind im Ordner \verb!php/include! untergebracht.
 Alle weiteren Funktionen die aus der App heraus erreichbar sein sollen, befinden sich im Hauptordner \verb!php!.
 
-\begin{figure} %[hbtp]
+\begin{figure} %[hbtp] 
   \centering
   \begin{minipage}{1.0\textwidth} \small
     \dirtree{%
@@ -110,8 +110,407 @@ Alle weiteren Funktionen die aus der App heraus erreichbar sein sollen, befinden
   \label{dirtree:phpPrototyp}
 \end{figure}
 
-Auf die einzelnen Skripte, sowie die Funktionen der Methoden, wird im Kapitel \ref{section:App} noch
-detailiert eingegangen, da diese nahezu identisch übernommen wurden.
+Die vollständigen Skripte befinden sich im Anhang und werde hier nur in Auszügen dargestellt. \\
+Der Ablauf zum Aufrufen der einzelnen PHP-Funktionen ist immer derselbe. 
+Dazu wird ein POST-Request an den Server geschickt, der die entsprechende Ressource, in diesem Fall entweder
+\verb!db.php! oder \verb!login.php! anfordert. Als POST-Parameter werden neben den Werten für die Funktion, 
+zum Beispiel E-Mailadresse und Passwort für den Login, noch ein TAG-Parameter angehängt. 
+Der TAG-Parameter ist für den Login-Prozess zum Beispiel leer, zum Ändern des Passworts kann dazu \verb!chgpass!
+eingesetzt werden. Nachdem die zum TAG passende Funktion gefunden wurde, werden die übertragenen Werte ausgelesen und
+entsprechend verarbeitet. \\
+Eine wichtige Funktion der PHP-Skripte ist der Login, beziehungsweise die Authentifizierung des Benutzers. \\*
+Dazu wird die Adresse \verb!http://test.app1.raschel.org/php/db.php! mit den Parametern \verb!TAG=''!,
+\verb!EMAIL=``ritzels@fh-trier.de''! und \verb!PASSWORD=``ritzels''! aufgerufen (Vgl. \ref{php:loginProto}).
+Sind alle Parameter korrekt übertragen worden, wird die Funktion \verb!getUserByEmailAndPassword($email, $password)!,
+die sich im Skript \verb!DB\_Functions.php! befindet, aufgerufen. Zum Authentifizieren wird aus der Datenbank der zur
+E-Mailadresse passende Datensatz geladen, siehe Auszug \ref{php:dbFuncProto}.
+Das in der Datenbank gespeicherte \verb!SALT! wird mit dem übertragenen Passwort an die Funktion
+\verb!checkhashSSHA($salt, $password)! übergeben, welche den Hash aus \verb!SALT! und Passwort bildet und zurückgibt.
+Dieser generierte Hash wird dann mit dem in der Datenbank gespeichertem \verb!encrypted\_password! verglichen. Stimmen
+die beiden Hashs überein, wird der geladene Datensatz an die Login-Funktion zurückgeliefert, ansonsten liefert die
+Funktion \verb!getUserByEmailAndPassword() -> false!.
 
-\subsection{Prototyp-App}\label{subsect:PrototypApp}
+\begin{figure} %[hbtp] 
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=php,escapechar=|]
+<?php
+  /**
+   PHP API for Login, Register, Changepassword,
+   Resetpassword Requests and for Email Notifications.
+ **/
+  [|\ldots{}|]
+  if (isset($tag) && $tag != `') {
+  // Include Database handler
+  require_once 'include/DB_Functions.php';
+  $db = new DB_Functions();
+  // response Array
+  $response = array("tag" => $tag, "success" => 0, "error" => 0);
+  // check for tag type
+  if ($tag == 'login') {
+  // Request type is check Login
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  // check for user
+  $user = $db->getUserByEmailAndPassword($email, $password);
+    if ($user) {
+      // user found
+      // echo json with success = 1
+      $response["success"] = 1;
+      $response["user"]["user_id"] = $user["user_id"];
+      $response["user"]["wg_id"] = $user["wg_id"];
+      $response["user"]["crea"] = $user["crea"];
+
+      echo json_encode($response);
+    } else {
+      // user not found
+      // echo json with error = 1
+      $response["error"] = 1;
+      $response["error_msg"] = $IncorrectEMail;
+      echo json_encode($response);
+    }
+  }
+  else if ($tag == 'chgpass') {
+  [|\ldots{}|]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus login.php}
+  \label{php:loginProto}
+\end{figure}
+
+\begin{figure} %[hbtp] 
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=php]
+    [..]
+    private $db;
+
+	// constructor
+	function __construct() {
+		require_once 'DB_Connect.php';
+		// connecting to database
+		$this->db = new DB_Connect();
+		$this->db->connect();
+	}
+     /**
+     * Verifies user by email and password
+     */
+    public function getUserByEmailAndPassword($email, $password) {
+        $resultSQL = mysql_query("SELECT * FROM user WHERE email = '$email'")
+            or die(mysql_error());
+        // check for result
+        $no_of_rows = mysql_num_rows($resultSQL);
+	
+        if ($no_of_rows > 0) {
+            $result = mysql_fetch_array($resultSQL);
+            $salt = $result['salt'];
+            $encrypted_password = $result['passwort'];
+            $hash = $this->checkhashSSHA($salt, $password);
+            // check for password equality
+            if ($encrypted_password == $hash) {
+                // user authentication details are correct
+                return $result;
+            }
+        }
+        else {
+            // user not found
+            return null;
+        }
+    }
+    [..]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus DB\_Functions.php} 
+  \label{php:dbFuncProto}
+\end{figure}
+
+Im Kapitel \ref{section:App} werden noch weitere Funktionen erläutert, die in diesem Kapitel noch keine Rolle spielen.
+Die Skripte befinden sich in vollem Umfang noch als Anhang an diese Arbeit.
+\pagebreak
+
+  \subsection{Prototyp-App}\label{subsect:PrototypApp}
+Die Implementierung der Prototyp-App wurde in zwei Projekte aufgeteilt. In dem Projekt \verb!DatabaseConnectionLib!
+wurden die Funktionen zum Schreiben und Lesen der MySQL-Datenbank ausgelagert, da diese mit Sicherheit für die spätere
+Implementierung wieder Verwendung finden werden. Das Anzeigen und Manipulieren der Daten wurde im Projekt
+\verb!DBPrototyp! zusammengefasst.
+
+\subsubsection*{DBPrototyp}\label{subsub:DBPrototyp}
+Das Projekt wurde noch in der Entwicklungsumgebung Eclipse erstellt und umfasst deshalb eine etwas tiefere
+Ordnerhirarchie. Da nicht alle für diese Implementierung relevant sind, werden nur die wichtigsten Ordner und Dateien
+näher erläutert. \\
+Der Ordnerbaum \ref{dirtree:dbProto} zeigt die wichtigen Ordner und Dateien, und erläutert kurz deren Funktion.
+
+\begin{figure} %[hbtp] 
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \dirtree{%
+      .1 DBPrototyp.
+        .2 src.
+          .3 de.hst.teamprojekt.dbprototype.
+            .4 LoginActivity.java \ldots{} \begin{minipage}[t]{8cm}
+                                 Java-Klasse mit den Funktionen zum Login{.}
+                               \end{minipage}.
+            .4 MainActivity.java \ldots{} \begin{minipage}[t]{8cm}
+                                 Java-Klasse mit den Funktionen zum Lesen und Schreiben der Daten{.}
+                                \end{minipage}.
+        .2 res.
+          .3 layout. 
+            .4 activity\_login.xml \ldots{} \begin{minipage}[t]{8cm}
+                                  Layout-Datei für die Login-Oberfläche{.}
+                                \end{minipage}.
+            .4 activity\_main.xml \ldots{} \begin{minipage}[t]{8cm}
+                                  Layout-Datei für die Standard-Oberfläche{.}
+                                \end{minipage}.
+          .3 menu \ldots{} \begin{minipage}[t]{8cm}
+                                  Beinhaltet die Menüstruktur der einzelnen Oberflächen{.}
+                                \end{minipage}.
+          .3 values \ldots{} \begin{minipage}[t]{8cm}
+                                 Beinhaltet XML-Dateien, in denen Werte hinterlegt werden können die nicht im Quellcode
+                                 sein sollten{.}
+                                \end{minipage}.
+        .2 AndroidManifest.xml \ldots{} \begin{minipage}[t]{8cm}
+                                  Allgmeine Parameter der App, wie unterstützte API-Version oder benötigte Ressourcen,
+                                  bzw{.} Erlaubnis für die Ressourcen{.}
+                                \end{minipage}.
+    }
+  \end{minipage}
+  \caption{Verzeichnisstruktur des DBPrototyp-Projekts}
+  \label{dirtree:dbProto}
+\end{figure}
+
+\begin{comment}
+\paragraph{Android Manifest}\label{para:ProtoManifest}
+In der \verb!AndroidManifest.xml! werden grundlegende Parameter für die App festgelegt.
+Dabei sind für diesen Prototyp zunächst nur die Elemente \verb!uses-permission!, durch das die verwendeten Ressourcen
+angegeben werden können, sowie \verb!activity!, über das das Betriebssystem erfährt welche Activity als erste gestartet
+wird und welche außerdem noch verwendbar sind. \\
+Die genaue Umsetzung dieser Einstellungen und welche weiteren Elemente verwendet wurden, können aus der angehängten
+AndroidManifest.xml entnommen werden.
+
+\paragraph{Menu und Values}\label{para:ProtoMenuValues}
+Im Ordner \verb!menu! werden die Menüpunkte der einzelnen Aktivitäten deklariert.
+Die Funktion hinter den einzelnen Punkten wird dann in der jeweiligen Aktivity-Klasse implementiert.
+Zum Beispiel wurde für den Login ein Menüpunkt in der \verb!MainAcitivity! angelegt.
+In der \verb!main.xml! wird dafür ein neues Element erstellt mit Attribute für den Namen, die Sortierung oder welche
+Kategorie dieser Menüpunkt angehört (vgl. \ref{xml:mainMenuProto}).
+
+\begin{figure} %[hbtp] 
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=xml,escapechar=|]
+[|\ldots{}|] 
+<item android:id="@+id/action_settings" android:orderInCategory="100"
+  android:title="@string/action_settings" app:showAsAction="never" 
+  android:menuCategory="system"
+  android:actionLayout="@layout/activity_login" />
+[|\ldots{}|]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus menu/main.xml} 
+  \label{xml:mainMenuProto}
+\end{figure}
+
+Um diesen Menüpunkt noch mit einer Funktion zu versehen, muss in der \verb!MainActivity.java! \ref{java:MainActivityProto} das Menü zunächst generiert werden
+(Zeile ~\ref{line:onCreateOptionsMenuProto}). Wird der Eintrag ausgewählt, ruft ein Listener die Methode \verb!onOptionsItemSelected!
+~\ref{line:onOptionsItemSelProto} auf, in welcher dann mittels dem übergebenen \verb!MenuItem!-Objekt die gewünschte
+Operation, in diesem Fall das Starten der \verb!LoginActivity.java!, ausgeführt wird.
+
+\begin{figure} %[hbtp] 
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=java, escapechar=|]
+[|\ldots{}|]
+@Override
+public boolean onCreateOptionsMenu(Menu menu) { |\label{line:onCreateOptionsMenuProto}|
+  // Inflate the menu; this adds items to the action bar if it is present.
+  getMenuInflater().inflate(R.menu.main, menu);
+  return true;  }
+
+@Override
+public boolean onOptionsItemSelected(MenuItem item) { |\label{line:onOptionsItemSelProto}|
+  // Handle action bar item clicks here. The action bar will
+  // automatically handle clicks on the Home/Up button, so long
+  // as you specify a parent activity in AndroidManifest.xml.
+  int id = item.getItemId();
+  if (id == R.id.action_settings) {
+      Intent loginIntent = new Intent(this, LoginActivity.class);
+      loginIntent.putExtra(Constants.EXTRA_EMAIL, creds.getUname());
+      startActivity(loginIntent);
+      return true;  }
+  return super.onOptionsItemSelected(item);  }
+[|\ldots{}|]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus MainActivity.java} 
+  \label{java:MainActivityProto}
+\end{figure}
+
+weiter ausführen?
+
+\paragraph{Oberfläche}\label{para:GUIProto}
+Im Ordner \verb!layout! befinden sich xml-Dateien, die das Layout definieren.
+Beim Start der App wird, wie in der Manifest-Datei angegeben, die MainActivity geladen, in der die Methode
+\verb!onCreate()! ausgeführt wird. 
+\end{comment}
+
+
+
+Für die Funktion des Prototyp und das Umsetzen der definierten Schwerpunkte sind in diesem Projekt die beiden Klassen
+\verb!LoginActivity.java! und \verb!MainActivity.java! von Bedeutung.
+Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \verb!activity_main.xml! geladen
+\ref{pic:MainActivityProto}. \\* Das geschieht in Zeile \ref{line:setContentViewProto} durch
+\verb!setContentView(R.layout.activity_main)! in der \verb!onCreate()! Methode.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.4\textwidth]{images/prototyp/MainActivityEmpty.png}
+  \caption{Start-Oberfläche}
+  \label{pic:MainActivityProto}
+\end{figure}
+
+Ist alles vollständig geladen, kann man sich über das Menü anmelden. Dafür wird in der \verb!onOptionsItemSelected(MenuItem item)! ein
+\verb!startActivity()! aufgerufen, welches die \verb!LoginActivity.java! startet \ref{pic:LoginActivityProto}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.4\textwidth]{images/prototyp/LoginActivity.png}
+  \caption{Login-Oberfläche}
+  \label{pic:LoginActivityProto}
+\end{figure}
+
+Nach der erfolgreichen Authentifizierung wird über den Button \texttt{Synchronisieren} die Funktion
+\verb!synchronizeDbs(View view)! \ref{line:synchDbsProto} aufgerufen.
+Dies generiert ein Objekt der Klasse \verb!SyncRemoteDatabase.java! \ref{java:SyncRemoteDBProto}. Dabei handelt es sich um eine von \verb!AsyncTask!
+abgeleitete Klasse, welche die Testdaten über das PHP-Skript aus der Datenbank abruft und anschließend in die lokale
+\verb!SQLite!-Datenbank schreibt. Diese Klasse wurde jedoch in die \verb!DBConnectionLib! \ref{subsub:DBConLibProto}
+ausgelagert und anschließend an diese Kapitel genauer erläutert. \\
+
+\begin{figure} 
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=java,escapechar=|]
+[|\ldots{}|]
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  setContentView(R.layout.activity_main); |\label{line:setContentViewProto}|
+[|\ldots{}|]
+public void synchronizeDbs(View view) { |\label{line:synchDbsProto}|
+  {|\ldots{}|}
+  SyncRemoteDatabase queryTask = 
+    new SyncRemoteDatabase(MainActivity.this, this.creds);
+  queryTask.execute(Constants.TABLE_TEST);
+}
+[|\ldots{}|]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus der MainActivity.java} 
+  \label{java:MainActivityProto}
+\end{figure}
+
+Wurden die Tabellen erfolgreich synchronisiert, kann über die beiden Felder Testwerte eingegeben werden. Durch einen
+klick auf den Button \texttt{Save to DB} werden die Daten zunächst in der Methode \verb!saveToDb(View view)!~\ref{line:saveToDbProto}
+in \textsl{BasicNameValuePair}-Objekte überführt (Zeile \ref{line:tableNameProto} - \ref{line:testNumberProto}).
+Zum Speichern werden diese Objekte an eine Instanz der Klasse
+\verb!InsertIntoDatabase.java! übergeben. Diese ist, wie die Klasse \verb!SyncRemoteDatabase.java!, eine Subklasse von
+\verb!AsyncTask! und wird ebenfalls im Kapitel \ref{subsub:DBConLibProto} genauer erklärt.
+Zum Anzeigen der lokalen Tabelleninhalte kann der Button \texttt{Load from DB} betätigt werden, wodurch die Funktion
+\verb!loadFromDb(View view)! ausgeführt wird. Dabei werden die Daten zunächst in einem \textsl{Cursor}-Objekt
+bereitgestellt, welches vom \texttt{DatabaseHandler}\ref{java:DBHandlerProto} bereitgestellt wird (vgl. Zeile
+\ref{line:CursorProto}). Die Darstellung wird durch eine \textsl{ListView} übernommen, die im
+Layout der Aktivität hinterlegt und über den Befehl //* \verb!findViewById(R.id.listView1)! in Zeile \ref{line:findListViewProto} 
+referenziert wurde. Um den \textsl{Cursor} in der \textsl{ListView} anzeigen zu können, muss dieser in einem
+\textsl{SimpleCursorAdapter} für die \textsl{ListView} zugänglich gemacht werden. Dazu wird in Zeile
+\ref{line:SiCuAdProto} dem Konstruktor des \textsl{SimpleCursorAdapter} zunächst der aktuelle \textsl{Context}, das
+gewünschte Layout der einzelnen Zeilen (\verb!R.Layout.list_item!) sowie der \textsl{Cursor} \verb!result! übergeben.
+Damit der Adapter weiß, welche Werte er in welche \textsl{TextView} packen soll, werden dem Konstruktor noch \verb!from!
+und \verb!to! übergeben. 
+
+\begin{figure} %[hbtp]  
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=java,escapechar=|]
+[|\ldots{}|]        
+public void saveToDb(View view) { |\label{line:saveToDbProto}|
+  {|\ldots{}|}
+  BasicNameValuePair tablename = 
+    new BasicNameValuePair("table", Constants.TABLE_TEST); |\label{line:tableNameProto}|
+  BasicNameValuePair testText = new BasicNameValuePair("msg", 
+        ((EditText) findViewById(R.id.editTestText)).getText().toString());
+  BasicNameValuePair testNumber = new BasicNameValuePair("nmbr", ((EditText)
+  findViewById(R.id.editTestNmbr)).getText().toString()); |\label{line:testNumberProto}|
+
+  InsertIntoDatabase saveTask = 
+    new InsertIntoDatabase(MainActivity.this, this.creds);
+  saveTask.execute(tablename, testText, testNumber);
+}
+public void loadFromDb(View view) {
+  {|\ldots{}|}
+  Cursor result = db.getTestRow(1); |\label{line:CursorProto}|
+
+  if (result.getCount() > 0) {
+      String[] from = new String[]
+      { Constants.KEY_UID, Constants.KEY_TEST_STRING, 
+        Constants.KEY_TEST_INT, Constants.KEY_CREATED_AT };
+
+      int[] to = new int[]
+      { R.id.uid, R.id.msg, R.id.nmbr, R.id.created_at };
+
+      SimpleCursorAdapter sca = new SimpleCursorAdapter
+        (this, R.layout.list_item, result, from, to, 0); |\label{line:SiCuAdProto}|
+      ListView lv = (ListView) findViewById(R.id.listView1); |\label{line:findListViewProto}|
+      lv.setAdapter(sca);
+      lv.setVisibility(ListView.VISIBLE);
+  {|\ldots{}|}
+}
+public void clearResultListVew(View view) { |\label{line:clearLVProto}|
+  TextView txtView = (TextView) findViewById(R.id.textView2);
+  txtView.setText(R.string.txtNothingLoaded);
+  txtView.setVisibility(TextView.VISIBLE);
+  ListView lv1 = (ListView) findViewById(R.id.listView1);
+  lv1.setAdapter(null);
+  lv1.setVisibility(ListView.INVISIBLE);
+}
+[|\ldots{}|]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus der MainActivity.java} 
+  \label{java:MainActivityProto3}
+\end{figure}
+
+Dabei handelt es sich bei dem Objekt \verb!from! um eine \textsl{String}-Liste mit den Namen der Tabellenspalten. Die
+\textsl{int}-Liste \verb!to! enthält die IDs der \textsl{TextView}s im verwendeten Zeilenlayout. Die Reihenfolge muss
+dabei beachtet werden. Abschließend erhält der Konstruktor noch eine Flag mit der das Verhalten bei Änderung der
+Datengrundlage gesteuert wird. Dieser Adapter wir mittels dem Befehl \verb!.setAdapter(sca)! der \textsl{ListView}
+übergeben. Wodurch nun die Daten auf der Oberfläche sichtbar werden. \\*
+
+Zum Leeren der \textsl{ListView} wird der Button \texttt{Clear View} gedrückt, wodurch mittels der Methode
+\textsl{clearResultListView(View view)} \ref{line:clearLVProto} die \textsl{ListView} vom Adapter getrennt und unsichtbar gemacht wird.
+
+\pagebreak
+\subsubsection*{DBConnectionLib}\label{subsub:DBConLibProto}
+
+\begin{figure} %[hbtp]  
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=java,escapechar=|]
+[|\ldots{}|]        
+[|\ldots{}|]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus der SyncRemoteDatabase.java} 
+  \label{java:SyncRemoteDBProto}
+\end{figure}
+
+\begin{figure} %[hbtp]  
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=java,escapechar=|]
+[|\ldots{}|]        
+[|\ldots{}|]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus der DatabaseHandler.java} 
+  \label{java:DBHandlerProto}
+\end{figure}
 
