@@ -224,7 +224,7 @@ Funktion \verb!getUserByEmailAndPassword() -> false!.
   \label{php:dbFuncProto}
 \end{figure}
 
-Im Kapitel \ref{section:App} werden noch weitere Funktionen erläutert, die in diesem Kapitel noch keine Rolle spielen.
+Im Kapitel ref{sec:App} werden noch weitere Funktionen erläutert, die in diesem Kapitel noch keine Rolle spielen.
 Die Skripte befinden sich in vollem Umfang noch als Anhang an diese Arbeit.
 \pagebreak
 
@@ -488,25 +488,175 @@ Zum Leeren der \textsl{ListView} wird der Button \texttt{Clear View} gedrückt, w
 \textsl{clearResultListView(View view)} \ref{line:clearLVProto} die \textsl{ListView} vom Adapter getrennt und unsichtbar gemacht wird.
 
 \pagebreak
-\subsubsection*{DBConnectionLib}\label{subsub:DBConLibProto}
 
-\begin{figure} %[hbtp]  
+\subsubsection*{DatabaseConnectionLib}\label{subsub:DBConLibProto}
+Das Projekt \verb!DatabaseConnectionLib! wurde, wie bereits erwähnt, zum Auslagern von wiederverwendbaren Modulen erstellt. 
+Aus diesem Grund befinden sich darin keine Layout, Values oder ähnliche Ressourcen die zur Darstellung und Bedienung
+nötig sind. Da die Ordner- und Dateistruktur der Projekte nahezu identisch ist, wird von einer weiteren Aufführung
+dieser Details abgesehen. In diesem Kapitel werden dementsprechend nur die Klassen näher erläutert, die im Kapitel
+\nameref{subsub:DBPrototyp} \ref{subsub:DBPrototyp} schon erwähnt wurden.
+
+\paragraph{Klasse SyncRemoteDatabase.java}\label{para:SyncRemoteDBProto}
+Instanziiert wird diese Klasse in der \verb!MainActivity.saveToDb()! Funktion. Um die Bedienbarkeit der Oberfläche nicht
+zu verhindern oder die App zum Einfrieren zu bringen, was durch eine langanhaltende Operation passieren könnte, wurde
+diese Klasse von der \verb!AsyncTask!-Klasse abgeleitet. Diese ermöglicht eine komfortable Möglichtkeit mit Threads zu
+arbeiten und somit die Operationen vom GUI-Thread auszulagern. Der Vorteil gegenüber dem Ausführen eines einfachen
+\texttt{Runnable}-Objekts in einem gesonderten Thread ist, dass die \verb!AsyncTask!-Klasse ableitbare Methoden besitzt
+mit denen bevor und während der Thread läuft, sowie nach dem Beenden des Threads, Operationen ausgeführt werden können.
+Im Fall der \verb!SyncRemoteDatabase!-Klasse wird vor dem Ausführen des Task, mittels der Methode \textsl{onPreExecute()}, 
+ein \texttt{ProgressDialog} erstellt (vgl. Zeilen \ref{line:onPreExecProto} ff.). 
+Anschließend wird im asynchronen Teil \textsl{doInBackground(String\ldots{} params)}, die Funktion
+\verb!syncRemoteTable(creds, params[0])!\ref{line:syncRemTabProto} aufgerufen und das damit erzeugte \texttt{JSONObject}-Objekt
+an die Methode \textsl{onPostExecute(JSONObject json)}\ref{line:postExecProto} übergeben.
+Da diese Methode, wie die \textsl{onPreExecute}, im GUI-Thread läuft, kann der \texttt{ProgressDialog} mit einer neuen
+Nachricht versehen werden \ref{line:pDialogPostProto} und die erhaltenen Daten aus dem \texttt{JSONObject}-Objekt
+extrahieren (Zeile ~\ref{line:parseJsonProto}). Im selben Schritt werden die Testdaten der Testtabelle als neuen
+Datensatz angefügt (siehe Zeile ~\ref{line:addTestRowProto}). 
+
+\begin{figure} 
   \centering
   \begin{minipage}{1.0\textwidth} \small
     \begin{lstlisting}[language=java,escapechar=|]
 [|\ldots{}|]        
+@Override
+protected void onPreExecute() { |\label{line:onPreExecProto}|
+  super.onPreExecute();
+  pDialog = new ProgressDialog(appContext);
+  pDialog.setTitle("Contacting Servers");
+  pDialog.setMessage("Query database ...");
+  pDialog.setIndeterminate(false);
+  pDialog.setCancelable(true);
+  pDialog.show();
+};
+@Override
+protected JSONObject doInBackground(String... params) { 
+/** {|\ldots{}| **/
+  JSONObject json = userFunction.syncRemoteTable(creds, params[0]); |\label{line:syncRemTabProto}|
+  return json;
+}
+@Override
+protected void onPostExecute(JSONObject json) { |\label{line:postExecProto}|
+/** {|\ldots{}| **/
+  pDialog.setMessage("Loading Test Data"); |\label{line:pDialogPostProto}|
+  pDialog.setTitle("Getting Data");
+  JSONArray json_array = json.getJSONArray("result");
+  /** {|\ldots{}|} **/
+    db.dropSyncTable();
+    for (int i = 0; i < Integer.parseInt(res); i++) { |\label{line:parseJsonProto}|
+      JSONObject json_data = json_array.getJSONObject(i);
+      db.addTestRow(json_data.getInt(Constants.KEY_UID), |\label{line:addTestRowProto} |
+        json_data.getString(Constants.KEY_TEST_STRING),
+        json_data.getInt(Constants.KEY_TEST_INT),
+        json_data.getString(Constants.KEY_CREATED_AT)); 
+    }
 [|\ldots{}|]
     \end{lstlisting}
   \end{minipage}
-  \caption{Auszug aus der SyncRemoteDatabase.java} 
+  \caption{Auszug aus SyncRemoteDatabase.java} 
   \label{java:SyncRemoteDBProto}
 \end{figure}
 
-\begin{figure} %[hbtp]  
+Die angesprochene Funktion \textsl{syncRemoteTable()} befindet sich in der Klasse \verb!UserFunctions.java!
+\ref{java:UsrFuncsProto}. Darin wurden die Methoden zusammgefasst, die vom Benutzer oder mit dem Benutzer
+zusammenhängen. Neben den Methoden \textsl{loginUser({\ldots})} und \textsl{loggedInUser({\ldots})}, enthält sie auch
+die Methode \textsl{syncRemoteTable(AuthCredentials creds, String table)} \ref{line:synRemTableProto}, die zum Abrufen
+der Testdaten aus der MySQL-Datenbank verwendet wird. \\*
+Dazu werden zunächst die \emph{POST}-Parameter in eine Liste aus \texttt{BasicNameValuePair}-Objekten gepackt, wie in
+den Zeilen \ref{line:POSTParaVonProto} bis \ref{line:POSTParaBisProto} zu sehen.
+
+\begin{figure}
   \centering
   \begin{minipage}{1.0\textwidth} \small
     \begin{lstlisting}[language=java,escapechar=|]
 [|\ldots{}|]        
+public JSONObject syncRemoteTable(AuthCredentials creds, String table) { |\label{line:synRemTableProto}|
+  List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>(); |\label{line:POSTParaVonProto}|
+  params.add(new BasicNameValuePair("tag", syncTag));
+  params.add(new BasicNameValuePair("email", creds.getEmail()));
+  params.add(new BasicNameValuePair("password", creds.getPassword()));
+  params.add(new BasicNameValuePair("table", table)); |\label{line:POSTParaBisProto}|
+  JSONObject json = jsonParser.getJSONFromUrl(syncUrl, params);  |\label{line:getJsonFromUrlProto}|
+  return json;
+}
+[|\ldots{}|]
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus UserFunctions.java} 
+  \label{java:UsrFuncsProto}
+\end{figure}
+
+Die so verpackten Parameter werden schließlich an den \verb!JSONParser! \ref{java:JSONParserProto} übergeben.
+Die darin enthaltene Funktion \\* \textsl{getJSONFromUrl(String url, List<BasicNameValuePair> params)} der
+\nameref{line:getJsonFromUrlProto} schickt die erhaltenen Attribute mittels \texttt{DefaultHttpClient()}- und
+\texttt{HttpPost}-Objekt zur angegebenen \emph{url} (Zeile \ref{line:httpConnection} ff).
+Die Serverantwort, die vom Socket über den \texttt{InputStream} erreichbar wird, wird durch einen
+\texttt{BufferedReader} lesbar. Der \texttt{BufferedReader} ist hier besonders geeignet, da dadurch ein zeilenweises
+Lesen ermöglicht wird, was bei \emph{HTTP}-Kommunikationen das Standardverfahren ist (Zeile \ref{line:bufRdrProto} und
+\ref{line:readLineProto}). Jede Zeile wird an einen \textsl{StringBuilder} gehängt und nach dem Lesen der
+letzten Zeile von einem \verb!String! (Zeile \ref{line:sb.toString(Proto)}) in das gewünschte \textsl{JSONObject} umgewandelt.
+
+\begin{figure}
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=java,escapechar=|]
+public JSONObject getJSONFromUrl(String url, 
+    List<BasicNameValuePair> params) {
+[|\ldots{}|]        
+  DefaultHttpClient httpClient = new DefaultHttpClient(); |\label{line:httpConnection}|
+  HttpPost httpPost = new HttpPost(url);
+  httpPost.setEntity(new UrlEncodedFormEntity(params));
+  HttpResponse httpResponse = httpClient.execute(httpPost);
+  HttpEntity httpEntity = httpResponse.getEntity();
+  is = httpEntity.getContent();
+[|\ldots{}|]
+  BufferedReader reader =
+    new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8); |\label{line:bufRdrProto}|
+  StringBuilder sb = new StringBuilder();
+  String line = null;
+  while ((line = reader.readLine()) != null) { |\label{line:readLineProto}|
+    sb.append(line + "\n");
+  }
+  is.close();
+  json = sb.toString(); |\label{line:sb.toString(Proto)}|
+[|\ldots{}|]
+else {
+  jObj = new JSONObject(json); |\label{line:newJSONObjectProto}|
+}
+[|\ldots{}|] 
+    \end{lstlisting}
+  \end{minipage}
+  \caption{Auszug aus JSONParser.java} 
+  \label{java:JSONParserProto}
+\end{figure}
+
+Die so verpackte Tabelle, wird dann mit einer \verb!for!-Schleife, siehe Zeile \ref{line:parseJsonProto} im
+\nameref{java:SyncRemoteDBProto} \ref{java:SyncRemoteDBProto}, in die einzelnen Zeilen zerlegt und von der Funktion
+\textsl{addTestRow(\ldots{})} \ref{line:addTstRw()Proto} in die lokale \verb!SQLite!-Datenbank geschrieben
+(Zeile \ref{line:addTestRowProto}). Dazu werden die einzelnen Werte in zunächst mit den zugehörigen Spaltennamen in ein
+sogenanntes \texttt{ContentValues}-Objekt geschrieben, was im Groben einer Tabellenzeile entspricht.
+Eine solche Kapselung ist theoretisch nicht nötig, da die Möglichkeit besteht,
+die Werte durch ein zusammengesetzten SQL-Statement in die Datenbank zu schrieben. Diese Lösung ermöglicht aber die
+Verwendung der \textsl{insert()}-Methode wie in Zeile \ref{line:insertProto}, wodurch der Code nicht nur weniger fehleranfällig, sondern auch
+übersichtlicher und sicherer wird. \\
+
+\begin{figure}
+  \centering
+  \begin{minipage}{1.0\textwidth} \small
+    \begin{lstlisting}[language=java,escapechar=|]
+[|\ldots{}|]        
+public void addTestRow(int id, String text, int number, 
+    String created_at) { |\label{line:addTstRw()Proto}|
+  SQLiteDatabase db = this.getWritableDatabase();
+  ContentValues vals = new ContentValues(); |\label{line:cntntValsProto}|
+  if (id > 0 & created_at != null & !created_at.equals("")) {
+    vals.put(Constants.KEY_UID, id);
+    vals.put(Constants.KEY_TEST_STRING, text);
+    vals.put(Constants.KEY_TEST_INT, number);
+    vals.put(Constants.KEY_CREATED_AT, created_at);
+  }
+  db.insert(Constants.TABLE_TEST, null, vals); |\label{line:insertProto}|
+  db.close();
+}
 [|\ldots{}|]
     \end{lstlisting}
   \end{minipage}
@@ -514,3 +664,15 @@ Zum Leeren der \textsl{ListView} wird der Button \texttt{Clear View} gedrückt, w
   \label{java:DBHandlerProto}
 \end{figure}
 
+\paragraph{Klasse InsertIntoDatabase}\label{para:InsrtIntoDbProto}
+Ebenfalls aus der \verb!MainActivity! heraus wird diese Klasse instantziiert und ausgeführt.
+Sie dient zum Schreiben von Testdaten in die \verb!MySQL!-Datenbank und ist somit auch eine Subklasse von
+\verb!AsyncTask!. \\*
+Analog zur \nameref{para:SyncRemoteDBProto} wird auch hier zunächst ein Objekt der Klasse erstellt, dem dann mit der  
+\textsl{execute(\ldots{})}-Methode die Testwerte als Parameter übergeben werden. Nachdem der \texttt{ProgressDialog}
+erstellt wurde, werden die Daten in Schlüssel- und Wertevariablen gekapselt und der
+\textsl{insertIntoRemoteTable(\ldots{})}-Methode übergeben. \\*
+Um einen standardkonformen \emph{HTTP}-Request abzuschicken, werden dort wieder die \emph{POST}-Parameter in einer Liste
+gekapselt und dem \verb!JSONParser! \ref{java:JSONParserProto}, zum Abschicken der Anfrage übergeben.
+Die Antwort wird wieder analog zur \nameref{para:SyncRemoteDBProto} in der \textsl{onPostExecute()}-Methode ausgewertet
+und eine Benachrichtigung angezeigt, ob die Übertragung erfolgreich war oder nicht.
