@@ -1,7 +1,151 @@
 \section{Putzplan}\label{section:Putzplan}
+Der Putzplan soll den Benutzern zeigen, wer als nächstes für eine Aufgabe an der Reihe ist. Dabei werden bei der
+Synchronisierung die für die gesamte WG anfallenden Aufgaben kopiert. Somit ist es auch möglich die Arbeiten eines
+anderen WG-Mitbewohners abzuarbeiten. Für die einzelnen Aufgaben, wie Küche oder Badezimmer, können noch Schritte
+definiert werden. Diese sind zu erledigen, bevor die Aufgabe als erledigt angesehen wird. Sobald alle Schritte markiert 
+sind, wird beim Übertragen automatisch die Aufgabe auf erledigt gesetzt.
 
 \subsection{Umsetzung}\label{subSec:PPUmsetz}
+Die Anzeige der Aufgaben wurde durch ein, von \verb!Fragment! abgeleitetes, \texttt{ChorePlanFragment} realisiert.
+Wechselt man zu dem Besagten \verb!Fragment!, wird zunächst das passende Layout geladen (vgl. Zeile
+\ref{line:inflateFragChore}). Danach wird aus der \textsl{onViewCreated(\ldots{})} der Inhalt des Fragments
+initialisiert. Dabei wird sowohl für die Aufgaben als auch die Schritte eine \verb!SQL!-Statement auf der
+\verb!SQLite!-Datenbank ausgeführt und in einen Cursor geladen. Die aus der Datenbank geladenen Daten werden
+anschließend in eine \verb!ArrayList! hinzugefügt, beziehungsweise in eine \verb!HashMap! gesetzt. Diese können dann dem
+\texttt{ChorePlanAdapter} übergeben werden, der die Daten für die Anzeige aufbereitet und dem \texttt{ListView}-Element
+im \texttt{ChorePlanFragment} anhängt. 
+Schlussendlich wird dem \textit{Erledigt}-Button die Funktion hinterlegt, die Schritte mit geänderter Markierung aus dem
+\texttt{ChorePlanAdapter} auszulesen und in der lokalen Datenbank zu speichern.
+
+\begin{lstlisting}[float,caption=ChorePlanFragment.java,label=java:ChorePlanFrag,language=java,escapechar=|,captionpos=below]
+[|\ldots{}|]
+@Override
+public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  rootView = inflater.inflate(R.layout.fragment_chores, container, false);  |\label{line:inflateFragChore}|
+  return rootView;
+}
+[|\ldots{}|]
+cpAdapter = new ChorePlanAdapter(getActivity(), chores, steps);
+lvChorePlan.setAdapter(cpAdapter);
+query = generateStepsQueryString();
+
+try {
+    result = dbHandler.getCursorForQuery(query, null);
+}
+catch (SQLiteException sqe) {
+    sqe.printStackTrace();
+    Log.e(TAG, sqe.getLocalizedMessage());
+}
+if (result != null && result.moveToFirst()) {
+[|\ldots{}|]
+final Button btnChoreDone = (Button) rootView.findViewById(R.id.btnChoreDone);
+btnChoreDone.setOnClickListener(new View.OnClickListener() {
+  private ArrayList<ChoreStepItem> selectedSteps = new ArrayList<ChoreStepItem>();
+
+  @Override
+  public void onClick(View v) {
+    Map<Integer, ChoreStepItem> steps = cpAdapter.getSelectedSteps();
+    ChorePlanStep commitStep = new ChorePlanStep(getActivity());
+
+    ArrayList<Integer> ids = new ArrayList<Integer>();
+    ArrayList<Integer> choreStepIds = new ArrayList<Integer>();
+    for (ChoreStepItem step : steps.values()) {
+        Long longId = commitStep.doChoreStep(step.getChorePlanId(), step.getChoreStepId(), step.getChoreId()) ? step.getChoreStepId() : 0L;
+        ids.add(Integer.parseInt(String.valueOf(longId)));
+        choreStepIds.add(step.getChoreStepId());
+        selectedSteps.add(step);
+    }
+    Bundle token = new Bundle();
+    token.putIntegerArrayList("insertedRowIds", ids);
+    token.putIntegerArrayList("choreStepId", choreStepIds); |\label{line:lastChorePlanLine}|
+[|\ldots{}|]
+\end{lstlisting}
 
 \subsection{Probleme und Lösungen}\label{subSec:PPSol}
+Bei diesem Teil der App kam es an zwei Stellen zu leichten Problemen. Dazu zählt zum einen das Aufklappen der
+\verb!ListView!-Zeilen, zum anderen war das nicht-persistente Ändern eine kleine Herausforderung.
+
+\paragraph*{Probleme}\label{para:ProbChorePlanFrag}
+Um die Liste der anfallenden Aufgaben übersichtlicht zu halten, aber trotzdem die Schritte bei den zugehörigen Aufgaben
+anzuzeigen, bewerkstelligen zu können, wurden die einzelnen \verb!ListView!-Elemente klappbar gemacht. Somit klappt beim
+klick auf eine Zeile der Teil mit den Aufgabeschritten auf. Womit die Zusammengehörigkeit symbolisiert wird und die
+Bedienbarkeit intuitiv ist.\\*
+Wie im Sourcecode-Auszug \ref{java:ChorePlanFrag} in der letzten Zeile zu erkennen ist, werden dort noch keine Daten
+geschrieben, sondern nur ein \verb!Bundle! mit den geänderten Daten erzeugt. An diese Stelle soll die Funktion des
+\emph{Undo}-Buttons kommen. Das bedeutet, eine Art \verb!Toast!, der erzeugt wird sobald der Benutzer Daten geändert
+hat, und über einen Button verfügt, mit dem die Änderungen wieder rückgängig gemacht werden können. Bis dato stellt die
+\textsc{android}-API keine derartige Funktion direkt bereit, noch wird auf der Developer-Homepage \cite{google:14} ein Lösung für das
+Problem angeboten. 
+
+\paragraph*{Lösungen}\label{para:ChorePlanSol}
+Um ein Aufklappen des Eintrags zu simulieren wurde zunächst eine Animations-Klasse \ref{java:ExpandAnim} geschrieben.
+Die sorgt dafür, dass die übergebene \verb!View! über eine angegebene Zeitspann hinweg aufgeklappt wird (Zeile
+\ref{line:ConstructExpandAnim}). 
+
+\begin{lstlisting}[float, caption=ExpandAnimation.java, captionpos=below, label=java:ExpandAnim, language=java,
+escapechar=|]
+\centering
+public ExpandAnimation(View view, int duration) { |\label{line:ConstructExpandAnim}|
+  setDuration(duration);
+  mAnimatedView = view;
+  mViewLayoutParams = (LayoutParams) view.getLayoutParams();
+
+  mIsVisibleAfter = (view.getVisibility() == View.VISIBLE);
+
+  mMarginStart = mViewLayoutParams.bottomMargin;
+  mMarginEnd = (mMarginStart == 0 ? (0- view.getHeight()) : 0);
+
+  view.setVisibility(View.VISIBLE);
+}
+\end{lstlisting}
+
+Diese Animation wird bei einem Klick auf einen beliebigen Punkt in der Zeile der \verb!ListView! ausgelöst. Der dafür
+benötigten \texttt{onClickListener(\ldots{})} wird im \textsl{ChorePlanAdapter} an die einzelnen \verb!Views! gehängt
+(Zeile \ref{line:onClickChorePlanAdapter}).
+Da es immer nur eine aufgeklapte Zeile geben soll, muss noch überprüft werden ob, es eine offene gibt, die geklickte
+die offene oder ob noch keine geöffnet Zeile in der Liste war (vgl. Zeile \ref{line:AnimLogic}).
+Außerdem wird im Falle eines Zeilenwechsels die Auswahl der Schritte zurückgesetzt, um beim späteren Speichern der
+Änderungen nicht die falschen Schritte auf 'erledigt' zu setzen, wozu in Zeile \ref{line:resetSel} die ein
+\textsl{resetSelection()} aufgerufen wird. In Zeile \ref{line:startAnim} wird dann die Animation auf dem entsprechenden
+Element ausfgeführt.
+
+\begin{lstlisting}[float, caption=ChorePlanAdapter.java, captionpos=below, label=java:ChorePlanFrag, language=java,
+escapechar=|]
+convertView.setOnClickListener(new View.OnClickListener() { |\label{line:onClickChorePlanAdapter}|
+
+@Override
+public void onClick(View v) {
+  View toolbar = v.findViewById(R.id.lstViewChoreSteps);
+
+  if (prevToolbar != null   |\label{line:AnimLogic}|
+          && prevToolbar.getVisibility() == ListView.VISIBLE
+          && toolbar.getVisibility() != ListView.VISIBLE) {
+    ExpandAnimation tmpAnimation = new ExpandAnimation(prevToolbar, 0);
+    prevToolbar.startAnimation(tmpAnimation);
+
+    TableLayout lvChoreSteps = 
+      (TableLayout) prevToolbar.findViewById(R.id.lstViewChoreSteps);
+    for(int i= 0; i < lvChoreSteps.getChildCount(); i++) {
+        TableRow row = (TableRow) lvChoreSteps.getChildAt(i);
+        CheckedTextView chdTxtView =
+          (CheckedTextView) row.findViewById(R.id.chkTxtViewStep);
+
+        if (!selectedSteps.isEmpty()
+                && selectedSteps.containsValue(
+                  steps.get(Integer.parseInt(row.getTag().toString()))
+                )) {
+            chdTxtView.setChecked(false);
+        }
+    }
+
+    resetSelection(); |\label{line:resetSel}|
+  }
+
+  ExpandAnimation expandAni = new ExpandAnimation(toolbar, 0);
+  toolbar.startAnimation(expandAni); |\label{line:startAnim}|
+  prevToolbar = toolbar;
+}
+});
+\end{lstlisting}
 
 
