@@ -1,4 +1,7 @@
 .*
+.bak
+.bbl
+.bbg
 !.gitignore
 _region_*
 *.aux
