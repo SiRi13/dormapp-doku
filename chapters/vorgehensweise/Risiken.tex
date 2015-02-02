@@ -1,8 +1,189 @@
 \section{Risiken}\index{Risiken}
-In unserem Lastenheft aus \ref{ANHANG} haben wir für jede Anforderung unserer App die individuellen Risiken ausformuliert die auftreten können.
+Risiken können den Ablauf in einer Softwarearchitektur beeinträchtigen. Jedes Risiko, welche vor der Implementierung nicht berücksichtigt wurde, kann beim Benutzer des Systems ein unkontrollierbares Verhalten verursachen. Um dies bestmöglich zu vermeiden haben wir uns bereits frühzeitig Gedanken um Mögliche Risiken gemacht. In einem Brainstorming kamen so eine Menge an Risikopunkten zusammen, die zu einem späteren Zeitpunkt Probleme machen könnten. In unserem Lastenheft \ref{ANHANG}, werden zu jeder Anforderung alle Möglichen Risiken aufgelistet.
+\\
+\begin{itemize}
+	\item \textbf{Blackboard}
+		\begin{itemize}
+			\item \textit{Anforderung F1 - Notiz hinzufügen}
+				\begin{itemize}
+					\item Benutzer bricht Vorgang ab
+					\item Speichern nicht möglich
+					\item Synchronisieren nicht möglich
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F2 - Notiz bearbeiten}
+				\begin{itemize}
+					\item Benutzer bricht Vorgang ab
+					\item Speichern nicht möglich
+					\item Synchronisieren nicht möglich
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F3 - Notiz löschen}
+				\begin{itemize}
+					\item Ungewolltes Löschen
+					\\
+				\end{itemize}
+			\item \textit{Anforderung NF4 - Design}			
+				\begin{itemize}
+					\item Unübersichtliches Layout
+					\item Missverständliche Abläufe
+					\\
+				\end{itemize}
+		\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+	\item \textbf{Putzplan}
+		\begin{itemize}
+			\item \textit{Anforderung F5 - Aufgabe erledigen}
+				\begin{itemize}
+					\item Fehlerhafte Synchronisierung
+					\item Falsche Aufgabe ausgewählt
+					\\
+				\end{itemize}
+			\item \textit{Anforderung NF6 - Design}
+				\begin{itemize}
+					\item Namen des Verantwortlichen zu Lang und/oder in nicht darstellbarem Zeichensatz
+					\item Rhythmus funktioniert nicht wie Benutzer es erwartet
+					\\
+				\end{itemize}
+		\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+	\item \textbf{Einkaufsliste}
+		\begin{itemize}
+			\item \textit{Anforderung F7 - Artikel hinzufügen}
+				\begin{itemize}
+					\item Fehler beim Speichern in die Datenbank
+					\item Der Artikel steht bereits in der Einkaufsliste, allerdings mit anderer Buchstabenformatierung (Groß- und Kleinschreibung, Bindestrich, etc.)
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F8 - Artikel löschen}
+				\begin{itemize}
+					\item Fehler beim Speichern in die Datenbank
+					\item Der Artikel existiert bereits nicht mehr in der Datenbank, wird aber in der Applikation auf dem Endgerät noch angezeigt.
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F9 - Artikel gekauft}
+				\begin{itemize}
+					\item Fehler beim speichern in die Datenbank
+					\item Der Artikel existiert bereits nicht mehr in der Datenbank, wird aber in der Applikation auf dem Endgerät noch angezeigt.
+					\\
+				\end{itemize}
+			\item \textit{Anforderung NF10 - Design}
+				\begin{itemize}
+					\item Sortierung der Artikel
+					\item Unübersichtliche Aufzählung
+					\item Schlecht leserliche Schlichtart und Schriftgröße
+					\\
+				\end{itemize}
+		\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+	\item \textbf{Kalender}
+		\begin{itemize}
+			\item \textit{Anforderung F11 - Kalendereintrag eintragen}
+				\begin{itemize}
+					\item Fehler beim Speichern in die Datenbank
+					\item Titel ist zu lang
+					\item Datum liegt in der Vergangenheit
+					\item Datum liegt weit in der Zukunft (>50 Jahre)
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F12 - Kalendereintrag bearbeiten}
+				\begin{itemize}
+					\item Fehler beim Speichern in die Datenbank
+					\item Titel ist zu lang
+					\item Datum liegt in der Vergangenheit
+					\item Datum liegt weit in der Zukunft (>50 Jahre)
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F13 - Kalendereintrag löschen}
+				\begin{itemize}
+					\item Fehler beim speichern in die Datenbank
+					\item Kalendereintrag existiert nicht mehr in Datenbank, wird aber noch auf dem Endgerät angezeigt
+					\\
+				\end{itemize}
+			\item \textit{Anforderung NF14 - Design}
+				\begin{itemize}
+					\item Benutzer benötigt zu lange um sich mit dem Design zurecht zu finden
+					\item Zu wenig Platz um alle Kalendereintragungen anzuzeigen
+					\item Titel zu lang für Gesamtansicht
+					\\
+				\end{itemize}
+		\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+	\item \textbf{Web Login}
+		\begin{itemize}
+			\item \textit{Anforderung F15 - Web Login}
+				\begin{itemize}
+					\item E-Mailadresse existiert nicht
+					\item E-Mailadresse und/oder Passwort falsch
+					\item Passwort vergessen
+					\item Verbindung zum Server kann nicht hergestellt werden
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F16 - Eingabekontrolle}
+				\begin{itemize}
+					\item\textit{ Eingabe falscher Daten}
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F17 - Passwort vergessen}
+				\begin{itemize}
+					\item Missbrauch von Daten
+					\\
+				\end{itemize}
+			\item \textit{Anforderung NF18 - Design}
+				\begin{itemize}
+					\item Design Gesetze nicht eingehalten (Gesetz der Nähe, Gleichheit, Geschlossenheit, etc.)
+					\item Größe der Textfelder nicht optimal
+					\\
+				\end{itemize}
+		\end{itemize}
+\end{itemize}
 
 
-- Datenbankverbindung
-	- keine Internetverbindung
-	- Server der Datenbank nicht erreichbar
-- 
+\begin{itemize}
+	\item \textbf{Web Oberfläche}
+		\begin{itemize}
+			\item \textit{Anforderung F19 - Benutzerverwaltung}
+				\begin{itemize}
+					\item Datenbankverbindung schlägt fehl
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F20 - Terminkalenderverwaltung}
+				\begin{itemize}
+					\item Datenbankverbindung
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F21 - Putzplanverwaltung}
+				\begin{itemize}
+					\item Datenbankverbindung
+					\\
+				\end{itemize}
+			\item \textit{Anforderung F22 - Systemeinstellungen}
+				\begin{itemize}
+					\item Datenbankverbindung
+					\\
+				\end{itemize}
+			\item \textit{Anforderung NF23 - Design}
+				\begin{itemize}
+					\item Unübersichtlich
+					\\
+				\end{itemize}
+		\end{itemize}
+\end{itemize}
+Die mit Abstand anfälligste Funktion unserer App wird die Verbindung zur Datenbank auf einem externen Server sein. Dabei kann zu jedem Zeitpunkt ein Fehler auftreten, der vom System möglichst gut behandelt werden soll. Darum hat die Verbindung zur Datenbank mehr Aufmerksamkeit bekommen und wir haben uns dafür entschieden einen lauffähigen Prototypen zu entwickeln. Wir haben uns bereits jetzt so stark mit der Mechanik beschäftigt, um anstelle eines einfachen Wegwerf-Prototypen, einen im späteren Verlauf der Implementierung weiter zu verwendenden Prototypen entwerfen können.
+Folgende Risiken können bei unserer Arbeit mit einer extern erreichbaren Datenbank auftreten:\\
+\\
+\begin{itemize}
+	\item Server nicht erreichbar
+	\item Verbindungsabbruch durch Zusammenbruch der Internetverbindung
+	\item Benutzer killt die App während der aktiven Nutzung der Verbindung
+\end{itemize}
+Eine genaue Erläuterung der Implementierung des gesamten Prototypen finden Sie im folgenden Kapitel \ref{chp:Prototyp} \nameref{chp:Prototyp}.
+
