@@ -59,14 +59,14 @@ Unter Berücksichtigung unseres Use-Case-Diagramms Black Board aus \textit{Abb. \
 \caption{Mockup 01: Übersicht Black Board}
 \label{fig:Mockup01BlackBoard}
 \end{figure}
-In Abb. \ref{fig_Mockup01BlackBoard} ist die Übersicht zu sehen. Dies ist der Startbildschirm für das Black Board. Hier werden alle Notizen in einer Liste angezeigt. Zu jeder Notiz gehört ein Benutzer mit dessen Profilbild, sowie ein Datum mit Uhrzeit und dem Text des Benutzers. Die Navigation befindet sich im Kopfbereich der App und ist für den Benutzer immer zu sehen. Im unteren Bereich des Bildschirm befinden sich die speziellen Optionen des Black Boards. Man wird mit einem Fingertipp auf das Textfeld eine neue Notiz erstellen können und mit einem Fingertipp auf \textit{Löschen} die gewünschten Notizen aus der Datenbank entfernen.
+In Abb. \ref{fig:Mockup01BlackBoard} ist die Übersicht zu sehen. Dies ist der Startbildschirm für das Black Board. Hier werden alle Notizen in einer Liste angezeigt. Zu jeder Notiz gehört ein Benutzer mit dessen Profilbild, sowie ein Datum mit Uhrzeit und dem Text des Benutzers. Die Navigation befindet sich im Kopfbereich der App und ist für den Benutzer immer zu sehen. Im unteren Bereich des Bildschirm befinden sich die speziellen Optionen des Black Boards. Man wird mit einem Fingertipp auf das Textfeld eine neue Notiz erstellen können und mit einem Fingertipp auf \textit{Löschen} die gewünschten Notizen aus der Datenbank entfernen.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{images/vorgehensweise/mockups/blackboardneuenotiz.png}
 \caption{Mockup 02: Neue Notiz}
 \label{fig:Mockup02BlackBoard}
 \end{figure}
-Will der Benutzer eine neue Notiz erstellen, so muss er von der Übersicht auf das Textfeld \textit{neue Notiz} tippen. Dann gelangt er auf das Mockup Abb. \ref{fig:Mockup02BlackBoard}., auf dem sich eine Tastatur geöffnet und der Button \textit{Löschen} verschwunden ist. Der Button zum löschen von Notizen würde hier nur verwirren, weil die Funktion nur in der Übersicht Möglich ist. Der Button \textit{Zurücksetzen} ist hier allerdings sehr wichtig, um dem Benutzer die Möglichkeit zu geben seinen Text mit einem Tipp  auf den Button zu entfernen und gleichzeitig auf die Übersicht zurück zu gelangen. Ohne diese Funktion würde der Benutzer den Text über die Tastatur löschen müssen und könnte schnell genervt davon sein.
+Will der Benutzer eine neue Notiz erstellen, so muss er von der Übersicht auf das Textfeld \textit{neue Notiz} tippen. Dann gelangt er auf das Mockup Abb. \ref{fig:Mockup02BlackBoard}, auf dem sich eine Tastatur geöffnet und der Button \textit{Löschen} verschwunden ist. Der Button zum löschen von Notizen würde hier nur verwirren, weil die Funktion nur in der Übersicht Möglich ist. Der Button \textit{Zurücksetzen} ist hier allerdings sehr wichtig, um dem Benutzer die Möglichkeit zu geben seinen Text mit einem Tipp  auf den Button zu entfernen und gleichzeitig auf die Übersicht zurück zu gelangen. Ohne diese Funktion würde der Benutzer den Text über die Tastatur löschen müssen und könnte schnell genervt davon sein.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{images/vorgehensweise/mockups/blackboardnotizloeschen.png}
@@ -78,8 +78,15 @@ Möchte der Benutzer eine Notiz löschen, kann er aus der Übersicht mit dem Finger
 Man erkennt, dass man sich mit dem Design der grafischen Benutzeroberfläche an gewisse Vorlagen des Betriebssystems \textit{Android} halten möchte. Ausserdem wird mit einem schlichten und wenig verspielten Design eine gute Lesbarkeit gewährleistet. Auf ein späteres verfeinern der Mockups durch ein Screendesign wurde bewusst verzichtet. Durch die bereits in den Mockups vorkommenden Details und farblichen Designaspekte ist eine weitere Verfeinerung in unseren Augen nicht nötig.
 
 \subsection{Lastenheft}\index{Lastenheft}
+Ein Lastenheft beschreibt alle Anforderungen die der Auftraggeber an ein Projekt stellt. Es wird vom Auftraggeber erstellt und an den Auftragnehmer weitergeleitet. Der Auftragnehmer erstellt auf der Grundlage des Lastenhefts ein Pflichtenheft, in dem er seine eigenen Lösungsansätze für die Anforderungen aus dem Lastenheft dem Auftraggeber präsentiert. Ist der Auftraggeber mit dem Pflichtenheft zufrieden, entsteht auf Grundlage dieser beiden Dokumente ein Vertrag zwischen beiden Parteien.Bei der finalen Abgabe des fertiges Produktes an den Auftraggeber, wird das Produkt auf Grundlage der Dokumente auf Vollständigkeit geprüft. Kommt es zu Auseinandersetzungen, können beide Parteien auf den Grundlagen der Dokumente gegeneinander argumentieren.\\
+Da wir als Team Auftraggeber sowie Auftragnehmer sind, schreiben wir uns selbst ein Lastenheft. Dies ist uns wichtig, um während der Implementierung der App den Umfang und den Aufwand im Auge zu behalten. Wir können uns mit einem Lastenheft von Punkt zu Punkt arbeiten und bei der finalen Abgabe gut das Produkt mit den Anforderungen vergleichen. Auf ein Pflichtenheft werden wir bewusst verzichten.\\
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{images/vorgehensweise/lastenheft/LastenheftIVZ.png}
+\caption{Inhaltsverzeichnis unseres Lastenhefts}
+\label{fig:LastenheftInhaltsverzeichnis}
+\end{figure}
 
-
-
-
-Die Verbindung über eine bestehende Internetverbindung zur verteilten Datenbank ist der Teilaspekt mit dem größten Fehlerpotential. Darum entwerfen wir für diesen Bereich der Implementierung einen Prototypen. Weitere Details zum Prototypen finden Sie im Kapitel \nameref{chp:Prototyp} auf Seite \pageref{chp:Prototyp}.
+In Abb. \ref{fig:LastenheftInhaltsverzeichnis} ist das Inhaltsverzeichnis unseres Lastenhefts zu sehen und zeigt die Struktur unseres Dokuments. Wir konzentrierten uns dabei auf das größte Kapitel, die \textit{Anforderungen}.  Dieses Kapitel beschreibt alle primären Funktionen der App. Wir haben uns dabei für \textit{Blackboard}, \textit{Putzplan}, \textit{Einkaufsliste}, \textit{Kalender}, \textit{Web Login} und \textit{Web Oberfläche} entschieden. Jedes dieser Funktionen wird zuerst mit einem kurzen Text beschrieben, um danach die Anforderungen und am Ende die Risiken zu beschreiben.\\
+\\
+Das gesamte Lastenheft, sowie alle Mockups, Use-Case-Diagramme und Use-Case Beschreibungen können im Anhang dieser Dokumentation nachgelesen werden.
