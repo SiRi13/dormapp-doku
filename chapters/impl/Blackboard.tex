@@ -19,12 +19,12 @@ Zum Bearbeiten wurde ein \verb!onLongClickListener! an die \verb!View! der Zeile
 generiert er einen Dialog mit dem aktuellen Inhalt der Nachricht und zeigt diesen an. Gespeichert wird dann die
 Nachricht mit der ID des Bearbeiters. Eine Erweiterung um die \verb!UndoBar!-Funktion sollte hier noch ergänzt werden.
 
-\subsection{Probleme}\label{subSec:BbProbl}
+\paragraph{Probleme}\label{para:BbProbl}
 Bei der Umsetzung des Blackboards kam es beim Anzeigen der Nachrichten zu einem komplexen Problem, was zunächst nicht
 nachvollziehbar war. In der \verb!ListView! war zwar die Anzahl der Einträge richtig, aber der Anfang der Liste wurde am 
 Ende der Liste, also bei Zeilen die ausserhalb des anfänglich darstellbaren Bereichs lagen, wiederholt.
 
-\subsection{Lösungen}\label{subSec:BbSol}
+\paragraph{Lösungen}\label{para:BbSol}
 Um die Datenquelle als Fehler auszuschließen wurde zunächst ein \verb!DISTINCT! in das \verb!SQL!-Statement eingefügt.
 Das bewirkt, dass doppelte Einträge ausgefiltert werden. Das war aber nicht die Ursache des Problems, da die erwarteten
 Daten im \verb!Cursor! waren und auch an den \texttt{BlackboardAdapter} weitergegeben wurden. Somit lies sich das
