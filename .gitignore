@@ -1,8 +1,8 @@
 .*
-.synctex.gz
-.bak
-.bbl
-.bbg
+*.synctex.gz
+*.bak
+*.bbl
+*.bbg
 !.gitignore
 _region_*
 *.aux
