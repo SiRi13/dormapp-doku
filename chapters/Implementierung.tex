@@ -9,10 +9,9 @@ neue Entwicklungsumgebung migriert, wo es auch fertiggestellt wurde. \\*
 Durch die Prototyp-Enwicklung konnte zu Beginn der Implementierung schon auf einige Bausteine zurückgegriffen werden.
 Zunächst wurde die Kommunikation mit der Datenbank nicht verändert. Somit ruft die App weiterhin ein PHP-Skript auf,
 welches dann die Tabelleninhalte ausliest, aufbereitet und im \emph{JSON}-Format zurücksendet. 
-Die von der \textsl{\textbf{DorMApp}}-App benötigten Skripte, sowie der Zugriff auf die Datenbank werden in den Kapiteln
-\nameref{chp:Datenbank}~\ref{chp:Datenbank} und \nameref{chp:PhpDbKomm}~\ref{chp:PhpDbKomm} genauer erläutert. Sollte
-es das Verständnis eines Sachverhaltes fordern, so wird auf das entsprechende Kapitel vorgegriffen und mit in die
-Erklärung aufgenommen.
+Die von der \textsl{\textbf{DorMApp}}-App benötigten Skripte, sowie der Zugriff auf die Datenbank werden im Kapitel
+\nameref{section:AppDbInterface}~\ref{section:AppDbInterface} genauer erläutert. Sollte es das Verständnis eines Sachverhaltes 
+fordern, so wird auf das entsprechende Kapitel vorgegriffen und mit in die Erklärung aufgenommen.
 
 \paragraph*{Externe Bibliotheken}\label{para:ExtLibs}
 Um Entwicklungszeit zu sparen, wurden vier externe Bibliotheken eingesetzt. Um eine bessere Sicherheit zu erreichen und
@@ -49,4 +48,5 @@ ist die Anzahl der Ordner in den Projekten auf drei geschrumpft, was die Übersic
 \include{chapters/impl/Putzplan}
 \include{chapters/impl/Einkaufsliste}
 \include{chapters/impl/Blackboard}
+\include{chapters/impl/DbAppInterface}
 \include{chapters/impl/Web}
