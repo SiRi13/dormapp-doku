@@ -21,7 +21,7 @@ Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete 
 Jede dieser PHP Dateien stellt eine Seite der Weboberfläche dar. Jede Datei beinhaltet gewöhnlichen HTML Code für die Anzeige im Browser und PHP Code für den dynamischen Teil der Datenabfrage von der Datenbank.\\
 Mehrzeilige Abfragen in PHP sind in eigene Dateien ausgelagert. So ist z.B. die Abfrage zum löschen eines WG Mitglieds in der Datei  \textit{benutzer\textunderscore edit\textunderscore delete.php} zu finden. So verfahren wir mit allen mehrzeiligen Abfragen um die Übersichtlichkeit zu erhöhen.\\
 \begin{description}
-\item Die Weboberfläche mit ihren neun Seiten inklusive aller ausgelagerten PHP Abfragen gegliedert nach Seite:
+\item Daraus ergibt sich folgende Struktur für die Weboberfläche mit ihren Seiten inklusive aller ausgelagerten PHP Abfragen:
 \begin{itemize}
 	\item admin.php
 	\item benutzer.php
@@ -65,8 +65,15 @@ Mehrzeilige Abfragen in PHP sind in eigene Dateien ausgelagert. So ist z.B. die 
 	\end{itemize}
 \end{itemize}
 \end{description}
-Text Text Text zur Erklärung zur Gliederung (add, delete-edit, update)
-
+Alle Eingaben die der Benutzer in der Weboberfläche machen kann, werden durch Textfeder oder Checkboxen erfasst. Wir verwenden für alle zu übertragenden Daten die Methode POST, die die Daten für Benutzer der Seiten unsichtbar im Rumpf des HTTP Requests sendet. Die Methode GET, die die Daten für alle sichtbar an die URI anhängt, könnte theoretisch ebenfalls genutzt werden. Jedoch würde das in unserem Fall ein erhöhtes Sicherheitsrisiko darstellen. Darum haben wir auf die Methode GET komplett verzichtet.\\
+Auf jeder HTML Seite und in jedem PHP Skript wird zu Beginn überprüft, ob der Nutzer im System angemeldet ist. Falls er nicht angemeldet ist, wird ihm mit dem Hinweis \textit{Bitte loggen Sie sich erst ein!} die Anzeige der Seite verwehrt.
+\begin{lstlisting}[language=PHP]
+if(!isset($_SESSION["email"]))
+{
+	echo("<a href=\"login.php\" />Bitte loggen sie sich erst ein!</a>");
+	exit;
+}
+\end{lstlisting}	
 
 
 \begin{description}
