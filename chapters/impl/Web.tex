@@ -5,7 +5,7 @@ Im folgenden Kapitel wird die Weboberfläche mit Hilfe von Codesnippets erläutert
 \subsection{Umsetzung}\label{subSec:WebUmsetz}
 Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete Skriptsprache PHP entschieden. PHP bietet durch den Einfluss von Java, C++ und Perl einen leichten Einstieg für diejenigen, die bereits erste Erfahrungen mit einer der Programmiersprachen sammeln konnten. Ausserdem bietet PHP die einfache Umsetzung von dynamischen Webseiten und eine sehr gute Unterstützung von Datenbankverbindungen. Mit PHP ist automatisch sichergestellt, dass die Weboberfläche von jedem gängigen Browser aus in deren Desktop- sowie Mobilversion genutzt werden kann.\\
 \begin{description}
-\item Die Weboberfläche gliedert sich in 11 Seiten:
+\item Die Weboberfläche gliedert sich in neun Seiten:
 \begin{itemize}
 	\item admin.php
 	\item benutzer.php
@@ -13,11 +13,66 @@ Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete 
 	\item einkaufsliste.php
 	\item login.php
 	\item logout.php
-	\item admin.php
 	\item putzplan.php
 	\item regist.php
-	\item admin.php
 	\item system.php
 \end{itemize}
 \end{description}
-Jede dieser PHP Dateien beinhaltet gewöhnlichen HTML Code um dem Browser die Daten präsentieren und PHP Code für den dynamischen Teil der Datenabfrage von der Datenbank.
+Jede dieser PHP Dateien stellt eine Seite der Weboberfläche dar. Jede Datei beinhaltet gewöhnlichen HTML Code für die Anzeige im Browser und PHP Code für den dynamischen Teil der Datenabfrage von der Datenbank.\\
+Mehrzeilige Abfragen in PHP sind in eigene Dateien ausgelagert. So ist z.B. die Abfrage zum löschen eines WG Mitglieds in der Datei  \textit{benutzer\textunderscore edit\textunderscore delete.php} zu finden. So verfahren wir mit allen mehrzeiligen Abfragen um die Übersichtlichkeit zu erhöhen.\\
+\begin{description}
+\item Die Weboberfläche mit ihren neun Seiten inklusive aller ausgelagerten PHP Abfragen gegliedert nach Seite:
+\begin{itemize}
+	\item admin.php
+	\item benutzer.php
+	\begin{itemize}
+		\item benutzer\textunderscore edit\textunderscore delete.php
+		\item benutzer\textunderscore script.php
+		\item benutzer\textunderscore update.php
+	\end{itemize}
+	\item blackboard.php
+	\begin{itemize}
+		\item blackboard\textunderscore add.php
+		\item blackboard\textunderscore delete\textunderscore edit.php
+		\item blackboard\textunderscore update.php
+	\end{itemize}
+	\item einkaufsliste.php
+	\begin{itemize}
+		\item einkaufsliste\textunderscore add.php
+		\item einkaufsliste\textunderscore delete\textunderscore edit.php
+		\item waren\textunderscore add\textunderscore delete.php
+		\item waren\textunderscore add.php
+	\end{itemize}
+	\item login.php
+	\begin{itemize}
+		\item login\textunderscore script.php
+	\end{itemize}
+	\item logout.php
+	\item putzplan.php
+	\begin{itemize}
+		\item putzplan\textunderscore add.php
+		\item putzplan\textunderscore delete\textunderscore edit.php
+		\item putzplan\textunderscore update.php
+	\end{itemize}
+	\item regist.php
+	\begin{itemize}
+		\item regist\textunderscore script.php
+	\end{itemize}
+	\item system.php
+	\begin{itemize}
+		\item system\textunderscore delete\textunderscore edit.php
+		\item system\textunderscore update.php
+	\end{itemize}
+\end{itemize}
+\end{description}
+Text Text Text zur Erklärung zur Gliederung (add, delete-edit, update)
+
+
+
+\begin{description}
+\item Dazu kommen noch:
+\begin{itemize}
+	\item style.css
+	\item wg\textunderscore app\textunderscore aktuell.sql
+\end{itemize}
+\end{description}
