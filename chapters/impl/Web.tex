@@ -1,3 +1,23 @@
-\chapter{Weboberfäche}\label{chp:WebUI}
+\section{Weboberfäche}\label{section:WebUI}
 Der Administrator einer WG muss in der Lage sein, die Eigenschaften der WG zu konfigurieren und die Funktionen zu verwalten. Wir haben uns dazu entschieden, eine extern jederzeit erreichbare Weboberfläche dafür bereit zu stellen. Wir hätten uns genauso gut für die Implementierung in die Android App entscheiden können, haben uns jedoch bewusst dagegen entschieden. Wir möchten mit den unterschiedlichen Programmiersprachen und den daraus resultierenden Herangehensweisen eine möglichst großes Vielfalt der Informatik widerspiegeln und die Arbeiten auf die Mitglieder verteilen, die bisher noch keine Erfahrung mit der Programmierung für die Android Plattform sammeln konnten.\\
 Im folgenden Kapitel wird die Weboberfläche mit Hilfe von Codesnippets erläutert.
+
+\subsection{Umsetzung}\label{subSec:WebUmsetz}
+Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete Skriptsprache PHP entschieden. PHP bietet durch den Einfluss von Java, C++ und Perl einen leichten Einstieg für diejenigen, die bereits erste Erfahrungen mit einer der Programmiersprachen sammeln konnten. Ausserdem bietet PHP die einfache Umsetzung von dynamischen Webseiten und eine sehr gute Unterstützung von Datenbankverbindungen. Mit PHP ist automatisch sichergestellt, dass die Weboberfläche von jedem gängigen Browser aus in deren Desktop- sowie Mobilversion genutzt werden kann.\\
+\begin{description}
+\item Die Weboberfläche gliedert sich in 11 Seiten:
+\begin{itemize}
+	\item admin.php
+	\item benutzer.php
+	\item blackboard.php
+	\item einkaufsliste.php
+	\item login.php
+	\item logout.php
+	\item admin.php
+	\item putzplan.php
+	\item regist.php
+	\item admin.php
+	\item system.php
+\end{itemize}
+\end{description}
+Jede dieser PHP Dateien beinhaltet gewöhnlichen HTML Code um dem Browser die Daten präsentieren und PHP Code für den dynamischen Teil der Datenabfrage von der Datenbank.
