@@ -6,80 +6,67 @@ Im folgenden Kapitel wird die Weboberfläche mit Hilfe von Codesnippets erläutert
 Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete Skriptsprache PHP entschieden. PHP bietet durch den Einfluss von Java, C++ und Perl einen leichten Einstieg für diejenigen, die bereits erste Erfahrungen mit einer der Programmiersprachen sammeln konnten. Ausserdem bietet PHP die einfache Umsetzung von dynamischen Webseiten und eine sehr gute Unterstützung von Datenbankverbindungen. Mit PHP ist automatisch sichergestellt, dass die Weboberfläche von jedem gängigen Browser aus in deren Desktop- sowie Mobilversion genutzt werden kann.\\
 \begin{description}
 \item Die Weboberfläche gliedert sich in neun Seiten:
-\begin{itemize}
-	\item admin.php
-	\item benutzer.php
-	\item blackboard.php
-	\item einkaufsliste.php
-	\item login.php
-	\item logout.php
-	\item putzplan.php
-	\item regist.php
-	\item system.php
-\end{itemize}
+\dirtree{%
+.0 /.
+.2 admin.php.
+.2 benutzer.php.
+.2 blackboard.php.
+.2 einkaufsliste.php.
+.2 login.php.
+.2 logout.php.
+.2 putzplan.php.
+.2 regist.php.
+.2 system.php.
+}
 \end{description}
 Jede dieser PHP Dateien stellt eine Seite der Weboberfläche dar. Jede Datei beinhaltet gewöhnlichen HTML Code für die Anzeige im Browser und PHP Code für den dynamischen Teil der Datenabfrage von der Datenbank.\\
 Mehrzeilige Abfragen in PHP sind in eigene Dateien ausgelagert. So ist z.B. die Abfrage zum löschen eines WG Mitglieds in der Datei  \textit{benutzer\textunderscore edit\textunderscore delete.php} zu finden. So verfahren wir mit allen mehrzeiligen Abfragen um die Übersichtlichkeit zu erhöhen.\\
+\begin{figure}
 \begin{description}
 \item Daraus ergibt sich folgende Struktur für die Weboberfläche mit ihren Seiten inklusive aller ausgelagerten PHP Abfragen:
-\begin{itemize}
-	\item admin.php
-	\item benutzer.php
-	\begin{itemize}
-		\item benutzer\textunderscore edit\textunderscore delete.php
-		\item benutzer\textunderscore script.php
-		\item benutzer\textunderscore update.php
-	\end{itemize}
-	\item blackboard.php
-	\begin{itemize}
-		\item blackboard\textunderscore add.php
-		\item blackboard\textunderscore delete\textunderscore edit.php
-		\item blackboard\textunderscore update.php
-	\end{itemize}
-	\item einkaufsliste.php
-	\begin{itemize}
-		\item einkaufsliste\textunderscore add.php
-		\item einkaufsliste\textunderscore delete\textunderscore edit.php
-		\item waren\textunderscore add\textunderscore delete.php
-		\item waren\textunderscore add.php
-	\end{itemize}
-	\item login.php
-	\begin{itemize}
-		\item login\textunderscore script.php
-	\end{itemize}
-	\item logout.php
-	\item putzplan.php
-	\begin{itemize}
-		\item putzplan\textunderscore add.php
-		\item putzplan\textunderscore delete\textunderscore edit.php
-		\item putzplan\textunderscore update.php
-	\end{itemize}
-	\item regist.php
-	\begin{itemize}
-		\item regist\textunderscore script.php
-	\end{itemize}
-	\item system.php
-	\begin{itemize}
-		\item system\textunderscore delete\textunderscore edit.php
-		\item system\textunderscore update.php
-	\end{itemize}
-\end{itemize}
+\dirtree{%
+.1 /.
+.2 admin.php.
+.2 benutzer.php.
+.3 benutzer\textunderscore aktivierung.php.
+.3 benutzer\textunderscore edit\textunderscore delete.php.
+.3 benutzer\textunderscore script.php.
+.3 benutzer\textunderscore update.php.
+.2 blackboard.php.
+.3 blackboard\textunderscore add.php.
+.3 blackboard\textunderscore delete\textunderscore edit.php.
+.3 blackboard\textunderscore update.php.
+.2 einkaufsliste.
+.3 einkaufsliste\textunderscore add.php.
+.3 einkaufsliste\textunderscore delete\textunderscore edit.php.
+.3 waren\textunderscore add\textunderscore delete.php.
+.3 waren\textunderscore add.php.
+.2 login.
+.3 login\textunderscore script.php.
+.2 logout.php.
+.2 putzplan.php.
+.3 putzplan\textunderscore add.php.
+.3 putzplan\textunderscore delete\textunderscore edit.php.
+.3 putzplan\textunderscore unteraufgaben\textunderscore add.php.
+.3 putzplan\textunderscore unteraufgaben\textunderscore update.php.
+.3 putzplan\textunderscore update.php.
+.2 regist.php.
+.3 regist\textunderscore script.php.
+.2 system.php.
+.3 system\textunderscore delete\textunderscore edit.php.
+.3 system\textunderscore update.php.
+.2 style.css.
+}
 \end{description}
-Alle Eingaben die der Benutzer in der Weboberfläche machen kann, werden durch Textfeder oder Checkboxen erfasst. Wir verwenden für alle zu übertragenden Daten die Methode POST, die die Daten für Benutzer der Seiten unsichtbar im Rumpf des HTTP Requests sendet. Die Methode GET, die die Daten für alle sichtbar an die URI anhängt, könnte theoretisch ebenfalls genutzt werden. Jedoch würde das in unserem Fall ein erhöhtes Sicherheitsrisiko darstellen. Darum haben wir auf die Methode GET komplett verzichtet.\\
-Auf jeder HTML Seite und in jedem PHP Skript wird zu Beginn überprüft, ob der Nutzer im System angemeldet ist. Falls er nicht angemeldet ist, wird ihm mit dem Hinweis \textit{Bitte loggen Sie sich erst ein!} die Anzeige der Seite verwehrt.
-\begin{lstlisting}[language=PHP]
+\end{figure}
+Alle Eingaben die der Benutzer in der Weboberfläche machen kann, werden durch Textfeder oder Checkboxen erfasst. Wir verwenden für alle zu übertragenden Daten die Methode POST, die die Daten für Benutzer der Seiten unsichtbar im Rumpf des HTTP-Requests sendet. Die Methode GET, die die Daten für alle sichtbar an die URI anhängt, könnte theoretisch ebenfalls genutzt werden. Jedoch würde das in unserem Fall ein erhöhtes Sicherheitsrisiko darstellen. Darum haben wir bis auf wenige ID's auf die Methode GET verzichtet.\\ \\
+\begin{figure}
+Auf jeder HTML Seite und in jedem PHP Skript wird zu Beginn überprüft, ob der Nutzer im System angemeldet ist. Falls die Prüfung fehlschlägt, wird ihm mit dem Hinweis \textit{Bitte loggen Sie sich erst ein!} die Anzeige der Seite verwehrt.
+\begin{lstlisting}[language=PHP, caption=Login des Benutzers überprüfen, captionpos=below, label=WEBLogin]
 if(!isset($_SESSION["email"]))
 {
 	echo("<a href=\"login.php\" />Bitte loggen sie sich erst ein!</a>");
 	exit;
 }
-\end{lstlisting}	
-
-
-\begin{description}
-\item Dazu kommen noch:
-\begin{itemize}
-	\item style.css
-	\item wg\textunderscore app\textunderscore aktuell.sql
-\end{itemize}
-\end{description}
+\end{lstlisting}
+\end{figure}
