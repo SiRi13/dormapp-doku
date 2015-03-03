@@ -1,5 +1,5 @@
 \section{Risiken}\index{Risiken}
-Risiken können den Ablauf in einer Softwarearchitektur erheblich beeinflussen. Jedes Risiko, welche vor der Implementierung nicht berücksichtigt wurde, kann beim Benutzer des Systems ein unkontrollierbares Verhalten verursachen. Um dies bestmöglich zu vermeiden haben wir uns bereits frühzeitig Gedanken um Mögliche Risiken gemacht. In einem Brainstorming kamen so eine Menge an Risikopunkten zusammen, die zu einem späteren Zeitpunkt Probleme machen könnten. In unserem Lastenheft \ref{ANHANG}, werden zu jeder Anforderung alle Risiken aufgelistet.
+Risiken können den Ablauf in einer Softwarearchitektur erheblich beeinflussen. Jedes Risiko, welche vor der Implementierung nicht berücksichtigt wurde, kann beim Benutzer ein unkontrollierbares Verhalten verursachen. Um dies möglichst zu vermeiden, haben wir uns bereits frühzeitig Gedanken um Mögliche Risiken gemacht. In einem Brainstorming kamen eine Menge Risikofaktoren zusammen, die zu einem späteren Zeitpunkt Probleme machen könnten. In unserem Lastenheft sind alle Risiken ausführlich aufgelistet.
 \\
 \begin{itemize}
 	\item \textbf{Blackboard}
@@ -43,7 +43,7 @@ Risiken können den Ablauf in einer Softwarearchitektur erheblich beeinflussen. J
 				\end{itemize}
 			\item \textit{Anforderung NF6 - Design}
 				\begin{itemize}
-					\item Namen des Verantwortlichen zu Lang und/oder in nicht darstellbarem Zeichensatz
+					\item Namen des Verantwortlichen zu lang und/oder in nicht darstellbarem Zeichensatz
 					\item Rhythmus funktioniert nicht wie Benutzer es erwartet
 					\\
 				\end{itemize}
@@ -177,11 +177,11 @@ Risiken können den Ablauf in einer Softwarearchitektur erheblich beeinflussen. J
 				\end{itemize}
 		\end{itemize}
 \end{itemize}
-Die mit Abstand anfälligste Funktion unserer App wird die Verbindung zur Datenbank auf einem externen Server sein. Dabei kann zu jedem Zeitpunkt ein Fehler auftreten, der vom System möglichst gut behandelt werden soll. Darum hat die Verbindung zur Datenbank mehr Aufmerksamkeit bekommen und wir haben uns dafür entschieden einen lauffähigen Prototypen zu entwickeln. Wir haben uns bereits jetzt so stark mit der Mechanik beschäftigt, um anstelle eines einfachen Wegwerf-Prototypen, einen im späteren Verlauf der Implementierung weiter zu verwendenden Prototypen entwerfen können.
+Die mit Abstand anfälligste Funktion unserer App wird die Verbindung zur Datenbank auf einen externen Server sein. Dabei kann zu jedem Zeitpunkt ein Fehler auftreten, der vom System möglichst gut behandelt werden muss. Darum hat die Verbindung zur Datenbank mehr Aufmerksamkeit bekommen und wir haben uns dafür entschieden einen lauffähigen Prototypen zu entwickeln. Wir haben uns bereits jetzt so stark mit der Mechanik beschäftigt, um anstelle eines einfachen Wegwerf-Prototypen, einen im späteren Verlauf der Implementierung weiter zu verwendenden Prototypen entwerfen zu können.
 Folgende Risiken können bei unserer Arbeit mit einer extern erreichbaren Datenbank auftreten:
 \begin{itemize}
 	\item Server nicht erreichbar
 	\item Verbindungsabbruch durch Zusammenbruch der Internetverbindung
-	\item Benutzer killt die App während der aktiven Nutzung der Verbindung
+	\item Benutzer \textit{killt} die App während der aktiven Nutzung der Verbindung
 \end{itemize}
 Eine genaue Erläuterung der Implementierung des gesamten Prototypen finden Sie im folgenden Kapitel \ref{chp:Prototyp} \nameref{chp:Prototyp}.
