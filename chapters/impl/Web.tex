@@ -76,7 +76,8 @@ if(!isset($_SESSION["email"]))
 Ist der Benutzer eingeloggt, wird das PHP Skript nicht gestoppt, sondern weiter verarbeitet. Mit einem \textit{require\textunderscore once 'db\textunderscore inc.php} wird die Datei db\textunderscore inc.php eingebunden und ausgeführt. Das passiert nur, wenn die Datei nicht schon im vorhergehenden Teil des Codes  eingebunden wurde.
 
 \begin{figure}
-\begin{lstlisting}[language=PHP, caption=Verbindung aufbauen\, falls noch nicht geschehen, captionpos=below, label=WEBLogin]
+\begin{lstlisting}[language=PHP, caption=Verbindung aufbauen\, falls noch nicht geschehen, captionpos=below,
+label=OpenConn]
 require_once 'db_inc.php';	
 \end{lstlisting}
 \end{figure}
@@ -84,7 +85,8 @@ require_once 'db_inc.php';
 Im Anschluss können die über die Methoden POST und GET übergebenden Variablen abgefragt und zwischengespeichert werden. In dem Beispiel wird mit einer if-Abfrage geprüft, ob eine Variable "einkaufsliste\textunderscore id" an das PHP Skript geliefert wurde. Falls dies der Fall ist, wird der Inhalt der Variablen lokal zwischengespeichert.
 
 \begin{figure}
-\begin{lstlisting}[language=PHP, caption=Variable \textit{einkaufsliste\textunderscore id} lockal zwischenspeichern, captionpos=below, label=WEBLogin]
+\begin{lstlisting}[language=PHP, caption=Variable \textit{einkaufsliste\textunderscore id} lokal zwischenspeichern,
+captionpos=below, label=Variable]
 if(isset($_POST['einkaufsliste_id']))
 {
 	$einkaufsliste_id = $_POST['einkaufsliste_id'];
