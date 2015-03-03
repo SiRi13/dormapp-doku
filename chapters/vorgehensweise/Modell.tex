@@ -6,9 +6,9 @@ Damit haben wir nun als Vorgehensmodell für unser Projektmanagement das \textit{
 
 \subsection{Use-Cases}\index{Use-Cases}\label{ssec:UseCases}
 Ein Use-Case (dt. Anwendungsfall) schildert auf einfache Art und Weise alle möglichen Szenarien, die zu einem bestimmten Ziel führen können. Am Anfang steht ein Akteur (z.B. der Benutzer der App) der ein bestimmtes Ziel im System erreichen möchte (z.B. das Erstellen einer Notiz). Der Use-Case beschreibt nun grob das System, die Umwelt in welchem das System arbeitet, die Anforderungen (falls gegeben) und letztendlich alle nötigen Schritte, welche vom Benutzer getätigt werden müssen, um das Ziel zu erreichen. Dazu können auch automatisierte Ereignisse vom System gehören.\\
-Inwieweit der Use-Case ins Details geht ist nicht definiert. Der Ersteller kann hier selbst entscheiden wie sehr eine Aktion abstrahiert werden kann und muss. Die Entscheidung kann von Use-Case zu Use-Case variieren. Es empfiehlt sich eine Vorlage mit relevanten Punkten zu erstellen, die dann bei jedem Use-Case möglichst einheitlich ausgefüllt werden kann. Dies erleichtert im Arbeitsalltag den Gebrauch der Use-Cases.
+Inwieweit der Use-Case ins Detail geht ist nicht definiert. Der Ersteller kann hier selbst entscheiden wie sehr eine Aktion abstrahiert werden kann und muss. Die Entscheidung kann von Use-Case zu Use-Case variieren. Es empfiehlt sich eine Vorlage mit relevanten Punkten zu erstellen, die dann bei jedem Use-Case möglichst einheitlich ausgefüllt werden kann. Dies erleichtert im Arbeitsalltag den Gebrauch der Use-Cases.
 Um eine Übersicht über das gesamte System aller Use-Cases zu erhalten, wird eine grafische Modellierung empfohlen. Dabei können die textbasierten Use-Cases in ein Use-Case-Diagramm vereint werden. Hierfür ist in der Softwarentwicklung die Modellierungssprache \textit{Unified Modelling Language} (dt. vereinheitlichte Modellierungssprache, kurz: \textit{UML}) zu empfehlen. Sie wird für Version 2.4.1 unter anderem von der \textit{International Organization for Standardization} (dt. Internationale Organisation für Normung, kurz: \textit{ISO}, ISO/IEC 19505) standardisiert.\\
-Ein beispielhafter Auszug aus unseren Use-Case-Diagrammen und den dazugehörigen Use-Cases finden sie unter \textit{Abb.\ref{fig:UseCaseDiagrammBlackBoard} }und \textit{Abb. \ref{fig:UseCaseNotizBearbeiten}}. \\
+Ein beispielhafter Auszug aus unseren Use-Case-Diagrammen und den dazugehörigen Use-Cases finden Sie unter \textit{Abb.\ref{fig:UseCaseDiagrammBlackBoard} }und \textit{Abb. \ref{fig:UseCaseNotizBearbeiten}}. \\
 \textit{Abb. \ref{fig:UseCaseDiagrammBlackBoard}} zeigt das Use-Case-Diagramm für die Funktion des Blackboards. Jedes ellipsenförmig eingekreiste Schlagwort steht für ein Use-Case. Oft ist die Wahl der Use-Cases identisch zu den der Funktionen, d.h. jede Funktion wird als Use-Case abgebildet. \\
 Am Anfang steht der Benutzer der App, hier dargestellt als ein Strichmännchen am linken Rand des Diagramms. Der Benutzer hat die Wahl zwischen der Funktion \textit{Notiz erstellen} und \textit{Notiz bearbeiten}. Hierbei teilt sich das Diagramm in zwei Stränge auf.\\
 Möchte der Benutzer eine Notiz erstellen, wird diese am Ende des Vorgangs in der Datenbank (kurz: \textit{DB}) gespeichert. Um eine Notiz zu speichern, muss der Benutzer vorher seine Eingaben getätigt haben. Wir haben uns dafür entschieden die Aktionen so zu minimalisieren, dass solche Aktionen wie \textit{Text eingeben} und ähnliches als nicht relevant und gegeben anzusehen sind. Diese Aktionen fallen somit in den Use-Case \textit{Notiz erstellen} und werden nicht extra aufgeführt.\\
@@ -21,7 +21,7 @@ Die an jeden Use-Case mit \textit{extends} angefügte Fehlerbehandlung wird vom S
 \end{figure}
 
 Betrachtet man das oben eingefügte Use-Case-Diagramm\textit{ Abb. \ref{fig:UseCaseDiagrammBlackBoard} }wird einem vermutlich auffallen, dass das Use-Case \textit{Notiz bearbeiten} komplexer erscheint als andere, jedoch genauso abstrakt dargestellt wird wie diese. Bei solchen Use-Cases, bei denen vermutlich nicht sofort jedem klar ist was im Hintergrund passiert, empfiehlt es sich eine Use-Case Beschreibung in Textform anzulegen. Für den Fall \textit{Notiz bearbeiten} sieht unsere Beschreibung wie folgt aus.\\
-Es wird klar definiert, dass das Ziel des Use-Cases eine unsortierte Liste von Notizen sein soll. Ein Ziel muss immer klar definiert werden. Ebenso werden \textit{Vor-} und \textit{Nachbedingungen} aufgeführt (falls diese vorhanden sind). Unter \textit{Akteure} wird aufgezählt, welche Akteure in den Use-Case gelangen können. In unserem Fall sind es alle Benutzer unserer App. Da man die App nur als registriertes Mitglied einer WG benutzen kann, wird in den Klammern nochmals explizit darauf hingewiesen. Die \textit{Beschreibung} schildert in Stichworten den Ablauf des Use-Cases, d.h. man beschreibt Punkt für Punkt die Ereignisse die vom Benutzer sowie vom System unternommen werden um zum Ziel zu gelangen. Mit \textit{Alternativen} beschreibt man Ereignisse, die durch eine Verzweigung im Ablauf vorkommen. Diese müssen bereits jetzt berücksichtigt werden.
+
 \begin{figure}[H]
 \centering
 \begin{lstlisting}
@@ -35,49 +35,69 @@ Akteure: Benutzer der App (nur registrierte WG Mitglieder)
 Auslösendes Ereignis: Erstellung eines Eintrags von Benutzer
 Beschreibung:
 Notiz erstellen
-1 Benutzer nimmt Änderungen an Notiz vor.
-2 Benutzer möchte Notiz speichern.
+1. Benutzer nimmt Änderungen an Notiz vor.
+2. Benutzer möchte Notiz speichern.
 3. Notiz in Datenbank speichern.
 Alternativen:
-2a Benutzer entschließ sich die Änderungen zu verwerfen. Benutzer gelangt auf vorherigen Bildschirm
+2a Benutzer entschließt sich die Änderungen zu verwerfen. Benutzer gelangt auf vorherigen Bildschirm
 2b Benutzer entschließt sich die Notiz zu löschen. Der Datenbankeintrag wird gelöscht.
 \end{lstlisting}
 \caption{Beschreibung des Use-Cases \textit{Notiz bearbeiten}}
 \label{fig:UseCaseNotizBearbeiten}
 \end{figure}
 
+Es wird klar definiert, dass das Ziel des Use-Cases eine unsortierte Liste von Notizen sein soll. Ein Ziel muss immer
+klar definiert werden. Ebenso werden \textit{Vor-} und \textit{Nachbedingungen} aufgeführt (falls diese vorhanden sind).
+Unter \textit{Akteure} wird aufgezählt, wer in den Use-Case gelangen kann. In unserem Fall sind es alle Benutzer der App.
+Da man die App nur als registriertes Mitglied einer WG benutzen kann, wird in den Klammern nochmals explizit darauf
+hingewiesen. Die \textit{Beschreibung} schildert in Stichworten den Ablauf des Use-Cases, das heißt man beschreibt Punkt für Punkt die Ereignisse die vom Benutzer sowie vom System unternommen werden um zum Ziel zu gelangen. Mit \textit{Alternativen} beschreibt man Ereignisse, die durch eine Verzweigung im Ablauf vorkommen. Diese müssen bereits jetzt berücksichtigt werden.
+
 \subsection{Mockups}\index{Mockups}\label{ssec:Mockups}
-Ein Mockup ist eine nicht lauffähige Version einer Ebene des Gesamtsystems. Sie dient hauptsächlich zur ersten Veranschaulichung designtechnischer Visionen. Der Begriff des Mockups wird auch ausserhalb der Softwareentwicklung gerne für maßstabsgetreue, plastisch modellierte Nachbildungen verwendet. In der Softwarentwicklung versteht man meistens eine in Bildbearbeitungsprogrammen entworfene Vorlage der grafischen Benutzeroberfläche Sie soll beispielhaft das finale Produkt repräsentieren. Im späteren Verlauf wird oft auf Basis der Mockups ein Screendesign entwickelt, in dem weitaus mehr Details ausgearbeitet werden. Das Screendesign dient zum Ende des Projekts als Vorlage für den Designer, der sich bei der Gestaltung der grafischen Benutzeroberfläche an den Vorlagen des Screendesigns orientieren muss.\\
-Auch hier betrachten wir uns ein Beispiel aus unseren angefertigten Mockups. Wir wählen hierfür bewusst die Mockups für das Blackboard, um zusammen mit den unter dem Kapitel \textit{\ref{ssec:UseCases} \nameref{ssec:UseCases}} in\textit{ Abb. \ref{fig:UseCaseDiagrammBlackBoard}} und \textit{Abb. \ref{fig:UseCaseNotizBearbeiten}} beschriebenen Dokumenten einen möglichst vollständigen Einblick in eine Funktion der App zu erhalten.\\
+Ein Mockup ist eine nicht lauffähige Version einer Ebene des Gesamtsystems. Sie dient hauptsächlich zur ersten
+Veranschaulichung designtechnischer Visionen. Der Begriff des Mockups wird auch ausserhalb der Softwareentwicklung gerne
+für maßstabsgetreue, plastisch modellierte Nachbildungen verwendet. In der Softwarentwicklung versteht man meistens eine
+in Bildbearbeitungsprogrammen entworfene Vorlage der grafischen Benutzeroberfläche. Sie soll beispielhaft das finale Produkt repräsentieren. Im späteren Verlauf wird oft auf Basis der Mockups ein Screendesign entwickelt, in dem weitaus mehr Details ausgearbeitet werden. Das Screendesign dient am Ende des Projekts als Vorlage für den Designer, der sich bei der Gestaltung der grafischen Benutzeroberfläche an den Vorlagen des Screendesigns orientieren muss.\\
+Auch hier betrachten wir ein Beispiel aus unseren angefertigten Mockups. Wir hierfür bewusst die Mockups für das
+Blackboard ausgewählt, um zusammen mit den unter dem Kapitel \textit{\ref{ssec:UseCases} \nameref{ssec:UseCases}} in\textit{ Abb. \ref{fig:UseCaseDiagrammBlackBoard}} und \textit{Abb. \ref{fig:UseCaseNotizBearbeiten}} beschriebenen Dokumenten einen möglichst vollständigen Einblick in eine Funktion der App zu erhalten.\\
 Für die Mockups wurde das kostenfreie Programm \textit{Pencil} \cite{pencil:13} von Entwickler \textit{Evolus} verwendet. Das Programm hilft speziell bei der Gestaltung von Mockups für die Softwareentwicklung. Es bringt bereits viele vorgefertigte Formen und Icons aus verschiedenen Systemen mit. So ist man nach der Installation bereits in der Lage Mockups basierend auf Android Icons zu erstellen. Dieser Vorteil hat uns überzeugt.\\
 Unter Berücksichtigung unseres Use-Case-Diagramms Blackboard aus \textit{Abb. \ref{fig:UseCaseDiagrammBlackBoard}} benötigen wir drei Mockups um die relevanten Screens des Blackboards darzustellen. So wäre das ein Mockup für die Übersicht des Systems, eins für \textit{Notiz erstellen} und eins für \textit{Notiz bearbeiten/Notiz löschen}.\\
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{images/vorgehensweise/mockups/blackboard.png}
 \caption{Mockup 01: Übersicht Black Board}
 \label{fig:Mockup01BlackBoard}
 \end{figure}
-In Abb. \ref{fig:Mockup01BlackBoard} ist die Übersicht zu sehen. Dies ist der Startbildschirm für das Blackboard. Hier werden alle Notizen in einer Liste angezeigt. Zu jeder Notiz gehört ein Benutzer mit dessen Profilbild, ein Datum mit Uhrzeit und der Text des Benutzers. Die Navigation befindet sich im Kopfbereich der App und ist für den Benutzer immer zu sehen. Im unteren Bereich des Bildschirms befinden sich die speziellen Optionen der Funktion. Man wird mit einem Fingertipp auf das Textfeld eine neue Notiz erstellen können und mit einem Fingertipp auf \textit{Löschen} die gewünschten Notizen aus der Datenbank entfernen.
+
+In Abb. \ref{fig:Mockup01BlackBoard} ist die Übersicht zu sehen. Dies ist der Startbildschirm für das Blackboard. Hier
+werden alle Notizen in einer Liste angezeigt. Zu jeder Notiz gehört ein Benutzer mit dessen Profilbild, ein Datum mit
+Uhrzeit und der Text des Benutzers. Die Navigation befindet sich im Kopfbereich der App und ist für den Benutzer immer
+zu sehen. Im unteren Bereich des Bildschirms befinden sich die speziellen Optionen der Funktion. Man kann mit einem Fingertipp auf das Textfeld eine neue Notiz erstellen und mit einem Fingertipp auf \textit{Löschen} die gewünschten Notizen aus der Datenbank entfernen.
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{images/vorgehensweise/mockups/blackboardneuenotiz.png}
 \caption{Mockup 02: Neue Notiz}
 \label{fig:Mockup02BlackBoard}
 \end{figure}
-Will der Benutzer eine neue Notiz erstellen, so muss er von der Übersicht auf das Textfeld \textit{neue Notiz} tippen. Dann gelangt er auf das Mockup Abb. \ref{fig:Mockup02BlackBoard}, auf dem sich eine Tastatur geöffnet und der Button \textit{Löschen} verschwunden ist. Der Button zum löschen von Notizen würde hier nur verwirren, weil die Funktion nur in der Übersicht Möglich ist. Der Button \textit{Zurücksetzen} ist hier allerdings sehr wichtig, um dem Benutzer die Möglichkeit zu geben seinen Text mit einem Tipp auf den Button zu entfernen und gleichzeitig auf die Übersicht zurück zu gelangen. Ohne diese Funktion würde der Benutzer den Text über die Tastatur löschen müssen und könnte schnell genervt sein.
+
+Will der Benutzer eine neue Notiz erstellen, so muss er von der Übersicht auf das Textfeld \textit{neue Notiz} tippen. Dann gelangt er auf das Mockup Abb. \ref{fig:Mockup02BlackBoard}, auf dem sich eine Tastatur geöffnet und der Button \textit{Löschen} verschwunden ist. Der Button zum Löschen von Notizen würde hier nur verwirren, weil die Funktion nur in der Übersicht möglich ist. Der Button \textit{Zurücksetzen} ist hier allerdings sehr wichtig, um dem Benutzer die Möglichkeit zu geben seinen Text mit einem Tipp auf den Button zu entfernen und gleichzeitig auf die Übersicht zurück zu gelangen. Ohne diese Funktion würde der Benutzer den Text über die Tastatur löschen müssen und könnte schnell genervt sein.
+
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{images/vorgehensweise/mockups/blackboardnotizloeschen.png}
 \caption{Mockup 03: Notiz(en) löschen}
 \label{fig:Mockup03BlackBoard}
 \end{figure}
-Möchte der Benutzer eine Notiz löschen, kann er aus der Übersicht mit dem Fingertipp auf den Button \textit{Löschen} diese Funktion aktivieren (Abb. \ref{fig:Mockup03BlackBoard}). Ist er in dieser Funktion, hat er die Möglichkeit mehrere Notizen auszuwählen und mit einem weiteren tippen auf \textit{Löschen} seine Auswahl aus der Datenbank zu entfernen.\\
+
+Möchte der Benutzer eine Notiz löschen, kann er aus der Übersicht mit dem Fingertipp auf den Button \textit{Löschen} diese Funktion aktivieren (Abb. \ref{fig:Mockup03BlackBoard}). Ist er in dieser Funktion, hat er die Möglichkeit mehrere Notizen auszuwählen und mit einem weiteren Tippen auf \textit{Löschen} seine Auswahl aus der Datenbank zu entfernen.\\
 \\
 Es ist zu erkennen, dass wir uns mit dem Design der grafischen Benutzeroberfläche an gewisse Vorlagen des Betriebssystems \textit{Android} halten möchten. Ausserdem wird mit einem schlichten und wenig verspielten Design eine gute Lesbarkeit gewährleistet. Auf ein späteres verfeinern der Mockups durch ein Screendesign wurde bewusst verzichtet. Durch die bereits in den Mockups vorkommenden Details und farblichen Designaspekte ist eine weitere Verfeinerung in unseren Augen nicht nötig.
 
 \subsection{Lastenheft}\index{Lastenheft}\label{ssec:Lastenheft}
 Ein Lastenheft beschreibt alle Anforderungen die der Auftraggeber an ein Projekt stellt. Es wird vom Auftraggeber erstellt und an den Auftragnehmer weitergeleitet. Der Auftragnehmer erstellt auf der Grundlage des Lastenhefts ein Pflichtenheft, in dem er seine eigenen Lösungsansätze für die Anforderungen aus dem Lastenheft dem Auftraggeber präsentiert. Ist der Auftraggeber mit dem Pflichtenheft zufrieden, entsteht auf Grundlage dieser beiden Dokumente ein Vertrag zwischen beiden Parteien. Bei der finalen Abgabe des fertigen Produktes an den Auftraggeber, wird das Endprodukt auf Grundlage der Dokumente auf Vollständigkeit geprüft. Kommt es zu Auseinandersetzungen, können beide Parteien auf den Mitschriften der Dokumente gegeneinander argumentieren.\\
-Da wir als Team Auftraggeber uns Auftragnehmer gleichzeitig sind, schreiben wir uns selbst ein Lastenheft. Dies ist uns wichtig, um während der Implementierung der App den Umfang und den Aufwand im Auge zu behalten. Wir können uns mit einem Lastenheft von Punkt zu Punkt arbeiten und bei der finalen Abgabe das Produkt gut mit den Anforderungen vergleichen. Auf ein Pflichtenheft haben wir verzichtet.\\
+Da wir als Team Auftraggeber und Auftragnehmer gleichzeitig sind, schreiben wir uns selbst ein Lastenheft. Dies ist uns wichtig, um während der Implementierung der App den Umfang und den Aufwand im Auge zu behalten. Wir können uns mit einem Lastenheft von Punkt zu Punkt arbeiten und bei der finalen Abgabe das Produkt gut mit den Anforderungen vergleichen. Auf ein Pflichtenheft haben wir verzichtet.\\
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{images/vorgehensweise/lastenheft/LastenheftIVZ.png}
@@ -85,6 +105,10 @@ Da wir als Team Auftraggeber uns Auftragnehmer gleichzeitig sind, schreiben wir 
 \label{fig:LastenheftInhaltsverzeichnis}
 \end{figure}
 
-In Abb. \ref{fig:LastenheftInhaltsverzeichnis} ist das Inhaltsverzeichnis unseres Lastenhefts zu sehen und zeigt die Struktur unseres Dokuments. Wir konzentrierten uns dabei auf das größte Kapitel, die \textit{Anforderungen}.  Dieses Kapitel beschreibt alle primären Funktionen der App. Wir haben uns dabei für \textit{Blackboard}, \textit{Putzplan}, \textit{Einkaufsliste}, \textit{Kalender}, \textit{Web Login} und \textit{Web Oberfläche} entschieden. Jedes dieser Funktionen wird zuerst mit einem kurzen Text beschrieben, um danach die Anforderungen und am Ende die Risiken zu beschreiben.\\
+In Abb. \ref{fig:LastenheftInhaltsverzeichnis} ist das Inhaltsverzeichnis unseres Lastenhefts zu sehen und zeigt die
+Struktur unseres Dokuments. Wir konzentrierten uns dabei auf das größte Kapitel, die \textit{Anforderungen}.  Dieses
+Kapitel beschreibt alle primären Funktionen der App. Dabei haben wir uns für \textit{Blackboard}, \textit{Putzplan},
+\textit{Einkaufsliste}, \textit{Kalender}, \textit{Web Login} und \textit{Web Oberfläche} entschieden. Jede dieser
+Funktionen wird zuerst mit einem kurzen Text beschrieben. Danach kommen die Anforderungen und am Ende werden die Risiken beschreiben.\\
 \\
 Das gesamte Lastenheft, sowie alle Mockups, Use-Case-Diagramme und Use-Case Beschreibungen können im Anhang dieser Dokumentation nachgelesen werden.
