@@ -60,9 +60,10 @@ Mehrzeilige Abfragen in PHP sind in eigene Dateien ausgelagert. So ist z.B. die 
 \end{description}
 \end{figure}
 Alle Eingaben die der Benutzer in der Weboberfläche machen kann, werden durch Textfeder oder Checkboxen erfasst. Wir verwenden für alle zu übertragenden Daten die Methode POST, die die Daten für Benutzer der Seiten unsichtbar im Rumpf des HTTP-Requests sendet. Die Methode GET, die die Daten für alle sichtbar an die URI anhängt, könnte theoretisch ebenfalls genutzt werden. Jedoch würde das in unserem Fall ein erhöhtes Sicherheitsrisiko darstellen. Darum haben wir bis auf wenige ID's auf die Methode GET verzichtet.\\ \\
-\begin{figure}
+
 Auf jeder HTML Seite und in jedem PHP Skript wird zu Beginn überprüft, ob der Nutzer im System angemeldet ist. Falls die Prüfung fehlschlägt, wird ihm mit dem Hinweis \textit{Bitte loggen Sie sich erst ein!} die Anzeige der Seite verwehrt und das PHP Script wird mit \textit{exit;} gestoppt.
 
+\begin{figure}
 \begin{lstlisting}[language=PHP, caption=Login des Benutzers überprüfen, captionpos=below, label=WEBLogin]
 if(!isset($_SESSION["email"]))
 {
@@ -72,16 +73,18 @@ if(!isset($_SESSION["email"]))
 \end{lstlisting}
 \end{figure}
 
-Ist der Benutzer eingeloggt, wird das PHP Script nicht gestoppt, sondern weiter verarbeitet. Mit einem \textit{require_oce 'db_inc.php} wird die Datei db_inc.php eingebunden und ausgeführt. Das passiert aber nur, wenn die Datei nicht schon vorher durch ein anderes Script eingebunden wurde.
+Ist der Benutzer eingeloggt, wird das PHP Script nicht gestoppt, sondern weiter verarbeitet. Mit einem \textit{require\textunderscore oce 'db\textunderscore inc.php} wird die Datei db\textunderscore inc.php eingebunden und ausgeführt. Das passiert aber nur, wenn die Datei nicht schon vorher durch ein anderes Script eingebunden wurde.
 
-\begin{lstlisting}[language=PHP, caption=Login des Benutzers überprüfen, captionpos=below, label=WEBLogin]
+\begin{figure}
+\begin{lstlisting}[language=PHP, caption=Verbindung aufbauen\, falls noch nicht geschehen, captionpos=below, label=WEBLogin]
 require_once 'db_inc.php';	
 \end{lstlisting}
 \end{figure}
 
-Im Anschluss können die über die POST bzw. GET von der HTML Seite übergebenen Parameter abgefragt und zwischengespeichert werden. In dem Beispiel wird mit einer if-Anfrage geprüft, ob ein Parameter "einkaufsliste_id" geliefert wurde, falls dies der Fall ist, wird der Inhalt der Variablen lokal zwischengespeichert.
+Im Anschluss können die über die POST bzw. GET von der HTML Seite übergebenen Parameter abgefragt und zwischengespeichert werden. In dem Beispiel wird mit einer if-Anfrage geprüft, ob ein Parameter "einkaufsliste\textunderscore id" geliefert wurde, falls dies der Fall ist, wird der Inhalt der Variablen lokal zwischengespeichert.
 
-\begin{lstlisting}[language=PHP, caption=Login des Benutzers überprüfen, captionpos=below, label=WEBLogin]
+\begin{figure}
+\begin{lstlisting}[language=PHP, caption=Variable \textit{einkaufsliste\textunderscore id} lockal zwischenspeichern, captionpos=below, label=WEBLogin]
 if(isset($_POST['einkaufsliste_id']))
 {
 	$einkaufsliste_id = $_POST['einkaufsliste_id'];
