@@ -26,21 +26,14 @@ Dazu wurden zwei einfache Tabellen angelegt. Die Tabelle \verb!tp_test!\ref{sql:
 verwendet. Um alle nötigen Datentypen testen zu können wurden verschiedene Spalten verwendet. 
 Dadurch konnte auch der spätere Einsatz besser simuliert werden.
 
-\begin{figure} %[hbtp]  
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=sql]
-      CREATE TABLE IF NOT EXISTS `test_tp` (
-          `uid` VARCHAR(23) NOT NULL,
-          `msg` TEXT,
-          `nmbr` INT(11) DEFAULT NULL,
-          `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-      ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Aufbau der Tabelle tp\_test} 
-  \label{sql:tptest}
-\end{figure}
+\begin{lstlisting}[float=h, caption=Aufbau der Tabelle tp\_test, captionpos=below, label=sql:tptest, language=sql, escapechar=|]
+CREATE TABLE IF NOT EXISTS `test_tp` (
+  `uid` VARCHAR(23) NOT NULL,
+  `msg` TEXT,
+  `nmbr` INT(11) DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+\end{lstlisting}
 
 Um die Benutzerverwaltung für den Prototypen zu simulieren wurden außerdem noch eine Tabelle \verb!users!
 \ref{sql:usersTest} angelegt.
@@ -48,30 +41,21 @@ Darin wurden Informationen zu den Benutzern hinterlegt. Zum Beispiel eine eindeu
 Zum Authentifizieren wurde die E-Mailadresse und ein beliebiges Passwort verwendet.
 Um das Passwort nicht im Klartext zu speichern, wurde es zusammen mit einem Salt als Hash-Wert abgelegt.
 
-\begin{figure} %[hbtp] 
-  \centering
-    \begin{minipage}{1.0\textwidth} \small
-      \begin{lstlisting}[language=sql]
-        CREATE TABLE IF NOT EXISTS `users` (
-          `uid` int(11) NOT NULL AUTO_INCREMENT,
-          `unique_id` varchar(23) NOT NULL,
-          `firstname` varchar(50) NOT NULL,
-          `lastname` varchar(50) NOT NULL,
-          `username` varchar(20) NOT NULL,
-          `wgId` int(11) NOT NULL,
-          `email` varchar(100) NOT NULL,
-          `encrypted_password` varchar(80) NOT NULL,
-          `salt` varchar(10) NOT NULL,
-          `created_at` datetime DEFAULT NULL,
-          PRIMARY KEY (`uid`)
-        ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
-        \end{lstlisting}
-    \end{minipage}
-  \caption{Aufbau der Tabelle users}
-  \label{sql:usersTest}
-\end{figure}
-
-  %Nachdem die Struktur der Datenbank stand, wurde die \kill
+\begin{lstlisting}[float=h, caption=Aufbau der Tabelle users, captionpos=below, label=sql:usersTest, language=sql, escapechar=|]
+CREATE TABLE IF NOT EXISTS `users` (
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
+  `unique_id` varchar(23) NOT NULL,
+  `firstname` varchar(50) NOT NULL,
+  `lastname` varchar(50) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `wgId` int(11) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `encrypted_password` varchar(80) NOT NULL,
+  `salt` varchar(10) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+\end{lstlisting}
 
 \subsection{PHP-Skripte}\label {subsect:PHPrototyp}
 Der Aufbau der PHP-Schnittstelle ist simpel umgesetzt, da nicht viele Funktionen für den Prototyp benötigt werden.
@@ -120,109 +104,65 @@ eingesetzt werden. Nachdem die zum TAG passende Funktion gefunden wurde, werden 
 entsprechend verarbeitet. \\
 Eine wichtige Funktion der PHP-Skripte ist der Login, beziehungsweise die Authentifizierung des Benutzers. \\*
 Dazu wird die Adresse \verb!http://test.app1.raschel.org/php/db.php! mit den Parametern \verb!TAG=''!,
-\verb!EMAIL=``ritzels@fh-trier.de''! und \verb!PASSWORD=``ritzels''! aufgerufen (Vgl. \ref{php:loginProto}).
+\verb!EMAIL=``ritzels@fh-trier.de''! und \verb!PASSWORD=``ritzels''! aufgerufen (vgl. \ref{php:loginProto}).
 Sind alle Parameter korrekt übertragen worden, wird die Funktion \verb!getUserByEmailAndPassword($email, $password)!,
 die sich im Skript \verb!DB\_Functions.php! befindet, aufgerufen. Zum Authentifizieren wird aus der Datenbank der zur
 E-Mailadresse passende Datensatz geladen, siehe Auszug \ref{php:dbFuncProto}.
 Das in der Datenbank gespeicherte \verb!SALT! wird mit dem übertragenen Passwort an die Funktion
 \verb!checkhashSSHA($salt, $password)! übergeben, welche den Hash aus \verb!SALT! und Passwort bildet und zurückgibt.
-Dieser generierte Hash wird dann mit dem in der Datenbank gespeichertem \verb!encrypted\_password! verglichen. Stimmen
+Dieser generierte Hash wird dann mit dem in der Datenbank gespeichertem \verb!encrypted_password! verglichen. Stimmen
 die beiden Hashs überein, wird der geladene Datensatz an die Login-Funktion zurückgeliefert, ansonsten liefert die
-Funktion \verb!getUserByEmailAndPassword() -> false!.
+Funktion \\* \verb!getUserByEmailAndPassword() -> false!.
 
-\begin{figure} %[hbtp] 
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=php,escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus login.php, captionpos=below, label=php:loginProto, language=php, escapechar=|]
 <?php
-  /**
-   PHP API for Login, Register, Changepassword,
-   Resetpassword Requests and for Email Notifications.
- **/
-  [|\ldots{}|]
-  if (isset($tag) && $tag != `') {
-  // Include Database handler
+[|\ldots{}|]
+if (isset($tag) && $tag != `') {
   require_once 'include/DB_Functions.php';
   $db = new DB_Functions();
-  // response Array
   $response = array("tag" => $tag, "success" => 0, "error" => 0);
-  // check for tag type
   if ($tag == 'login') {
-  // Request type is check Login
   $email = $_POST['email'];
   $password = $_POST['password'];
-  // check for user
   $user = $db->getUserByEmailAndPassword($email, $password);
-    if ($user) {
-      // user found
-      // echo json with success = 1
-      $response["success"] = 1;
-      $response["user"]["user_id"] = $user["user_id"];
-      $response["user"]["wg_id"] = $user["wg_id"];
-      $response["user"]["crea"] = $user["crea"];
-
-      echo json_encode($response);
-    } else {
-      // user not found
-      // echo json with error = 1
-      $response["error"] = 1;
-      $response["error_msg"] = $IncorrectEMail;
-      echo json_encode($response);
-    }
+  if ($user) {
+    $response["success"] = 1;
+    $response["user"]["user_id"] = $user["user_id"];
+    $response["user"]["wg_id"] = $user["wg_id"];
+    $response["user"]["crea"] = $user["crea"];
+    echo json_encode($response);
+  } else {
+    $response["error"] = 1;
+    $response["error_msg"] = $IncorrectEMail;
+    echo json_encode($response);
   }
-  else if ($tag == 'chgpass') {
-  [|\ldots{}|]
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus login.php}
-  \label{php:loginProto}
-\end{figure}
+}
+else if ($tag == 'chgpass') {
+[|\ldots{}|]
+\end{lstlisting}
 
-\begin{figure} %[hbtp] 
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=php]
-    [..]
-    private $db;
-
-	// constructor
-	function __construct() {
-		require_once 'DB_Connect.php';
-		// connecting to database
-		$this->db = new DB_Connect();
-		$this->db->connect();
-	}
-     /**
-     * Verifies user by email and password
-     */
-    public function getUserByEmailAndPassword($email, $password) {
-        $resultSQL = mysql_query("SELECT * FROM user WHERE email = '$email'")
-            or die(mysql_error());
-        // check for result
-        $no_of_rows = mysql_num_rows($resultSQL);
-	
-        if ($no_of_rows > 0) {
-            $result = mysql_fetch_array($resultSQL);
-            $salt = $result['salt'];
-            $encrypted_password = $result['passwort'];
-            $hash = $this->checkhashSSHA($salt, $password);
-            // check for password equality
-            if ($encrypted_password == $hash) {
-                // user authentication details are correct
-                return $result;
-            }
-        }
-        else {
-            // user not found
-            return null;
-        }
+\begin{lstlisting}[float=h, caption=Auszug aus DB\_Functions.php, captionpos=below, label=php:dbFuncProto, language=php, escapechar=|]
+[|\ldots{}|]
+private $db;
+function __construct() {
+  require_once 'DB_Connect.php';
+  $this->db = new DB_Connect();
+  $this->db->connect();
+}
+public function getUserByEmailAndPassword($email, $password) {
+  $resultSQL = mysql_query("SELECT * FROM user WHERE email = '$email'")
+      or die(mysql_error());
+  $no_of_rows = mysql_num_rows($resultSQL);
+  if ($no_of_rows > 0) {
+    $result = mysql_fetch_array($resultSQL);
+    $salt = $result['salt'];
+    $encrypted_password = $result['passwort'];
+    $hash = $this->checkhashSSHA($salt, $password);
+    if ($encrypted_password == $hash) {
+      return $result;
     }
-    [..]
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus DB\_Functions.php} 
-  \label{php:dbFuncProto}
-\end{figure}
+[|\ldots{}|]
+\end{lstlisting}
 
 %Im Kapitel ref{sec:App} werden noch weitere Funktionen erläutert, die in diesem Kapitel noch keine Rolle spielen.
 Die Skripte befinden sich in vollem Umfang noch als Anhang an diese Arbeit.
@@ -294,31 +234,21 @@ Zum Beispiel wurde für den Login ein Menüpunkt in der \verb!MainAcitivity! angel
 In der \verb!main.xml! wird dafür ein neues Element erstellt mit Attribute für den Namen, die Sortierung oder welche
 Kategorie dieser Menüpunkt angehört (vgl. \ref{xml:mainMenuProto}).
 
-\begin{figure} %[hbtp] 
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=xml,escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus menu/main.xml, captionpos=below, label=xml:mainMenuProto, language=xml, escapechar=|]
 [|\ldots{}|] 
 <item android:id="@+id/action_settings" android:orderInCategory="100"
   android:title="@string/action_settings" app:showAsAction="never" 
   android:menuCategory="system"
   android:actionLayout="@layout/activity_login" />
 [|\ldots{}|]
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus menu/main.xml} 
-  \label{xml:mainMenuProto}
-\end{figure}
+\end{lstlisting}
 
 Um diesen Menüpunkt noch mit einer Funktion zu versehen, muss in der \verb!MainActivity.java! \ref{java:MainActivityProto} das Menü zunächst generiert werden
 (Zeile ~\ref{line:onCreateOptionsMenuProto}). Wird der Eintrag ausgewählt, ruft ein Listener die Methode \verb!onOptionsItemSelected!
 ~\ref{line:onOptionsItemSelProto} auf, in welcher dann mittels dem übergebenen \verb!MenuItem!-Objekt die gewünschte
 Operation, in diesem Fall das Starten der \verb!LoginActivity.java!, ausgeführt wird.
 
-\begin{figure} %[hbtp] 
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=java, escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus MainActivity.java, captionpos=below, label=java:MainActivityProto, language=java, escapechar=|]
 [|\ldots{}|]
 @Override
 public boolean onCreateOptionsMenu(Menu menu) { |\label{line:onCreateOptionsMenuProto}|
@@ -339,11 +269,7 @@ public boolean onOptionsItemSelected(MenuItem item) { |\label{line:onOptionsItem
       return true;  }
   return super.onOptionsItemSelected(item);  }
 [|\ldots{}|]
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus MainActivity.java} 
-  \label{java:MainActivityProto}
-\end{figure}
+\end{lstlisting}
 
 weiter ausführen?
 
@@ -361,7 +287,7 @@ Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \ve
 \ref{pic:MainActivityProto}. \\* Das geschieht in Zeile \ref{line:setContentViewProto} durch
 \verb!setContentView(R.layout.activity_main)! in der \verb!onCreate()! Methode.
 
-\begin{figure}
+\begin{figure} [h]
   \centering
   \includegraphics[width=0.4\textwidth]{images/prototyp/MainActivityEmpty.png}
   \caption{Start-Oberfläche}
@@ -369,9 +295,10 @@ Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \ve
 \end{figure}
 
 Ist alles vollständig geladen, kann man sich über das Menü anmelden. Dafür wird in der \verb!onOptionsItemSelected(MenuItem item)! ein
-\verb!startActivity()! aufgerufen, welches die \verb!LoginActivity.java! startet \ref{pic:LoginActivityProto}.
+\verb!startActivity()! aufgerufen, welches die \verb!LoginActivity.java! startet (siehe Abbildung
+\ref{pic:LoginActivityProto}).
 
-\begin{figure}
+\begin{figure} [h]
   \centering
   \includegraphics[width=0.4\textwidth]{images/prototyp/LoginActivity.png}
   \caption{Login-Oberfläche}
@@ -379,16 +306,13 @@ Ist alles vollständig geladen, kann man sich über das Menü anmelden. Dafür wird 
 \end{figure}
 
 Nach der erfolgreichen Authentifizierung wird über den Button \texttt{Synchronisieren} die Funktion
-\verb!synchronizeDbs(View view)! \ref{line:synchDbsProto} aufgerufen.
+\verb!synchronizeDbs(View view)! in Zeile \ref{line:synchDbsProto} aufgerufen. \\
 Dies generiert ein Objekt der Klasse \verb!SyncRemoteDatabase.java! \ref{java:SyncRemoteDBProto}. Dabei handelt es sich um eine von \verb!AsyncTask!
 abgeleitete Klasse, welche die Testdaten über das PHP-Skript aus der Datenbank abruft und anschließend in die lokale
 \verb!SQLite!-Datenbank schreibt. Diese Klasse wurde jedoch in die \verb!DBConnectionLib! \ref{subsub:DBConLibProto}
-ausgelagert und anschließend an diese Kapitel genauer erläutert. \\
+ausgelagert und anschließend an diese Kapitel genauer erläutert.
 
-\begin{figure} 
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=java,escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto, language=java, escapechar=|]
 [|\ldots{}|]
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -402,11 +326,7 @@ public void synchronizeDbs(View view) { |\label{line:synchDbsProto}|
   queryTask.execute(Constants.TABLE_TEST);
 }
 [|\ldots{}|]
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus der MainActivity.java} 
-  \label{java:MainActivityProto}
-\end{figure}
+\end{lstlisting}
 
 Wurden die Tabellen erfolgreich synchronisiert, kann über die beiden Felder Testwerte eingegeben werden. Durch einen
 klick auf den Button \texttt{Save to DB} werden die Daten zunächst in der Methode \verb!saveToDb(View view)!~\ref{line:saveToDbProto}
@@ -426,10 +346,7 @@ gewünschte Layout der einzelnen Zeilen (\verb!R.Layout.list_item!) sowie der \te
 Damit der Adapter weiß, welche Werte er in welche \textsl{TextView} packen soll, werden dem Konstruktor noch \verb!from!
 und \verb!to! übergeben. 
 
-\begin{figure} %[hbtp]  
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=java,escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto3, language=java, escapechar=|]
 [|\ldots{}|]        
 public void saveToDb(View view) { |\label{line:saveToDbProto}|
   {|\ldots{}|}
@@ -472,11 +389,7 @@ public void clearResultListVew(View view) { |\label{line:clearLVProto}|
   lv1.setVisibility(ListView.INVISIBLE);
 }
 [|\ldots{}|]
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus der MainActivity.java} 
-  \label{java:MainActivityProto3}
-\end{figure}
+\end{lstlisting}
 
 Dabei handelt es sich bei dem Objekt \verb!from! um eine \textsl{String}-Liste mit den Namen der Tabellenspalten. Die
 \textsl{int}-Liste \verb!to! enthält die IDs der \textsl{TextView}s im verwendeten Zeilenlayout. Die Reihenfolge muss
@@ -513,10 +426,7 @@ Nachricht versehen werden \ref{line:pDialogPostProto} und die erhaltenen Daten a
 extrahieren (Zeile ~\ref{line:parseJsonProto}). Im selben Schritt werden die Testdaten der Testtabelle als neuen
 Datensatz angefügt (siehe Zeile ~\ref{line:addTestRowProto}). 
 
-\begin{figure} 
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=java,escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus SyncRemoteDatabase.java, captionpos=below, label=java:SyncRemoteDBProto, language=java, escapechar=|]
 [|\ldots{}|]        
 @Override
 protected void onPreExecute() { |\label{line:onPreExecProto}|
@@ -551,10 +461,6 @@ protected void onPostExecute(JSONObject json) { |\label{line:postExecProto}|
     }
 [|\ldots{}|]
     \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus SyncRemoteDatabase.java} 
-  \label{java:SyncRemoteDBProto}
-\end{figure}
 
 Die angesprochene Funktion \textsl{syncRemoteTable()} befindet sich in der Klasse \verb!UserFunctions.java!
 \ref{java:UsrFuncsProto}. Darin wurden die Methoden zusammgefasst, die vom Benutzer oder mit dem Benutzer
@@ -564,10 +470,7 @@ der Testdaten aus der MySQL-Datenbank verwendet wird. \\*
 Dazu werden zunächst die \emph{POST}-Parameter in eine Liste aus \texttt{BasicNameValuePair}-Objekten gepackt, wie in
 den Zeilen \ref{line:POSTParaVonProto} bis \ref{line:POSTParaBisProto} zu sehen.
 
-\begin{figure}
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=java,escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus UserFunctions.java, captionpos=below, label=java:UsrFuncsProto, language=java, escapechar=|]
 [|\ldots{}|]        
 public JSONObject syncRemoteTable(AuthCredentials creds, String table) { |\label{line:synRemTableProto}|
   List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>(); |\label{line:POSTParaVonProto}|
@@ -579,11 +482,7 @@ public JSONObject syncRemoteTable(AuthCredentials creds, String table) { |\label
   return json;
 }
 [|\ldots{}|]
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus UserFunctions.java} 
-  \label{java:UsrFuncsProto}
-\end{figure}
+\end{lstlisting}
 
 Die so verpackten Parameter werden schließlich an den \verb!JSONParser! \ref{java:JSONParserProto} übergeben.
 Die darin enthaltene Funktion \\* \textsl{getJSONFromUrl(String url, List<BasicNameValuePair> params)} der
@@ -595,10 +494,7 @@ Lesen ermöglicht wird, was bei \emph{HTTP}-Kommunikationen das Standardverfahren
 \ref{line:readLineProto}). Jede Zeile wird an einen \textsl{StringBuilder} gehängt und nach dem Lesen der
 letzten Zeile von einem \verb!String! (Zeile \ref{line:sb.toString(Proto)}) in das gewünschte \textsl{JSONObject} umgewandelt.
 
-\begin{figure}
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=java,escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus JSONParser.java, captionpos=below, label=java:JSONParserProto, language=java, escapechar=|]
 public JSONObject getJSONFromUrl(String url, 
     List<BasicNameValuePair> params) {
 [|\ldots{}|]        
@@ -623,11 +519,7 @@ else {
   jObj = new JSONObject(json); |\label{line:newJSONObjectProto}|
 }
 [|\ldots{}|] 
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus JSONParser.java} 
-  \label{java:JSONParserProto}
-\end{figure}
+\end{lstlisting}
 
 Die so verpackte Tabelle, wird dann mit einer \verb!for!-Schleife, siehe Zeile \ref{line:parseJsonProto} im
 \nameref{java:SyncRemoteDBProto} \ref{java:SyncRemoteDBProto}, in die einzelnen Zeilen zerlegt und von der Funktion
@@ -639,10 +531,7 @@ die Werte durch ein zusammengesetzten SQL-Statement in die Datenbank zu schriebe
 Verwendung der \textsl{insert()}-Methode wie in Zeile \ref{line:insertProto}, wodurch der Code nicht nur weniger fehleranfällig, sondern auch
 übersichtlicher und sicherer wird. \\
 
-\begin{figure}
-  \centering
-  \begin{minipage}{1.0\textwidth} \small
-    \begin{lstlisting}[language=java,escapechar=|]
+\begin{lstlisting}[float=h, caption=Auszug aus der DatabaseHandler.java, captionpos=below, label=java:DBHandlerProto, language=java, escapechar=|]
 [|\ldots{}|]        
 public void addTestRow(int id, String text, int number, 
     String created_at) { |\label{line:addTstRw()Proto}|
@@ -658,11 +547,7 @@ public void addTestRow(int id, String text, int number,
   db.close();
 }
 [|\ldots{}|]
-    \end{lstlisting}
-  \end{minipage}
-  \caption{Auszug aus der DatabaseHandler.java} 
-  \label{java:DBHandlerProto}
-\end{figure}
+\end{lstlisting}
 
 \paragraph{Klasse InsertIntoDatabase}\label{para:InsrtIntoDbProto}
 Ebenfalls aus der \verb!MainActivity! heraus wird diese Klasse instantziiert und ausgeführt.
