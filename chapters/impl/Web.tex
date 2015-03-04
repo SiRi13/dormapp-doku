@@ -3,10 +3,10 @@ Der Administrator einer WG muss in der Lage sein, die Eigenschaften der WG zu ko
 Im folgenden Kapitel wird die Struktur der Weboberfläche mit Hilfe von einzelnen Auszügen aus dem Quellcode erläutert.
 
 \subsection{Umsetzung}\label{subSec:WebUmsetz}
-Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete Skriptsprache PHP entschieden. PHP bietet durch den Einfluss von Java, C++ und Perl einen leichten Einstieg für diejenigen, die bereits erste Erfahrungen mit einer der Programmiersprachen sammeln konnten. Ausserdem bietet PHP die einfache Umsetzung von dynamischen Webseiten und eine sehr gute Unterstützung von Datenbankverbindungen. Mit PHP ist automatisch sichergestellt, dass die Weboberfläche von jedem gängigen Browser aus in deren Desktop- sowie Mobilversion angezeigt werden kann.\\
+Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete Skriptsprache PHP entschieden. PHP bietet durch den Einfluss von Java, C++ und Perl einen leichten Einstieg für diejenigen, die bereits erste Erfahrungen mit einer der Programmiersprachen sammeln konnten. Ausserdem bietet PHP die einfache Umsetzung von dynamischen Webseiten und eine sehr gute Unterstützung von Datenbankverbindungen. Mit PHP ist automatisch sichergestellt, dass die Weboberfläche von jedem gängigen Browser aus in deren Desktop- sowie Mobilversion angezeigt werden kann.
 
-\begin{description}
-\item Die Weboberfläche gliedert sich in neun Seiten:
+\begin{figure}[H]
+Die Weboberfläche gliedert sich in neun Seiten:
 \dirtree{%
 .0 /.
 .2 admin.php.
@@ -19,17 +19,16 @@ Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete 
 .2 regist.php.
 .2 system.php.
 }
-\end{description}
+\end{figure}
 
 Jede dieser PHP Dateien stellt eine Seite der Weboberfläche dar. Jede Datei beinhaltet gewöhnlichen HTML Code für die
 Anzeige im Browser und PHP Code für die dynamische Datenabfrage von der Datenbank.\\
 Mehrzeilige Abfragen in PHP sind in externe Dateien ausgelagert. So ist zum Beispiel die Abfrage zum Löschen eines WG
-Mitglieds in der Datei \textit{benutzer\textunderscore edit\textunderscore delete.php} zu finden. Dadurch wird die
+Mitglieds in der Datei \textit{benutzer\textunderscore edit \textunderscore delete.php} zu finden. Dadurch wird die
 Übersichtlichkeit erhöht und wurde deshalb bei allen weiteren Abfragen so beibehalten.
 
-\begin{figure}
-\begin{description}
-\item Daraus ergibt sich folgende Struktur für die Weboberfläche mit ihren Seiten inklusive aller ausgelagerten PHP Abfragen:
+\begin{figure}[H]
+Daraus ergibt sich folgende Struktur für die Weboberfläche mit ihren Seiten inklusive aller ausgelagerten PHP Abfragen:
 \dirtree{%
 .1 /.
 .2 admin.php.
@@ -63,7 +62,6 @@ Mitglieds in der Datei \textit{benutzer\textunderscore edit\textunderscore delet
 .3 system\textunderscore update.php.
 .2 style.css.
 }
-\end{description}
 \end{figure}
 
 Alle Eingaben die der Benutzer auf der Weboberfläche machen kann, werden durch Textfelder oder Checkboxen erfasst. Wir
