@@ -1,0 +1,18 @@
+Use-Case: Artikel gekauft
+Ziel: Einkaufsliste mit Artikeln bearbeitet 
+Kategorie: optional (nützlich, nicht unbedingt notwendig)
+Vorbedingung: Benutzer ist eingeloggt (in App oder Web-Oberfläche)
+Nachbedingung Erfolg: Mitteilung an Benutzer, dass erfolgreich
+Nachbedingung Fehlschlag: Mitteilung an Benutzer, dass fehlgeschlagen
+Akteure: Benutzer der App & Weboberfläche (demnach nur registrierte WG Mitglieder)
+Auslösendes Ereignis: Benutzer wählt Artikel aus und möchte ihn als "gekauft" markieren
+Beschreibung:
+Artikel gekauft
+1 Artikelpreis eintragen
+2 Artikel als gekauft markieren. Der Artikel wird blasser (oder durchgestrichen) an das
+Ende der Einkaufsliste angestellt.
+3 Datenbank aktualisieren
+Alternativen:
+1a Artikel bereits gekauft markiert, somit keine Aktion Möglich
+
+

@@ -1,0 +1,16 @@
+Use-Case: Kalendereintrag erstellen
+Ziel: Kalendereintrag erstellen
+Kategorie: optional (nützlich, nicht unbedingt notwendig)
+Vorbedingung: Benutzer ist eingeloggt (in App oder Web-Oberfläche)
+Nachbedingung Erfolg: Mitteilung an Benutzer, dass Eintrag erfolgreich
+Nachbedingung Fehlschlag: Mitteilung an Benutzer, dass Eintrag fehlgeschlagen
+Akteure: Benutzer der App & Weboberfläche (demnach nur registrierte WG Mitglieder)
+Auslösendes Ereignis: Erstellung einer neuen WG, Termineintrag von Benutzer
+Beschreibung:
+Kalendereintrag erstellen
+1 Benutzer gibt Daten ein. Benutzer wünscht speichern der Daten.
+2 Kalendereintragung von Benutzer in Datenbank speichern.
+3 Kalendereintrag in Datenbank speichern
+Alternativen:
+3a (Fehlerbehandlung) Kalendereintrag nicht speichern, da Pflichtfeld(er) nicht ausgefüllt
+3b (Fehlerbehandlung) Benutzer Mitteilung über Fehler geben und auf Wunsch des Benutzers erneut versuchen, oder Vorgang abbrechen
