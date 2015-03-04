@@ -10,7 +10,7 @@ Um bei diesen kritischen Stellen nicht in bredouille zu geraten, wurde dafür ein
 
 \section{Prototyp Implementierung}\label{sect:ImplPrototyp}
 Als eine einfache und schnelle Art der Umsetzung haben wir uns für die PHP-Variante entschieden.
-Dabei werden die Daten von einem PHP-Skript aus der Datenbank gelesen und in eine JSON-Datenformat gebracht.
+Dabei werden die Daten von einem PHP-Skript aus der Datenbank gelesen und in ein JSON-Datenformat gebracht.
 Dieses Objekt wird in einem HTTP-Paket an die App übertragen.
 In der App sorgt dann ein JSON-Parser für das Auslesen der Daten, welche anschließend direkt verwertet werden oder
 zunächst in der lokalen SQLite-Datenbank vorgehalten werden. \\
@@ -22,9 +22,9 @@ Da beide Schwerpunkte in einem Prototyp getestet wurden, wird auf eine weitere T
 
 \subsection{Datenbankstruktur}\label{subsect:DBStruktPrototyp} 
 Begonnen wurde die Umsetzung mit der Definition der Datenbankstruktur sowie deren Umsetzung.
-Dazu wurden zwei einfache Tabellen angelegt. Die Tabelle \verb!tp_test!\ref{sql:tptest} wird für die Schreib- und Lesevorgänge
-verwendet. Um alle nötigen Datentypen testen zu können wurden verschiedene Spalten verwendet. 
-Dadurch konnte auch der spätere Einsatz besser simuliert werden.
+Dazu wurden zwei einfache Tabellen angelegt. Die Tabelle \verb!tp_test! in Abb. \ref{sql:tptest} wird für die Schreib- und Lesevorgänge
+verwendet. Um alle nötigen Datentypen testen zu können, wurden verschiedene Spalten verwendet. 
+Dadurch konnte der spätere Einsatz besser simuliert werden.
 
 \begin{lstlisting}[float=h, caption=Aufbau der Tabelle tp\_test, captionpos=below, label=sql:tptest, language=sql, escapechar=|]
 CREATE TABLE IF NOT EXISTS `test_tp` (
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `test_tp` (
 \end{lstlisting}
 
 Um die Benutzerverwaltung für den Prototypen zu simulieren wurden außerdem noch eine Tabelle \verb!users!
-\ref{sql:usersTest} angelegt.
+(Abb. \ref{sql:usersTest}) angelegt.
 Darin wurden Informationen zu den Benutzern hinterlegt. Zum Beispiel eine eindeutige ID, sowie Vor- und Nachname.
 Zum Authentifizieren wurde die E-Mailadresse und ein beliebiges Passwort verwendet.
 Um das Passwort nicht im Klartext zu speichern, wurde es zusammen mit einem Salt als Hash-Wert abgelegt.
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 \subsection{PHP-Skripte}\label {subsect:PHPrototyp}
 Der Aufbau der PHP-Schnittstelle ist simpel umgesetzt, da nicht viele Funktionen für den Prototyp benötigt werden.
 Trotzdem wurde auf eine übersichtliche Datei- und Ordnerstruktur, als auch auf einen modularen Aufbau geachtet.
-Wie in Abbildung \ref{dirtree:phpPrototyp} \nameref{dirtree:phpPrototyp} zu sehen, wurden der Aufbau zunächst in zwei Kategorien aufgeteilt.
+Wie in Abbildung \ref{dirtree:phpPrototyp} \nameref{dirtree:phpPrototyp} zu sehen, wurde der Aufbau zunächst in zwei Kategorien aufgeteilt.
 Funktionen, die direkt auf der Datenbank ausgeführt werden, sowie das Verbinden und Bereitstellen des Datenbankobjekts
 übernehmen, sind im Ordner \verb!php/include! untergebracht.
 Alle weiteren Funktionen die aus der App heraus erreichbar sein sollen, befinden sich im Hauptordner \verb!php!.
@@ -94,19 +94,18 @@ Alle weiteren Funktionen die aus der App heraus erreichbar sein sollen, befinden
   \label{dirtree:phpPrototyp}
 \end{figure}
 
-Die vollständigen Skripte befinden sich im Anhang und werde hier nur in Auszügen dargestellt. \\
+Die vollständigen Skripte befinden sich im Anhang und werden hier nur in Auszügen dargestellt. \\
 Der Ablauf zum Aufrufen der einzelnen PHP-Funktionen ist immer derselbe. 
 Dazu wird ein POST-Request an den Server geschickt, der die entsprechende Ressource, in diesem Fall entweder
-\verb!db.php! oder \verb!login.php! anfordert. Als POST-Parameter werden neben den Werten für die Funktion, 
+\verb!db.php! oder \verb!login.php!, anfordert. Als POST-Parameter werden neben den Werten für die Funktion, 
 zum Beispiel E-Mailadresse und Passwort für den Login, noch ein TAG-Parameter angehängt. 
 Der TAG-Parameter ist für den Login-Prozess zum Beispiel leer, zum Ändern des Passworts kann dazu \verb!chgpass!
 eingesetzt werden. Nachdem die zum TAG passende Funktion gefunden wurde, werden die übertragenen Werte ausgelesen und
 entsprechend verarbeitet. \\
-Eine wichtige Funktion der PHP-Skripte ist der Login, beziehungsweise die Authentifizierung des Benutzers. \\*
+Eine wichtige Funktion der PHP-Skripte ist der Login bzw. die Authentifizierung des Benutzers. \\*
 Dazu wird die Adresse \verb!http://test.app1.raschel.org/php/db.php! mit den Parametern \verb!TAG=''!,
 \verb!EMAIL=``ritzels@fh-trier.de''! und \verb!PASSWORD=``ritzels''! aufgerufen (vgl. \ref{php:loginProto}).
-Sind alle Parameter korrekt übertragen worden, wird die Funktion \verb!getUserByEmailAndPassword($email, $password)!,
-die sich im Skript \verb!DB\_Functions.php! befindet, aufgerufen. Zum Authentifizieren wird aus der Datenbank der zur
+Sind alle Parameter korrekt übertragen worden, wird die Funktion \verb!getUserByEmailAndPassword($email, $password)!, die sich im Skript \verb!DB\_Functions.php! befindet, aufgerufen. Zum Authentifizieren wird aus der Datenbank der zur
 E-Mailadresse passende Datensatz geladen, siehe Auszug \ref{php:dbFuncProto}.
 Das in der Datenbank gespeicherte \verb!SALT! wird mit dem übertragenen Passwort an die Funktion
 \verb!checkhashSSHA($salt, $password)! übergeben, welche den Hash aus \verb!SALT! und Passwort bildet und zurückgibt.
@@ -165,7 +164,7 @@ public function getUserByEmailAndPassword($email, $password) {
 \end{lstlisting}
 
 %Im Kapitel ref{sec:App} werden noch weitere Funktionen erläutert, die in diesem Kapitel noch keine Rolle spielen.
-Die Skripte befinden sich in vollem Umfang noch als Anhang an diese Arbeit.
+Die Skripte befinden sich in vollem Umfang noch als Anhang an diese Dokumentation.
 \pagebreak
 
   \subsection{Prototyp-App}\label{subsect:PrototypApp}
