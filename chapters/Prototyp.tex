@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `test_tp` (
 \end{lstlisting}
 
 Um die Benutzerverwaltung für den Prototypen zu simulieren wurden außerdem noch eine Tabelle \verb!users!
-(Abb. \ref{sql:usersTest}) angelegt.
+(siehe Abb. \ref{sql:usersTest}) angelegt.
 Darin wurden Informationen zu den Benutzern hinterlegt. Zum Beispiel eine eindeutige ID, sowie Vor- und Nachname.
 Zum Authentifizieren wurde die E-Mailadresse und ein beliebiges Passwort verwendet.
 Um das Passwort nicht im Klartext zu speichern, wurde es zusammen mit einem Salt als Hash-Wert abgelegt.
@@ -104,7 +104,7 @@ eingesetzt werden. Nachdem die zum TAG passende Funktion gefunden wurde, werden 
 entsprechend verarbeitet. \\
 Eine wichtige Funktion der PHP-Skripte ist der Login bzw. die Authentifizierung des Benutzers. \\*
 Dazu wird die Adresse \verb!http://test.app1.raschel.org/php/db.php! mit den Parametern \verb!TAG=''!,
-\verb!EMAIL=``ritzels@fh-trier.de''! und \verb!PASSWORD=``ritzels''! aufgerufen (vgl. \ref{php:loginProto}).
+\verb!EMAIL=``ritzels@fh-trier.de''! und \verb!PASSWORD=``ritzels''! aufgerufen (vgl. Abb. \ref{php:loginProto}).
 Sind alle Parameter korrekt übertragen worden, wird die Funktion \verb!getUserByEmailAndPassword($email, $password)!, die sich im Skript \verb!DB\_Functions.php! befindet, aufgerufen. Zum Authentifizieren wird aus der Datenbank der zur
 E-Mailadresse passende Datensatz geladen, siehe Auszug \ref{php:dbFuncProto}.
 Das in der Datenbank gespeicherte \verb!SALT! wird mit dem übertragenen Passwort an die Funktion
@@ -164,7 +164,7 @@ public function getUserByEmailAndPassword($email, $password) {
 \end{lstlisting}
 
 %Im Kapitel ref{sec:App} werden noch weitere Funktionen erläutert, die in diesem Kapitel noch keine Rolle spielen.
-Die Skripte befinden sich in vollem Umfang noch als Anhang an diese Dokumentation.
+Die Skripte befinden sich in vollem Umfang als Anhang an diese Dokumentation.
 \pagebreak
 
   \subsection{Prototyp-App}\label{subsect:PrototypApp}
@@ -177,7 +177,7 @@ Implementierung wieder Verwendung finden werden. Das Anzeigen und Manipulieren d
 Das Projekt wurde noch in der Entwicklungsumgebung Eclipse erstellt und umfasst deshalb eine etwas tiefere
 Ordnerhirarchie. Da nicht alle für diese Implementierung relevant sind, werden nur die wichtigsten Ordner und Dateien
 näher erläutert. \\
-Der Ordnerbaum \ref{dirtree:dbProto} zeigt die wichtigen Ordner und Dateien, und erläutert kurz deren Funktion.
+Der Ordnerbaum in Abb. \ref{dirtree:dbProto} zeigt die wichtigen Ordner und Dateien, und erläutert kurz deren Funktion.
 
 \begin{figure} %[hbtp] 
   \centering
@@ -217,6 +217,8 @@ Der Ordnerbaum \ref{dirtree:dbProto} zeigt die wichtigen Ordner und Dateien, und
   \label{dirtree:dbProto}
 \end{figure}
 
+
+%%%%%%%%%%%%%%%%%%%%%
 \begin{comment}
 \paragraph{Android Manifest}\label{para:ProtoManifest}
 In der \verb!AndroidManifest.xml! werden grundlegende Parameter für die App festgelegt.
@@ -277,16 +279,15 @@ Im Ordner \verb!layout! befinden sich xml-Dateien, die das Layout definieren.
 Beim Start der App wird, wie in der Manifest-Datei angegeben, die MainActivity geladen, in der die Methode
 \verb!onCreate()! ausgeführt wird. 
 \end{comment}
+%%%%%%%%%%%%%%%%%%%%%
 
 
-
-Für die Funktion des Prototyp und das Umsetzen der definierten Schwerpunkte sind in diesem Projekt die beiden Klassen
+Für die Funktion des Prototypen und das Umsetzen der definierten Schwerpunkte sind in diesem Projekt die beiden Klassen
 \verb!LoginActivity.java! und \verb!MainActivity.java! von Bedeutung.
-Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \verb!activity_main.xml! geladen
-\ref{pic:MainActivityProto}. \\* Das geschieht in Zeile \ref{line:setContentViewProto} durch
+Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \verb!activity_main.xml! geladen (siehe Abb. \ref{pic:MainActivityProto}). \\* Das geschieht in Zeile \ref{line:setContentViewProto} durch
 \verb!setContentView(R.layout.activity_main)! in der \verb!onCreate()! Methode.
 
-\begin{figure} [h]
+\begin{figure} [H]
   \centering
   \includegraphics[width=0.4\textwidth]{images/prototyp/MainActivityEmpty.png}
   \caption{Start-Oberfläche}
@@ -294,7 +295,7 @@ Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \ve
 \end{figure}
 
 Ist alles vollständig geladen, kann man sich über das Menü anmelden. Dafür wird in der \verb!onOptionsItemSelected(MenuItem item)! ein
-\verb!startActivity()! aufgerufen, welches die \verb!LoginActivity.java! startet (siehe Abbildung
+\verb!startActivity()! aufgerufen, welches die \verb!LoginActivity.java! startet (siehe Abb.
 \ref{pic:LoginActivityProto}).
 
 \begin{figure} [h]
@@ -306,10 +307,9 @@ Ist alles vollständig geladen, kann man sich über das Menü anmelden. Dafür wird 
 
 Nach der erfolgreichen Authentifizierung wird über den Button \texttt{Synchronisieren} die Funktion
 \verb!synchronizeDbs(View view)! in Zeile \ref{line:synchDbsProto} aufgerufen. \\
-Dies generiert ein Objekt der Klasse \verb!SyncRemoteDatabase.java! \ref{java:SyncRemoteDBProto}. Dabei handelt es sich um eine von \verb!AsyncTask!
+Dies generiert ein Objekt der Klasse \verb!SyncRemoteDatabase.java! (siehe Abb. \ref{java:SyncRemoteDBProto}). Dabei handelt es sich um eine von \verb!AsyncTask!
 abgeleitete Klasse, welche die Testdaten über das PHP-Skript aus der Datenbank abruft und anschließend in die lokale
-\verb!SQLite!-Datenbank schreibt. Diese Klasse wurde jedoch in die \verb!DBConnectionLib! \ref{subsub:DBConLibProto}
-ausgelagert und anschließend an diese Kapitel genauer erläutert.
+\verb!SQLite!-Datenbank schreibt. Diese Klasse wird in dem Kapitel \ref{subsub:DBConLibProto} \verb!DBConnectionLib! genauer erläutert.
 
 \begin{lstlisting}[float=h, caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto, language=java, escapechar=|]
 [|\ldots{}|]
@@ -327,25 +327,26 @@ public void synchronizeDbs(View view) { |\label{line:synchDbsProto}|
 [|\ldots{}|]
 \end{lstlisting}
 
-Wurden die Tabellen erfolgreich synchronisiert, kann über die beiden Felder Testwerte eingegeben werden. Durch einen
-klick auf den Button \texttt{Save to DB} werden die Daten zunächst in der Methode \verb!saveToDb(View view)!~\ref{line:saveToDbProto}
+Wurden die Tabellen erfolgreich synchronisiert, können über die beiden Felder Testwerte eingegeben werden. Durch einen
+Klick auf den Button \texttt{Save to DB} werden die Daten zunächst in der Methode \verb!saveToDb(View view)!(Zeile ~\ref{line:saveToDbProto})
 in \textsl{BasicNameValuePair}-Objekte überführt (Zeile \ref{line:tableNameProto} - \ref{line:testNumberProto}).
 Zum Speichern werden diese Objekte an eine Instanz der Klasse
 \verb!InsertIntoDatabase.java! übergeben. Diese ist, wie die Klasse \verb!SyncRemoteDatabase.java!, eine Subklasse von
 \verb!AsyncTask! und wird ebenfalls im Kapitel \ref{subsub:DBConLibProto} genauer erklärt.
 Zum Anzeigen der lokalen Tabelleninhalte kann der Button \texttt{Load from DB} betätigt werden, wodurch die Funktion
 \verb!loadFromDb(View view)! ausgeführt wird. Dabei werden die Daten zunächst in einem \textsl{Cursor}-Objekt
-bereitgestellt, welches vom \texttt{DatabaseHandler}\ref{java:DBHandlerProto} bereitgestellt wird (vgl. Zeile
+bereitgestellt, welches vom \texttt{DatabaseHandler} (siehe Abb. \ref{java:DBHandlerProto}) bereitgestellt wird (vgl. Zeile
 \ref{line:CursorProto}). Die Darstellung wird durch eine \textsl{ListView} übernommen, die im
 Layout der Aktivität hinterlegt und über den Befehl //* \verb!findViewById(R.id.listView1)! in Zeile \ref{line:findListViewProto} 
 referenziert wurde. Um den \textsl{Cursor} in der \textsl{ListView} anzeigen zu können, muss dieser in einem
 \textsl{SimpleCursorAdapter} für die \textsl{ListView} zugänglich gemacht werden. Dazu wird in Zeile
 \ref{line:SiCuAdProto} dem Konstruktor des \textsl{SimpleCursorAdapter} zunächst der aktuelle \textsl{Context}, das
-gewünschte Layout der einzelnen Zeilen (\verb!R.Layout.list_item!) sowie der \textsl{Cursor} \verb!result! übergeben.
+gewünschte Layout der einzelnen Zeilen (\verb!R.Layout.list_item!) sowie der \textsl{Cursor} \verb!result!, übergeben.
 Damit der Adapter weiß, welche Werte er in welche \textsl{TextView} packen soll, werden dem Konstruktor noch \verb!from!
 und \verb!to! übergeben. 
 
-\begin{lstlisting}[float=h, caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto3, language=java, escapechar=|]
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto3, language=java, escapechar=|]
 [|\ldots{}|]        
 public void saveToDb(View view) { |\label{line:saveToDbProto}|
   {|\ldots{}|}
@@ -389,11 +390,12 @@ public void clearResultListVew(View view) { |\label{line:clearLVProto}|
 }
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 Dabei handelt es sich bei dem Objekt \verb!from! um eine \textsl{String}-Liste mit den Namen der Tabellenspalten. Die
 \textsl{int}-Liste \verb!to! enthält die IDs der \textsl{TextView}s im verwendeten Zeilenlayout. Die Reihenfolge muss
 dabei beachtet werden. Abschließend erhält der Konstruktor noch eine Flag mit der das Verhalten bei Änderung der
-Datengrundlage gesteuert wird. Dieser Adapter wir mittels dem Befehl \verb!.setAdapter(sca)! der \textsl{ListView}
+Datengrundlage gesteuert wird. Dieser Adapter wird mittels dem Befehl \verb!.setAdapter(sca)! der \textsl{ListView}
 übergeben. Wodurch nun die Daten auf der Oberfläche sichtbar werden. \\*
 
 Zum Leeren der \textsl{ListView} wird der Button \texttt{Clear View} gedrückt, wodurch mittels der Methode
@@ -418,14 +420,15 @@ mit denen bevor und während der Thread läuft, sowie nach dem Beenden des Threads
 Im Fall der \verb!SyncRemoteDatabase!-Klasse wird vor dem Ausführen des Task, mittels der Methode \textsl{onPreExecute()}, 
 ein \texttt{ProgressDialog} erstellt (vgl. Zeilen \ref{line:onPreExecProto} ff.). 
 Anschließend wird im asynchronen Teil \textsl{doInBackground(String\ldots{} params)}, die Funktion
-\verb!syncRemoteTable(creds, params[0])!\ref{line:syncRemTabProto} aufgerufen und das damit erzeugte \texttt{JSONObject}-Objekt
-an die Methode \textsl{onPostExecute(JSONObject json)}\ref{line:postExecProto} übergeben.
+\verb!syncRemoteTable(creds, params[0])!(Zeile \ref{line:syncRemTabProto}) aufgerufen und das damit erzeugte \texttt{JSONObject}-Objekt
+an die Methode \textsl{onPostExecute(JSONObject json)}(Zeile \ref{line:postExecProto}) übergeben.
 Da diese Methode, wie die \textsl{onPreExecute}, im GUI-Thread läuft, kann der \texttt{ProgressDialog} mit einer neuen
-Nachricht versehen werden \ref{line:pDialogPostProto} und die erhaltenen Daten aus dem \texttt{JSONObject}-Objekt
+Nachricht versehen werden (Zeile \ref{line:pDialogPostProto}) und die erhaltenen Daten aus dem \texttt{JSONObject}-Objekt
 extrahieren (Zeile ~\ref{line:parseJsonProto}). Im selben Schritt werden die Testdaten der Testtabelle als neuen
-Datensatz angefügt (siehe Zeile ~\ref{line:addTestRowProto}). 
+Datensatz angefügt (siehe Zeile ~\ref{line:addTestRowProto}). \\
 
-\begin{lstlisting}[float=h, caption=Auszug aus SyncRemoteDatabase.java, captionpos=below, label=java:SyncRemoteDBProto, language=java, escapechar=|]
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus SyncRemoteDatabase.java, captionpos=below, label=java:SyncRemoteDBProto, language=java, escapechar=|]
 [|\ldots{}|]        
 @Override
 protected void onPreExecute() { |\label{line:onPreExecProto}|
@@ -459,17 +462,19 @@ protected void onPostExecute(JSONObject json) { |\label{line:postExecProto}|
         json_data.getString(Constants.KEY_CREATED_AT)); 
     }
 [|\ldots{}|]
-    \end{lstlisting}
+\end{lstlisting}
+\end{minipage}
 
 Die angesprochene Funktion \textsl{syncRemoteTable()} befindet sich in der Klasse \verb!UserFunctions.java!
-\ref{java:UsrFuncsProto}. Darin wurden die Methoden zusammgefasst, die vom Benutzer oder mit dem Benutzer
+(siehe Listing \ref{java:UsrFuncsProto}). Darin wurden die Methoden zusammengefasst, die vom Benutzer oder mit dem Benutzer
 zusammenhängen. Neben den Methoden \textsl{loginUser({\ldots})} und \textsl{loggedInUser({\ldots})}, enthält sie auch
-die Methode \textsl{syncRemoteTable(AuthCredentials creds, String table)} \ref{line:synRemTableProto}, die zum Abrufen
+die Methode \textsl{syncRemoteTable(AuthCredentials creds, String table)} (Zeile \ref{line:synRemTableProto}), die zum Abrufen
 der Testdaten aus der MySQL-Datenbank verwendet wird. \\*
 Dazu werden zunächst die \emph{POST}-Parameter in eine Liste aus \texttt{BasicNameValuePair}-Objekten gepackt, wie in
-den Zeilen \ref{line:POSTParaVonProto} bis \ref{line:POSTParaBisProto} zu sehen.
+den Zeilen \ref{line:POSTParaVonProto} bis \ref{line:POSTParaBisProto} zu sehen.\\
 
-\begin{lstlisting}[float=h, caption=Auszug aus UserFunctions.java, captionpos=below, label=java:UsrFuncsProto, language=java, escapechar=|]
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus UserFunctions.java, captionpos=below, label=java:UsrFuncsProto, language=java, escapechar=|]
 [|\ldots{}|]        
 public JSONObject syncRemoteTable(AuthCredentials creds, String table) { |\label{line:synRemTableProto}|
   List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>(); |\label{line:POSTParaVonProto}|
@@ -482,8 +487,9 @@ public JSONObject syncRemoteTable(AuthCredentials creds, String table) { |\label
 }
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
-Die so verpackten Parameter werden schließlich an den \verb!JSONParser! \ref{java:JSONParserProto} übergeben.
+Die so verpackten Parameter werden schließlich an den \verb!JSONParser! (siehe Listing \ref{java:JSONParserProto}) übergeben.
 Die darin enthaltene Funktion \\* \textsl{getJSONFromUrl(String url, List<BasicNameValuePair> params)} der
 \nameref{line:getJsonFromUrlProto} schickt die erhaltenen Attribute mittels \texttt{DefaultHttpClient()}- und
 \texttt{HttpPost}-Objekt zur angegebenen \emph{url} (Zeile \ref{line:httpConnection} ff).
@@ -491,9 +497,10 @@ Die Serverantwort, die vom Socket über den \texttt{InputStream} erreichbar wird,
 \texttt{BufferedReader} lesbar. Der \texttt{BufferedReader} ist hier besonders geeignet, da dadurch ein zeilenweises
 Lesen ermöglicht wird, was bei \emph{HTTP}-Kommunikationen das Standardverfahren ist (Zeile \ref{line:bufRdrProto} und
 \ref{line:readLineProto}). Jede Zeile wird an einen \textsl{StringBuilder} gehängt und nach dem Lesen der
-letzten Zeile von einem \verb!String! (Zeile \ref{line:sb.toString(Proto)}) in das gewünschte \textsl{JSONObject} umgewandelt.
+letzten Zeile von einem \verb!String! (Zeile \ref{line:sb.toString(Proto)}) in das gewünschte \textsl{JSONObject} umgewandelt.\\
 
-\begin{lstlisting}[float=h, caption=Auszug aus JSONParser.java, captionpos=below, label=java:JSONParserProto, language=java, escapechar=|]
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus JSONParser.java, captionpos=below, label=java:JSONParserProto, language=java, escapechar=|]
 public JSONObject getJSONFromUrl(String url, 
     List<BasicNameValuePair> params) {
 [|\ldots{}|]        
@@ -519,10 +526,10 @@ else {
 }
 [|\ldots{}|] 
 \end{lstlisting}
+\end{minipage}
 
-Die so verpackte Tabelle, wird dann mit einer \verb!for!-Schleife, siehe Zeile \ref{line:parseJsonProto} im
-\nameref{java:SyncRemoteDBProto} \ref{java:SyncRemoteDBProto}, in die einzelnen Zeilen zerlegt und von der Funktion
-\textsl{addTestRow(\ldots{})} \ref{line:addTstRw()Proto} in die lokale \verb!SQLite!-Datenbank geschrieben
+Die so verpackte Tabelle, wird dann mit einer \verb!for!-Schleife (Zeile \ref{line:parseJsonProto} in die einzelnen Zeilen zerlegt und von der Funktion
+\textsl{addTestRow(\ldots{})} (Zeile \ref{line:addTstRw()Proto}) in die lokale \verb!SQLite!-Datenbank geschrieben
 (Zeile \ref{line:addTestRowProto}). Dazu werden die einzelnen Werte in zunächst mit den zugehörigen Spaltennamen in ein
 sogenanntes \texttt{ContentValues}-Objekt geschrieben, was im Groben einer Tabellenzeile entspricht.
 Eine solche Kapselung ist theoretisch nicht nötig, da die Möglichkeit besteht,
@@ -530,7 +537,8 @@ die Werte durch ein zusammengesetzten SQL-Statement in die Datenbank zu schriebe
 Verwendung der \textsl{insert()}-Methode wie in Zeile \ref{line:insertProto}, wodurch der Code nicht nur weniger fehleranfällig, sondern auch
 übersichtlicher und sicherer wird. \\
 
-\begin{lstlisting}[float=h, caption=Auszug aus der DatabaseHandler.java, captionpos=below, label=java:DBHandlerProto, language=java, escapechar=|]
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus der DatabaseHandler.java, captionpos=below, label=java:DBHandlerProto, language=java, escapechar=|]
 [|\ldots{}|]        
 public void addTestRow(int id, String text, int number, 
     String created_at) { |\label{line:addTstRw()Proto}|
@@ -547,6 +555,7 @@ public void addTestRow(int id, String text, int number,
 }
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 \paragraph{Klasse InsertIntoDatabase}\label{para:InsrtIntoDbProto}
 Ebenfalls aus der \verb!MainActivity! heraus wird diese Klasse instantziiert und ausgeführt.
@@ -557,6 +566,6 @@ Analog zur \nameref{para:SyncRemoteDBProto} wird auch hier zunächst ein Objekt d
 erstellt wurde, werden die Daten in Schlüssel- und Wertevariablen gekapselt und der
 \textsl{insertIntoRemoteTable(\ldots{})}-Methode übergeben. \\*
 Um einen standardkonformen \emph{HTTP}-Request abzuschicken, werden dort wieder die \emph{POST}-Parameter in einer Liste
-gekapselt und dem \verb!JSONParser! \ref{java:JSONParserProto}, zum Abschicken der Anfrage übergeben.
+gekapselt und dem \verb!JSONParser! (siehe Listing \ref{java:JSONParserProto}), zum Abschicken der Anfrage übergeben.
 Die Antwort wird wieder analog zur \nameref{para:SyncRemoteDBProto} in der \textsl{onPostExecute()}-Methode ausgewertet
 und eine Benachrichtigung angezeigt, ob die Übertragung erfolgreich war oder nicht.
