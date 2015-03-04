@@ -1,50 +1,50 @@
 \begin{figure}[H] 
   \centering
      \includegraphics[width=0.7\textwidth]{anhang/mockups/overview.png}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Mockup Übersicht}
+  \label{anhang:mockOver}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=0.7\textwidth]{anhang/mockups/overviewsettings.png}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Mockup Übersicht - Einstellungen}
+  \label{anhang:mockOverSet}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=0.7\textwidth]{anhang/mockups/putzplan.png}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Mockup Putzplan - Übersicht}
+  \label{anhang:mockPutz}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=0.7\textwidth]{anhang/mockups/putzplanerledigt.png}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Mockup Putzplan - Erledigt}
+  \label{anhang:mockPutz01}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=0.7\textwidth]{anhang/mockups/putzplanneuewoche.png}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Mockup Putzplan - Neue Woche}
+  \label{anhang:mockPutz02}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=0.7\textwidth]{anhang/mockups/webpage_1.png}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Mockup Weboberfläche Nr. 02}
+  \label{anhang:mockWeb02}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=0.7\textwidth]{anhang/mockups/webpage.png}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Mockup Weboberfläche Nr. 01}
+  \label{anhang:mockWeb01}
 \end{figure}
 
 \newpage
@@ -54,52 +54,62 @@
 \begin{figure}[H] 
   \centering
      \includegraphics[width=\textwidth]{anhang/usecases/diagramme/teamprojekt14_uc_Blackboard.jpg}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Use-Case Diagramm Blackboard}
+  \label{anhang:ucdBB}
 \end{figure}
 
-\begin{figure}[hHtbp] 
+\begin{figure}[H] 
   \centering
      \includegraphics[width=\textwidth]{anhang/usecases/diagramme/teamprojekt14_uc_Einkaufsliste.jpg}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Use-Case Diagramm Einkaufsliste}
+  \label{anhang:ucdEinkauf}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=\textwidth]{anhang/usecases/diagramme/teamprojekt14_uc_Kalender.jpg}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Use-Case Diagramm Kalender}
+  \label{anhang:ucdKalender}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=\textwidth]{anhang/usecases/diagramme/teamprojekt14_uc_Putzplan.jpg}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Use-Case Diagramm Putzplan}
+  \label{anhang:ucdPutz}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=\textwidth]{anhang/usecases/diagramme/teamprojekt14_uc_Registrierung.jpg}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Use-Case Diagramm Registrierung}
+  \label{anhang:ucdReg}
 \end{figure}
 
 \begin{figure}[H] 
   \centering
      \includegraphics[width=\textwidth]{anhang/usecases/diagramme/teamprojekt14_uc_WebLogin.jpg}
-  \caption{Erstes Bild}
-  \label{fig:Bild1}
+  \caption{Use-Case Diagramm Web Login}
+  \label{anhang:ucdLogin}
 \end{figure}
 \newpage
 
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Use-Case Beschreibungen}
 %%%%%%%%%%%%%%%%%%%%%%
-\includepdf[pages=-,  scale=0.85, pagecommand={}]{anhang/usecases/beschreibungen/teamprojekt14_uc_Alle.pdf}
+Use-Case: Artikel gekauft\\Ziel: Einkaufsliste mit Artikeln bearbeitet\\Kategorie: optional (nützlich, nicht unbedingt notwendig)\\Vorbedingung: Benutzer ist eingeloggt (in App oder Web-Oberfläche)\\Nachbedingung Erfolg: Mitteilung an Benutzer, dass erfolgreich\\Nachbedingung Fehlschlag: Mitteilung an Benutzer, dassfehlgeschlagen\\Akteure: Benutzer der App \& Weboberfläche (demnach nur registrierte\\WG Mitglieder)\\Auslösendes Ereignis: Benutzer wählt Artikel aus und möchte ihn als"gekauft" markieren\\Beschreibung:\\Artikel gekauft\\1 Artikelpreis eintragen\\2 Artikel als gekauft markieren. Der Artikel wird blasser (oderdurchgestrichen) an dasEnde der Einkaufsliste angestellt.\\3 Datenbank aktualisieren\\Alternativen:\\1a Artikel bereits gekauft markiert, somit keine Aktion Möglich.\\
+\newline
+\noindentUse-Case: Authentifiziert\\Ziel: Benutzeridentifikation geprüft\\Kategorie: primär (erforderlich, häufig verwendet)\\Vorbedingung: Benutzer ist bereits erfolgreich registriert\\Nachbedingung Fehlschlag: Mitteilung an Benutzer, dass Aktionfehlgeschlagen\\Akteure: Administrator der WG\\Auslösendes Ereignis: Login Web-Oberfläche\\Beschreibung:\\1 E-Mail und Passwort der Eingabe mit den Einträgen der Datenbankabgleichen.\\2 falls identisch Zugang gewähren. Benutzer eine Mitteilung geben,dass erfolgreich\\Alternativen:\\2a falls nicht identisch. Mitteilung an Benutzer dass die Eingabennicht übereinstimmen.Benutzer die Chance geben nochmals die Eingabe zu prüfen und zuändern falls nötig.Dann den nächsten Versuch der Prüfung.\\
+\newline
+\noindentUse-Case: Fehlerbehandlung\\Ziel: Ablauf einer Fehlerroutine\\Kategorie: primär (erforderlich, häufig verwendet)\\Vorbedingung: Ein Fehler muss aufgetreten sein\\Auslösendes Ereignis: Der Fehler\\Beschreibung:\\1 Keine Verbindung zum Datenbankserver / Server antwortet nicht: Diebereitszwischengespeicherten Daten lokal auf dem Handy aufbewahren und beinächsterDatenbankverbindung automatisch mit auf den Server pushen. Dem
+Benutzer muss zu Anfang derFehlerroutine ein Hinweis gegeben werden.\\2 Textfeld Fehler (Pflichtfeld nicht ausgefüllt, Format stimmtnicht): Benutzer den Hinweisgeben welcher Fehler vorliegt und dem Benutzer die Möglichkeit gebendas Textfeld zu bearbeiten.\\3 Betriebssystem (Google Android) "killt" die Applikation: Denaktuellen Status lokal speichern.Bei nächstem Start der App während des Startvorgangs den zuletztlokal gespeicherten Statusladen. Dem Benutzer muss kein Hinweis gegeben werden.\\
+\newline
+\noindentUse-Case: Kalendereintrag bearbeiten\\Ziel: Kalendereintrag erstellen\\Kategorie: optional (nützlich, nicht unbedingt notwendig)\\Vorbedingung: Benutzer ist eingeloggt (in App oder Web-Oberfläche)\\Nachbedingung Erfolg: Mitteilung an Benutzer, dass Eintragerfolgreich\\Nachbedingung Fehlschlag: Mitteilung an Benutzer, dass Eintragfehlgeschlagen\\Akteure: Benutzer der App \& Weboberfläche (demnach nur registrierteWG Mitglieder)\\Auslösendes Ereignis: Termin bereits in Kalender gespeichert.Benutzer wünscht die BearbeitungBeschreibung:\\Kalendereintrag bearbeiten\\1 Benutzer öffnet gewünschten Kalendereintrag und nimmt dieÄnderungen vor.\\2 Benutzer wünscht speichern der Daten.\\3 Kalendereintrag in Datenbank speichern.\\Alternativen:\\2a Benutzer wünscht löschen des Eintrags.\\
+\newline
+\noindentUse-Case: Kalendereintrag erstellen\\Ziel: Kalendereintrag erstellen\\Kategorie: optional (nützlich, nicht unbedingt notwendig)\\Vorbedingung: Benutzer ist eingeloggt (in App oder Web-Oberfläche)\\Nachbedingung Erfolg: Mitteilung an Benutzer, dass Eintragerfolgreich\\Nachbedingung Fehlschlag: Mitteilung an Benutzer, dass Eintragfehlgeschlagen\\Akteure: Benutzer der App \& Weboberfläche (demnach nur registrierteWG Mitglieder)\\Auslösendes Ereignis: Erstellung einer neuen WG, Termineintrag vonBenutzer\\Beschreibung:\\Kalendereintrag erstellen\\1 Benutzer gibt Daten ein. Benutzer wünscht speichern der Daten.\\2 Kalendereintragung von Benutzer in Datenbank speichern.\\3 Kalendereintrag in Datenbank speichern.\\Alternativen:\\3a (Fehlerbehandlung) Kalendereintrag nicht speichern, da
+Pflichtfeld(er) nicht ausgefüllt.\\3b (Fehlerbehandlung) Benutzer Mitteilung über Fehler geben und aufWunsch des Benutzers erneut versuchen, oder Vorgang abbrechen.\\
+\\newline
+\noindentUse-Case: Notiz bearbeiten\\Ziel: Unsortierte Liste von Notizen angezeigt\\Kategorie: optional (nützlich, nicht unbedingt notwendig)\\Vorbedingung: Benutzer ist eingeloggt (in App)\\Nachbedingung Erfolg: Mitteilung an Benutzer, dass Eintragerfolgreich\\Nachbedingung Fehlschlag: Mitteilung an Benutzer, dass Eintragfehlgeschlagen\\Akteure: Benutzer der App (nur registrierte WG Mitglieder)\\Auslösendes Ereignis: Erstellung eines Eintrags von Benutzer.\\Beschreibung:\\Notiz erstellen\\1 Benutzer nimmt Änderungen an Notiz vor.\\2 Benutzer möchte Notiz speichern.\\3. Notiz in Datenbank speichern.\\Alternativen:\\2a Benutzer entschließ sich die Änderungen zu verwerfen. Benutzergelangt auf vorherigen Bildschirm.\\2b Benutzer entschließt sich die Notiz zu löschen. DerDatenbankeintrag wird gelöscht.\\
 
-
-\includepdf[pages=-, addtotoc={1,section,1,Lastenheft,chap:int},  scale=0.85, pagecommand={}]{anhang/Lastenheft.pdf} 
-%\includepdf[pages=2-, addtotoc={1,chapter,0,Lastenheft,chap:int},  scale=0.85, pagecommand={}]{anhang/Lastenheft.pdf} 
-
+%%%%%%%%%%%%%%%%%%%%
+\includepdf[pages=-, addtotoc={1,section,2,Lastenheft,chap:float},  scale=0.85, pagecommand={}]{anhang/Lastenheft.pdf} 
