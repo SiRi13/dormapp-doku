@@ -1,41 +1,42 @@
 \section{App/Datenbank Schnittstelle}\label{section:AppDbInterface}
-In Kapitel \nameref{chp:Prototyp}~\ref{chp:Prototyp}, als auch in Kapitel \nameref{section:App}~\ref{section:App} wurde
-bereits die Problematik aufgegriffen, dass es für eine Android-App nicht möglich ist über einen \verb!JDBC!-Treiber eine
+In Kapitel \ref{chp:Prototyp} - \nameref{chp:Prototyp}, als auch in Kapitel \ref{section:App} - \nameref{section:App} wurde
+bereits die Problematik aufgegriffen, dass es für eine Android-App nicht möglich sei über einen \verb!JDBC!-Treiber eine
 Verbindung mit einer Datenbank aufzubauen. Neben der Verwendung eines \textsc{REST}full Webservice zum Abrufen von
 Datenbankinhalten, gibt es die hier verwendete Methode über \textsc{PHP}-Dokumente die über eine 
-\textsc{HTTP}-Verbindungen abgerufen werden und einen \textsc{JSON}-formatierte Antwort liefern. Diese Vorgehensweise
+\textsc{HTTP}-Verbindung abgerufen werden und einen \textsc{JSON}-formatierte Antwort liefern kann. Diese Vorgehensweise
 kann mit einfachen Mitteln realisiert werden und Bedarf keiner komplexen Serverkonfiguration.
 Der Aufbau wird ausgehend vom aufgerufenen \textsc{PHP}-Skript, über die \textsc{PHP}-Datenbankschnittstelle bis
 schließlich zur Datenbank hin erklärt.
 
 \subsection{PHP-Skript}\label{subSec:PhpDbKomm}
 Der Aufruf des Skripts erfolgt über eine einfache \textsc{HTTP-POST}-Anfrage an die Server-\textsc{URL}. Der Aufbau
-wurde bereits im Kapitel \nameref{subsub:DBConLibProto}~\ref{subsub:DBConLibProto} Paragraph
-\ref{para:SyncRemoteDBProto} erläutert. \\*
+wurde bereits in Kapitel \ref{subsub:DBConLibProto} - \nameref{subsub:DBConLibProto} Abschnitt \nameref{para:SyncRemoteDBProto} erläutert. \\*
 Wurden die notwendigen Parameter angegeben, so erreicht die Abarbeitung die Zeile \ref{line:getTag} in der die
 gewünschte Operation dem \textsc{HTTP}-Request entnommen wird. Nach der erfolgreichen Authentifizierung der
 übermittelten Zugangsdaten in Zeile \ref{line:authCreds}, findet die Auswertung der \textit{tag}-Parameters statt. Dabei
 gibt es drei mögliche Zustände. Entweder wurde eine Synchronisierung angestoßen, ein Datensatz soll in eine Tabelle
-geschrieben werden oder ein Änderung wird committed. Der zweite Zustand, schreiben eines Datensatz, wurde nur für den
+geschrieben werden oder ein Änderung wird committed. Der zweite Zustand, schreiben eines Datensatzes, wurde nur für den
 Prototyp benötigt und kann hier vernachlässigt werden.
-Beim Synchonisieren wird dann aus den Parametern die gewünschte Tabelle gelesen (Zeile \ref{line:getTablePara}).
+Beim Synchonisieren wird aus den Parametern die gewünschte Tabelle gelesen (Zeile \ref{line:getTablePara}).
 Die Parametervariable wird mit der User- und WG-Id der \textsc{PHP}-Datenbankschnittstelle übergeben,
 welche die Daten in einem \verb!Array! zurückliefert (siehe Zeile \ref{line:getTable}). Wurde kein leeres \verb!Array!
-erhalten, kann es dem \textit{response}-\verb!Array! angehängt werden (vgl. Zeile \ref{line:result}.
-Danach wird die Anfrage mit einem \nameref{line:echoJson}~\ref{line:echoJson} an den Client zurückgeschickt.
+erhalten, kann es dem \textit{response}-\verb!Array! angehängt werden (vgl. Zeile \ref{line:result}).
+Danach wird die Anfrage mit einem \nameref{line:echoJson} (siehe Zeile \ref{line:echoJson}) an den Client zurückgeschickt.
 Befindet sich weder \emph{sync} noch \emph{write} im \textit{tag}, so handelt es sich um den Commit einer 
-Benutzeränderungen. In diesem Fall wird der \textit{tag} durch eine \verb!switch-case!-Unterscheidung ausgewertet (Zeile
-\ref{line:switchTag}). Da die Datenbankfunktion entweder WG-übergreifend oder benutzerspezifische Änderungen vornehmen
+Benutzeränderung. In diesem Fall wird der \textit{tag} durch eine \verb!switch-case!-Unterscheidung ausgewertet (Zeile
+\ref{line:switchTag}). Da die Datenbankfunktion entweder WG-übergreifend oder benutzerspezifische Änderungen vornehmen,
 werden in Zeile \ref{line:userWgId4Commit} die übertragene WG-, sowie User-ID aus dem \textit{\$user}-Objekt gelesen.
 Hier wurden nur die Fälle zum Erstellen und Bearbeiten von Blackboard-Nachrichten dargestellt. Dieser Ausschnitt genügt,
-um zu erkennen, dass je nach Fall unterschiedliche Parameter aus dem \textsc{HTTP-POST} gelesen werden. Diese werden
+um zu erkennen, dass je nach Fall unterschiedliche Parameter aus dem \textsc{HTTP-POST} gelesen werden müssen. Diese werden
 dann in einem \verb!Array!, Zeile \ref{line:params1}, \ref{line:params2} und \ref{line:params3}, zusammengepackt und der
-\texttt{commitFunc}-Methode der Datenbankschnittstelle zur Ausführung übergeben (Zeile \ref{line:commitFunc}). Der Grund
-für die Verwendung des \verb!Arrays! waren die unterschiedlichen Parameter, welche dadurch einfacher einer Funktion übergeben
-werden konnten. Das Ergebnis der Funktion wird wieder als \verb!Array! geliefert und, wie schon beim \textit{write}, dem
+\texttt{commitFunc}-Methode der Datenbankschnittstelle für die Ausführung übergeben (Zeile \ref{line:commitFunc}). Der Grund
+für die Verwendung des \verb!Arrays! sind die unterschiedlichen Parameter, welche dadurch einfacher einer Funktion übergeben
+werden können. Das Ergebnis der Funktion wird wieder als \verb!Array! geliefert und wie schon beim \textit{write}, dem
 Rückgabeobjekt \textit{\$response} als \textit{result} angehängt (Zeile \ref{line:responseResult}).
 
-\begin{lstlisting}[language=php, float=ph, caption=db.php, captionpos=below, label=php:dbPhpSkript, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=php, caption=db.php, captionpos=below, label=php:dbPhpSkript, escapechar=|]
 [|\ldots{}|]
 $tag = $_POST['tag']; |\label{line:getTag}|
 $response = array("tag" => $tag, "success" => 0);
@@ -96,25 +97,31 @@ if ($user) {
  } }
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 \subsection{PHP-Datenbankschnittstelle}\label{subSec:PhpDbInterface}
 Im wesentlichen ist die \textsc{PHP}-Datenbankschnittstelle ebenso auf \textsc{PHP}-Skripten basierend wie die im
 Kapitel \ref{subSec:PhpDbKomm} beschriebene Verarbeitung der \textsc{HTTP}-Anfragen.
 Am Anfang der öffentlichen \textsc{PHP}-Skripte wird die Datenbankschnittstelle intitialisiert (siehe
-\nameref{php:dbFuncInit} Zeile \ref{line:reqOnce} f).
+\nameref{php:dbFuncInit} Zeile \ref{line:reqOnce} f).\\
 
-\begin{lstlisting}[language=php, float=ph, caption=Datenbankschnittstelle initialisieren, captionpos=below,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=php, caption=Datenbankschnittstelle initialisieren, captionpos=below,
 label=php:dbFuncInit, escapechar=|]
   require_once 'include/DB_Functions.php'; |\label{line:reqOnce}|
   $db = new DB_Functions();
 \end{lstlisting}
+\end{minipage}
 
-Durch das Initialiseren der \texttt{DB\_Functions}-Klasse wird dessen Konstruktor \ref{php:dbFuncConstructor}
-aufgerufen. Darin wird dann die Verbindung zur Datenbank aufgebaut, indem ein Objekt der Klasse
-\texttt{DB\_Connect} erstellt und darin die Methode \textsl{connect} \ref{php:dbConnConstructor} aufgerufen
-wird.
+Durch das Initialiseren der \texttt{DB\_Functions}-Klasse wird dessen Konstruktor (siehe Listing \ref{php:dbFuncConstructor})
+aufgerufen. Darin wird die Verbindung zur Datenbank aufgebaut, indem ein Objekt der Klasse
+\texttt{DB\_Connect} erstellt und darin die Methode \textsl{connect} (siehe Listing \ref{php:dbConnConstructor}) aufgerufen
+wird.\\
 
-\begin{lstlisting}[language=php, float=ph, caption=Konstruktor der DB\_Functions.php, captionpos=below,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=php, caption=Konstruktor der DB\_Functions.php, captionpos=below,
 label=php:dbFuncConstructor, escapechar=|]
 <?php
 class DB_Functions {
@@ -125,8 +132,11 @@ class DB_Functions {
       $this->db->connect();
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
-\begin{lstlisting}[language=php, float=ph, caption=Konstruktor der DB\_Connect.php, captionpos=below,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=php, caption=Konstruktor der DB\_Connect.php, captionpos=below,
 label=php:dbConnConstructor, escapechar=|]
 [|\ldots{}|]
 public function connect() {
@@ -136,14 +146,17 @@ public function connect() {
   return $con;
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 Sind beide Klassen erfolgreich instanziiert worden, kann mit den Methoden der \texttt{DB\_Functions} gearbeitet werden.
-Eine besondere Methode ist die \textsl{getTable(\ldots{})} \ref{php:getTableMethod}. Das Besondere daran ist, dass
+Eine besondere Methode ist die \textsl{getTable(\ldots{})} (siehe Listing \ref{php:getTableMethod}). Das Besondere daran ist, dass
 dieser Methode sowohl Tabellennamen als auch Prozeduren übergeben werden können. Dazu wird, wie in Zeile
-\ref{line:strrposTableProc} zu sehen, im übergebenen Attribute der String \emph{proc} gesucht. Da die Ergebnisse die
-selben sind, kann damit eine Redundanz des Codes vermieden werden.
+\ref{line:strrposTableProc} zu sehen, im übergebenen Attribut der String \emph{proc} gesucht. Da die Ergebnisse die
+selben sind, kann damit eine Redundanz des Codes vermieden werden.\\
 
-\begin{lstlisting}[language=php, float=tph, caption=getTable() aus DB\_Functions.php, captionpos=below,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=php, caption=getTable() aus DB\_Functions.php, captionpos=below,
 label=php:getTableMethod, escapechar=|]
 public function getTable($table_name, $userId, $wgId) {
   if (strrpos($table_name, "proc") === false) { |\label{line:strrposTableProc}|
@@ -152,21 +165,24 @@ public function getTable($table_name, $userId, $wgId) {
     $query = "CALL $table_name('$userId','$wgId')";
 {|\ldots{}|}
 \end{lstlisting}
+\end{minipage}
 
-Eine weitere interessante Methode ist die \textsl{commitFunc(\ldots{})} \ref{php:commitFunc}. Damit kann eine \verb!SQL!-Funktion mit einer
-variablen Anzahl an Paramtern aufgerufen werden. Wie in \nameref{php:dbPhpSkript}~\ref{php:dbPhpSkript} in Zeile
+Eine weitere interessante Methode ist die \textsl{commitFunc(\ldots{})} (siehe Listing \ref{php:commitFunc}). Damit kann eine \verb!SQL!-Funktion mit einer
+variablen Anzahl an Paramtern aufgerufen werden. Wie in Listing \ref{php:dbPhpSkript} \nameref{php:dbPhpSkript} in Zeile
 \ref{line:commitFunc} zu sehen, wird der Methode ein \verb!Array! mit den passenden Parametern übergeben, 
 sowie der Name der gewünschten Methode. Zunächst wird die \verb!SQL-Query! mit einem \verb!SELECT $dbFunc! geöffnet (siehe Zeile
 \ref{line:comFuncOpenQuery}), wobei für \verb!$dbFunc! der übergebene Funktionsname steht. Danach wird geprüft, ob
 überhaupt Parameter im \verb!Array! übergeben wurden. Da die Parameter mit Kommata aneinandergereiht werden,
 wird der erste Parameter vor der Iteration extrahiert (vgl. Zeile \ref{line:comFuncExtract1stParam}), was die
 Kommasetzung erleichtert und eine Fallabfrage in der \verb!for!-Schleife, ob es sich um den letzten Parameter handelt,
-spart. In der Schleife werden dann einfach die Parameter mit Komma und dem vorhandenen String konkateniert (Zeile
+spart. In der Schleife werden im Anschluss die Parameter mit Komma und dem vorhandenen String konkateniert (Zeile
 \ref{line:comFuncExtractNthparam}) und mit einer Klammer wird die Abfrage geschlossen (Zeile
-\ref{line:comFuncPuttingTogether}). Mit dem Befehl \verb!mysql_query(\ldots{})! wird dann das Statement auf der
-Datenbank ausgeführt und per \verb!return! zurückgegeben (vgl. Zeile \ref{line:comFuncReturn}).
+\ref{line:comFuncPuttingTogether}). Mit dem Befehl \verb!mysql_query(\ldots{})! wird das Statement auf der
+Datenbank ausgeführt und per \verb!return! zurückgegeben (vgl. Zeile \ref{line:comFuncReturn}).\\
 
-\begin{lstlisting}[language=php, float=ph, caption=commitFunc() aus DB\_Functions.php, captionpos=below,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=php, caption=commitFunc() aus DB\_Functions.php, captionpos=below,
 label=php:commitFunc, escapechar=|]
 public function commitFunc($dbFunc, $params) {
   $query = "SELECT $dbFunc ( '"; ­|\label{line:comFuncOpenQuery}|
@@ -181,6 +197,7 @@ public function commitFunc($dbFunc, $params) {
   return mysql_query($query) or die(mysql_error()); |\label{line:comFuncReturn}|
 }
 \end{lstlisting}
+\end{minipage}
 
 Neben den zwei gerade erläuterten Methoden besitzt die \texttt{DB\_Functions} noch einige weitere Funktionen, bei denen
 von einer detailierten Ausarbeitung abgesehen wird. Einige Funktionen, wie zum Beispiel die Registrierung, Passwortänderung oder 
@@ -188,23 +205,25 @@ Erzeugung eines zufälligen Strings, wurden aus dem Programmierbeispiel \textit{\
 als auch \textit{\textbf{Android Programming Samples}} \cite{Learn2Crack:13} übernommen. 
 
 \subsection{Datenbank}\label{subSec:Datenbank}
-Da eine seperate Tabellenstruktur für jeden WG sehr umständlich und, bei vielen angemeldeten Wohngemeinschaften, sehr
+Da eine seperate Tabellenstruktur für jede WG sehr umständlich und bei vielen angemeldeten Wohngemeinschaften, sehr
 ressourcenhungrig wäre, werden die Daten in den Tabellen zusammengefasst. Damit müssen aber auch die Daten dynamisch an
-den gerade anfragenden Benutzer angepasst werden. Desweiteren ist eine sinnvolle Aufarbeitung und Zusammenstellung der
+den gerade anfragenden Benutzer angepasst werden. Des Weiteren ist eine sinnvolle Aufarbeitung und Zusammenstellung der
 Daten notwendig, um die übertragene Menge so gering wie möglich zu halten.
-
+\newpage
 \paragraph{\textit{Views} - Datenbanksichten}\label{para:Sichten}
 Da zum einen die Übertragungsgeschwindigkeit bei mobilen Endgeräten meist etwas geringer ausfällt und zum anderen das
 Volumen begrenzt ist, empfiehlt es sich auf das komplette Synchronisieren der Tabellen zu verzichten. Statt die Abfragen
-direkt auf den Tabellen auszuführen, werden zuerst sogenannte \verb!View!s oder \verb!Sicht!en zwischengeschaltet. Dabei
+direkt auf den Tabellen auszuführen, werden zuerst sogenannte \verb!View!s oder \verb!Sicht!en zwischengeschalten. Dabei
 handelt es sich um gespeicherte Abfragen, die wie Tabellen verwendet werden können. Da solche \verb!Sicht!en jedoch statisch
 sind, werden sie nur zum Zusammenfassen von verschiedenen Tabellen benutzt. Ein einfaches Beispiel einer solchen
-\verb!View! ist die \nameref{sql:ViewBlackboard}~\ref{sql:ViewBlackboard}. Darin werden die \textit{user}- und
+\verb!View! ist die \nameref{sql:ViewBlackboard} in Listing \ref{sql:ViewBlackboard}. Darin werden die \textit{user}- und
 \textit{blackboards}-Tabellen so vereinigt, dass eine Tabelle entsteht in der zu jeder Nachricht die Benutzer- als auch
 die WG-Id angezeigt werden (siehe Zeile \ref{line:ViewBbIds}) und ausgeblendete Nachrichten herausgefiltert sind
-(Zeile \ref{line:ViewBbWhere}).
+(Zeile \ref{line:ViewBbWhere}).\\
 
-\begin{lstlisting}[language=sql, float=tph, caption=ViewBlackboard, captionpos=below, label=sql:ViewBlackboard,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=sql, caption=ViewBlackboard, captionpos=below, label=sql:ViewBlackboard,
 escapechar=|]
 VIEW `ViewBlackboard` AS 
 SELECT DISTINCT `b`.`blackboard_id` AS `blackboard_id`,
@@ -213,21 +232,24 @@ SELECT DISTINCT `b`.`blackboard_id` AS `blackboard_id`,
 FROM (`user` `u` JOIN `blackboards` `b` ON((`u`.`wg_id` = `b`.`wg_id`))) 
 WHERE (`b`.`anzeigen` > 0); |\label{line:ViewBbWhere}|
 \end{lstlisting}
+\end{minipage}
 
-Würde die App diese \verb!View! abfragen, so müssten entweder im \verb!PHP!-Skript oder später in der App die, für die
-WG des angemeldeten Benutzers, relevanten Nachrichten herausgefiltert werden. Das würde entweder die Laufzeit auf dem
+Würde die App diese \verb!View! abfragen, so müssten entweder im \verb!PHP!-Skript oder später in der App die für die
+WG des angemeldeten Benutzers relevanten Nachrichten herausgefiltert werden. Das würde entweder die Laufzeit auf den
 Server drastisch erhöhen oder ein sehr großes Sicherheitsrisiko darstellen, da zunächst die Nachrichten sämtlicher WGs
-übertragen werden würden. Abgesehen vom unnötig großen Übetragungsvolumen, wurden hier Prozeduren eingesetzt. 
-Wie in \nameref{sql:funcBbMsgRem}~\ref{sql:funcBbMsgRem} zu sehen, wird ähnlich einer \textsc{java}-Methode, mit dem 
-Methodenkopf definiert welche Parameter erwartete werden und was sie für einen Rückgabetyp hat (vgl. Zeile
+übertragen werden müssten. Abgesehen vom unnötig großen Übertragungsvolumen, würden hier Prozeduren eingesetzt. 
+Wie in \nameref{sql:funcBbMsgRem} (Listing \ref{sql:funcBbMsgRem}) zu sehen, wird ähnlich einer \textsc{java}-Methode, mit dem 
+Methodenkopf definiert welche Parameter erwartet werden und was sie für einen Rückgabetyp hat (vgl. Zeile
 \ref{line:funcBbRemMeth}). Anschließend wird mit \textsc{begin} in Zeile \ref{line:funcBbRemBegin} der Anfang des 
 Funktionskörper markiert, der mit \textsc{RETURN} und \textsc{END} beendet wird (vgl. Zeile \ref{line:funcBbRemEnd}).
-Dazwischen kann jeder beliebige, valide \verb!SQL!-Code stehen, in diesem Fall wird beim Blackboardeintrag mit der
+Dazwischen kann jeder beliebige, valide \verb!SQL!-Code stehen. In diesem Fall wird beim Blackboardeintrag mit der
 \textsl{blackboard\_id} gleich der übergebenen \texttt{\$blackboardId} die Spalte \textsc{anzeigen} auf 0 gesetzt. Das
-führt dazu, dass die Nachricht beim Synchronisieren ausgefiltert wird (siehe Zeile \ref{line:ViewBbWhere} im Listing
-\ref{sql:ViewBlackboard}).
+führt dazu, dass die Nachricht beim Synchronisieren ausgefiltert wird (siehe Zeile \ref{line:ViewBbWhere} in Listing
+\ref{sql:ViewBlackboard}).\\
 
-\begin{lstlisting}[language=sql, float=ph, caption=Funktion \textsl{funcBlackboardMessageRemove(\ldots{})},
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=sql, caption=Funktion \textsl{funcBlackboardMessageRemove(\ldots{})},
 captionpos=below, label=sql:funcBbMsgRem, escapechar=|]
 FUNCTION `funcBlackboardMessageRemove`(`$blackboardId` INT(8)) RETURNS tinyint(1) |\label{line:funcBbRemMeth}|
     MODIFIES SQL DATA
@@ -239,6 +261,7 @@ BEGIN |\label{line:funcBbRemBegin}|
 RETURN 1; |\label{line:funcBbRemEnd}|
 END
 \end{lstlisting}
+\end{minipage}
 
 Das komplette Datenbankschema inklusiv der hier beispielhaft aufgeführten \verb!View! und \verb!Funktion! sind im Anhang
 einzusehen.

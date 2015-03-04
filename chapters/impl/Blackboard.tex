@@ -4,19 +4,19 @@ kann. Obwohl der Einsatz von Zugriffsbeschränkungen auf die Nachrichten leicht u
 wurde bewusst darauf verzichtet, um die Eigentschaften eines physikalischen Blackboards gerecht zu werden.
 
 \subsection{Implementierung}\label{subSec:BbImpl}
-Die Klassenhierarchie der Fragmente ist aus den vorhergehenden Beispielen schon bekannt und wurde auch in beim
+Die Klassenhierarchie der Fragmente ist aus den vorhergehenden Beispielen schon bekannt und wurde auch bei dem
 \texttt{BlackboardFragment} beibehalten. Dabei wird in der überschriebenen Methode \textsl{onCreateView(\ldots{})} durch
 ein SQL-Statement die Nachrichten aus der \verb!SQLite!-Datenbank gelesen, welche in einem \verb!Cursor! vorgehalten
 werden. Da es sich bei dem Zeilenlayout der \verb!ListView! um kein Standard-Layout handelt, muss zunächst der
-\verb!Cursor! schrittweise durchgearbeitet werden und die Werte in eine \verb!HashMap! übertragen werden. Auf eine
+\verb!Cursor! schrittweise durchgearbeitet und die Werte in eine \verb!HashMap! übertragen werden. Auf eine
 \verb!HashMap! wurde zurückgegriffen, um beim Löschen des Eintrags einfach über die \textit{BlackboardId} an die
-Nachricht zu gelangen und aus der Liste zu löschen, das spart einen direkten Datenbankzugriff für das Löschen und
+Nachricht zu gelangen und aus der Liste zu löschen. Das spart einen direkten Datenbankzugriff für das Löschen und
 weitere Zugriffe beim Aktualisieren der Liste, sowie dem etwaigen Wiederherstellen der Nachricht.
 Über eine \verb!EditText!-Feld kann die neue, mehrzeilige Nachricht eingegeben werden und durch den
 \textit{+}-Button dem schwarzen Brett hinzugefügt werden. Das Löschen der einzelnen Nachrichten kann durch ein Klick auf
 das Löschen-Symbol ausgelöst werden und ist durch die \verb!UndoBar!-Funktion revidierbar.
 Zum Bearbeiten wurde ein \verb!onLongClickListener! an die \verb!View! der Zeile gebunden. Wird dieser ausgelöst, so
-generiert er einen Dialog mit dem aktuellen Inhalt der Nachricht und zeigt diesen an. Gespeichert wird dann die
+generiert er einen Dialog mit dem aktuellen Inhalt der Nachricht und zeigt diesen an. Gespeichert wird die
 Nachricht mit der ID des Bearbeiters. Eine Erweiterung um die \verb!UndoBar!-Funktion sollte hier noch ergänzt werden.
 
 \paragraph{Probleme}\label{para:BbProbl}
@@ -26,14 +26,16 @@ Ende der Liste, also bei Zeilen die ausserhalb des anfänglich darstellbaren Bere
 
 \paragraph{Lösungen}\label{para:BbSol}
 Um die Datenquelle als Fehler auszuschließen wurde zunächst ein \verb!DISTINCT! in das \verb!SQL!-Statement eingefügt.
-Das bewirkt, dass doppelte Einträge ausgefiltert werden. Das war aber nicht die Ursache des Problems, da die erwarteten
-Daten im \verb!Cursor! waren und auch an den \texttt{BlackboardAdapter} weitergegeben wurden. Somit lies sich das
-Problem auf die Anzeige, beziehungsweise das die Vorbereitung der Daten zu Anzeige, eingrenzen. Demnach muss sich der
+Das bewirkt, dass doppelte Einträge ausgefiltert werden. Das war jedoch nicht die Ursache des Problems, da die erwarteten
+Daten im \verb!Cursor! waren und erwartungsgemäß an den \texttt{BlackboardAdapter} weitergegeben wurden. Somit lies sich das
+Problem auf die Anzeige, beziehungsweise das die Vorbereitung der Daten für die Anzeige, eingrenzen. Demnach muss sich der
 Fehler im erwähnten \texttt{BlackboardAdapter} befinden. Nachdem weitere Gedanken über die Funktion des Adapters gemacht
-wurden, kam die Erkenntnis, dass die Zeile \ref{line:WrongLineBbAdap} im alten Quelltext \ref{java:BbAdapOld} nicht
-funktionieren kann, sobald es mehr Einträge gibt, als auf anhieb anzeigbar sind.
+wurden, kam die Erkenntnis, dass die Zeile \ref{line:WrongLineBbAdap} im alten Quelltext (siehe Listing \ref{java:BbAdapOld}) nicht
+funktionieren kann, sobald es mehr Einträge gibt, als auf Anhieb darstellbar sind.\\
 
-\begin{lstlisting}[float, language=java, caption=Alte BlackboardAdapter.java, captionpos=below, label=java:BbAdapOld,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=java, caption=Alte BlackboardAdapter.java, captionpos=below, label=java:BbAdapOld,
 escapechar=|]
 [|\ldots{}|]
 @Override
@@ -45,13 +47,13 @@ public View getView(int position, View convertView, ViewGroup parent) { |\label{
 }
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
-Mit der \verb!if!-Abfrage, ob die übergebene \verb!View! noch \verb!null! ist, wird verhindert, dass wenn die
-\verb!ListView! gescrollt wird, die neue Zeile überschrieben werden kann. In der \verb!ListView! befinden sich nämlich
-immer gleich viele \verb!Views! als Zeilen, vorrausgesetzt dass mehr Einträge dargestellt werden sollen als auf den
+Mit der \verb!if!-Abfrage, ob die übergebene \verb!View! \verb!null! ist, wird verhindert, dass wenn die
+\verb!ListView! gescrollt wird, die neue Zeile überschrieben werden kann. In der \verb!ListView! befindet sich immer die gleiche Anzahl \verb!Views! als Zeilen, vorausgesetzt dass mehr Einträge dargestellt werden sollen als auf den
 sichtbaren Bereich passen. Tritt der Fall ein dass neue Zeilen angezeigt werden müssen, sprich es wird gescrollt, werden
 die angezeigten \verb!View!s der \textsl{getView(int position, View convertView, ViewGroup parent)} (vgl. Zeile
-\ref{line:getView} im \nameref{java:BbAdapOld}~\ref{java:BbAdapOld}) als \textit{converView} übergeben. Somit kann diese
+\ref{line:getView} in Kapitel \ref{java:BbAdapOld} - \nameref{java:BbAdapOld}) als \textit{converView} übergeben. Somit kann diese
 Variable nicht \verb!null! sein und die Bedingung der \verb!if!-Abfrage ist falsch. Demzufolge können die alten 
 Daten nicht in den vorhandenen \verb!View!s durch die neuen ersetzt werden und die selbe Nachricht wird noch mal
 angezeigt. Die Wiederholung des Anfangs wird dadurch erzeugt, dass die Zeilen-\verb!View!s wiederverwendet werden, die

@@ -1,6 +1,5 @@
 \section{Einkaufsliste}\label{section:Einkaufsliste}
-Wie der Name schon sagt, soll diese Liste die für die WG benötigten Artikel zusammengetragen werden. Dazu kann jedes
-Mitglied Einträge hinzufügen oder kaufen. Abschließend soll dadurch auch die Abrechnung vereinfacht werden, da den
+Die Einkaufsliste ist eine vom Benutzer sortierte Liste von Einkaufsgegenständen. Es können von jedem WG Mitglied Gegenstände hinzugefügt und entfernt werden. Abschließend soll dadurch die Abrechnung vereinfacht werden, da den
 gekauften Artikel jeweils der Käufer, als auch der bezahlte Preis zugeordnet werden kann.
 
 \subsection{Implementierung}\label{subSec:EkLImpl}
@@ -12,15 +11,17 @@ Einsatz der Autovervollständigung hier eine große Erleichterung. Dazu werden zun
 Datenbank in ein \verb!String-Array! geladen (vgl. Zeile \ref{line:getGroceries}). Danach wird ein \verb!ArrayAdapter!
 erzeugt, dem das \verb!Array! mit den Vorschlägen, sowie ein Layout übergeben werden. Dieser Adapter wird dem
 vorbereiteten \verb!AutoCompleteTextView! auf dem Einkaufslisten-\verb!Fragment! gesetzt. Als weitere Erleichterung
-wurde \verb!Listener! zur automatischen Eingabebestätigung implementiert (Zeile \ref{line:onEditorListener}),
+wurde ein \verb!Listener! zur automatischen Eingabebestätigung implementiert (Zeile \ref{line:onEditorListener}),
 welcher beim Hinzufügen von Waren zum Einsatz kommt, die noch nicht als Vorschlag verfügbar hinterlegt sind.
 Dazu kommt der \texttt{TextView.OnEditorActionListener()} zum Einsatz und fängt das Drücken der Tasten auf der Tastatur
 ab und überprüft ob es sich dabei um die \verb!Senden!-Taste handelt (siehe Zeile \ref{line:actionIdVergleich}).
 In diesem Fall wird die Weitergabe des Events unterbrochen und die \textsl{handleItemAddAction(\ldots{})} aufgerufen
 (vgl. Zeile \ref{line:handleItemAdd}, der der eingegebene Text übergeben wird und diesen als neue Auswahl zur Verfügung
-stellt, sowie ein Dialog öffnet mit dem die benötigte Anzahl für die Einkaufsliste übergeben werden kann.
+stellt, sowie ein Dialog öffnet mit dem die benötigte Anzahl für die Einkaufsliste übergeben werden kann.\\
 
-\begin{lstlisting}[float, caption=ShoppingListFragment.java, captionpos=below, label=java:ShoppingListFrag,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=ShoppingListFragment.java, captionpos=below, label=java:ShoppingListFrag,
 language=java, escapechar=|]
 [|\ldots{}|]
 final String[] grocieries = dbHandler.getGrocieries(); |\label{line:getGroceries}|
@@ -41,8 +42,9 @@ editTextNew.setOnEditorActionListener(new TextView.OnEditorActionListener() { |\
     return handled;
 } });
 [|\ldots{}|]
-\end{lstlisting}        
+\end{lstlisting}  
+\end{minipage}      
 
 Dieser Teil der App konnte ohne weitere Probleme gelöst werden, weswegen auf die hier üblichen Paragraphen \textsc{Probleme}
-und \textsc{Lösungen} verzichtet.
+und \textsc{Lösungen} verzichtet wird.
 
