@@ -21,7 +21,7 @@ Beim Synchonisieren wird aus den Parametern die gewünschte Tabelle gelesen (Zeil
 Die Parametervariable wird mit der User- und WG-Id der \textsc{PHP}-Datenbankschnittstelle übergeben,
 welche die Daten in einem \verb!Array! zurückliefert (siehe Zeile \ref{line:getTable}). Wurde kein leeres \verb!Array!
 erhalten, kann es dem \textit{response}-\verb!Array! angehängt werden (vgl. Zeile \ref{line:result}).
-Danach wird die Anfrage mit einem \nameref{line:echoJson} (siehe Zeile \ref{line:echoJson}) an den Client zurückgeschickt.
+Danach wird die Anfrage mit einem \textit{echo json\_encode(\$response)}(siehe Zeile \ref{line:echoJson}) an den Client zurückgeschickt.
 Befindet sich weder \emph{sync} noch \emph{write} im \textit{tag}, so handelt es sich um den Commit einer 
 Benutzeränderung. In diesem Fall wird der \textit{tag} durch eine \verb!switch-case!-Unterscheidung ausgewertet (Zeile
 \ref{line:switchTag}). Da die Datenbankfunktion entweder WG-übergreifend oder benutzerspezifische Änderungen vornehmen,

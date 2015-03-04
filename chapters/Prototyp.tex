@@ -552,9 +552,9 @@ else {
 \end{lstlisting}
 \end{minipage}
 
-Die so verpackte Tabelle, wird dann mit einer \verb!for!-Schleife (Zeile \ref{line:parseJsonProto}) in die einzelnen Zeilen zerlegt und von der Funktion
+Die so verpackte Tabelle, wird dann mit einer \verb!for!-Schleife (Listing \ref{java:SyncRemoteDBProto} \# \ref{line:parseJsonProto}) in die einzelnen Zeilen zerlegt und von der Funktion
 \textsl{addTestRow(\ldots{})} (Zeile \ref{line:addTstRwProto}) in die lokale \verb!SQLite!-Datenbank geschrieben
-(Zeile \ref{line:addTestRowProto}). Dazu werden die einzelnen Werte in zunächst mit den zugehörigen Spaltennamen in ein
+(Listing \ref{java:SyncRemoteDBProto} \# \ref{line:addTestRowProto}). Dazu werden die einzelnen Werte in zunächst mit den zugehörigen Spaltennamen in ein
 sogenanntes \texttt{ContentValues}-Objekt geschrieben, was im Groben einer Tabellenzeile entspricht.
 Eine solche Kapselung ist theoretisch nicht nötig, da die Möglichkeit besteht,
 die Werte durch ein zusammengesetzten SQL-Statement in die Datenbank zu schrieben. Diese Lösung ermöglicht aber die
