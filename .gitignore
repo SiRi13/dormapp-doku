@@ -7,12 +7,9 @@
 _region_*
 *.aux
 *.log
-*.pdf
 *.idx
 *.lof
 *.toc
 *.out
 *.tcp
 *.tps
-!Teamprojekt.pdf
-!Lastenheft.pdf
