@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99d (TeX Live 2012/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Teamprojekt.aux
+A level-1 auxiliary file: chapters/impl/App.aux
+A level-1 auxiliary file: chapters/impl/Putzplan.aux
+A level-1 auxiliary file: chapters/impl/Einkaufsliste.aux
+A level-1 auxiliary file: chapters/impl/Blackboard.aux
+A level-1 auxiliary file: chapters/impl/DbAppInterface.aux
+A level-1 auxiliary file: chapters/impl/Web.aux
+The style file: geralpha.bst
+A level-1 auxiliary file: chapters/Glossar.aux
+A level-1 auxiliary file: chapters/Selbststaendigkeitserklaerung.aux
+A level-1 auxiliary file: chapters/Anhang.aux
+A level-1 auxiliary file: chapters/Anhang2.aux
+Database file #1: literatur.bib
+You've used 15 entries,
+            2768 wiz_defined-function locations,
+            672 strings with 6505 characters,
+and the built_in function-call counts, 4227 in all, are:
+= -- 417
+> -- 113
+< -- 14
++ -- 29
+- -- 28
+* -- 244
+:= -- 618
+add.period$ -- 23
+call.type$ -- 15
+change.case$ -- 60
+chr.to.int$ -- 14
+cite$ -- 15
+duplicate$ -- 194
+empty$ -- 417
+format.name$ -- 54
+if$ -- 948
+int.to.chr$ -- 2
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 56
+num.names$ -- 42
+pop$ -- 152
+preamble$ -- 1
+purify$ -- 90
+quote$ -- 0
+skip$ -- 190
+stack$ -- 0
+substring$ -- 107
+swap$ -- 44
+text.length$ -- 14
+text.prefix$ -- 13
+top$ -- 0
+type$ -- 120
+warning$ -- 0
+while$ -- 28
+width$ -- 17
+write$ -- 148

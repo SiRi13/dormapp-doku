@@ -110,7 +110,7 @@ eingesetzt werden. Nachdem die zum TAG passende Funktion gefunden wurde, werden 
 entsprechend verarbeitet. \\
 Eine wichtige Funktion der PHP-Skripte ist der Login bzw. die Authentifizierung des Benutzers. \\*
 Dazu wird die Adresse \verb!http://test.app1.raschel.org/php/db.php! mit den Parametern \verb!TAG=''!,
-\verb!EMAIL=``ritzels@fh-trier.de''! und \verb!PASSWORD=``ritzels''! aufgerufen (vgl. Abb. \ref{php:loginProto}).
+\verb!EMAIL=`ritzels@fh-trier.de'! und \verb!PASSWORD=`ritzels'! aufgerufen (vgl. Abb. \ref{php:loginProto}).
 Sind alle Parameter korrekt übertragen worden, wird die Funktion \verb!getUserByEmailAndPassword($email, $password)!, die sich im Skript \verb!DB\_Functions.php! befindet, aufgerufen. Zum Authentifizieren wird aus der Datenbank der zur
 E-Mailadresse passende Datensatz geladen, siehe Auszug \ref{php:dbFuncProto}.
 Das in der Datenbank gespeicherte \verb!SALT! wird mit dem übertragenen Passwort an die Funktion
@@ -179,7 +179,7 @@ public function getUserByEmailAndPassword($email, $password) {
 Die Skripte befinden sich in vollem Umfang als Anhang an diese Dokumentation.
 \pagebreak
 
-  \subsection{Prototyp-App}\label{subsect:PrototypApp}
+\subsection{Prototyp-App}\label{subsect:PrototypApp}
 Die Implementierung der Prototyp-App wurde in zwei Projekte aufgeteilt. In dem Projekt \verb!DatabaseConnectionLib!
 wurden die Funktionen zum Schreiben und Lesen der MySQL-Datenbank ausgelagert, da diese mit Sicherheit für die spätere
 Implementierung wieder Verwendung finden werden. Das Anzeigen und Manipulieren der Daten wurde im Projekt
@@ -302,8 +302,8 @@ Beim Start der App wird, wie in der Manifest-Datei angegeben, die MainActivity g
 
 Für die Funktion des Prototypen und das Umsetzen der definierten Schwerpunkte sind in diesem Projekt die beiden Klassen
 \verb!LoginActivity.java! und \verb!MainActivity.java! von Bedeutung.
-Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \verb!activity_main.xml! geladen (siehe Abb. \ref{pic:MainActivityProto}). \\* Das geschieht in Zeile \ref{line:setContentViewProto} durch
-\verb!setContentView(R.layout.activity_main)! in der \verb!onCreate()! Methode.
+Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \verb!activity_main.xml! geladen (siehe Abb. \ref{pic:MainActivityProto}).
+Das geschieht in Zeile \ref{line:setContentViewProto} durch \verb!setContentView(R.layout.activity_main)! in der \verb!onCreate()! Methode.
 
 \begin{figure}[H]
   \centering
@@ -358,7 +358,7 @@ Zum Anzeigen der lokalen Tabelleninhalte kann der Button \texttt{Load from DB} b
 \verb!loadFromDb(View view)! ausgeführt wird. Dabei werden die Daten zunächst in einem \textsl{Cursor}-Objekt
 bereitgestellt, welches vom \texttt{DatabaseHandler} (siehe Abb. \ref{java:DBHandlerProto}) bereitgestellt wird (vgl. Zeile
 \ref{line:CursorProto}). Die Darstellung wird durch eine \textsl{ListView} übernommen, die im
-Layout der Aktivität hinterlegt und über den Befehl //* \verb!findViewById(R.id.listView1)! in Zeile \ref{line:findListViewProto} 
+Layout der Aktivität hinterlegt und über den Befehl \\* \verb!findViewById(R.id.listView1)! in Zeile \ref{line:findListViewProto} 
 referenziert wurde. Um den \textsl{Cursor} in der \textsl{ListView} anzeigen zu können, muss dieser in einem
 \textsl{SimpleCursorAdapter} für die \textsl{ListView} zugänglich gemacht werden. Dazu wird in Zeile
 \ref{line:SiCuAdProto} dem Konstruktor des \textsl{SimpleCursorAdapter} zunächst der aktuelle \textsl{Context}, das
@@ -420,8 +420,8 @@ Datengrundlage gesteuert wird. Dieser Adapter wird mittels dem Befehl \verb!.set
 übergeben. Wodurch nun die Daten auf der Oberfläche sichtbar werden. \\*
 
 Zum Leeren der \textsl{ListView} wird der Button \texttt{Clear View} gedrückt, wodurch mittels der Methode
-\textsl{clearResultListView(View view)} \ref{line:clearLVProto} die \textsl{ListView} vom Adapter getrennt und unsichtbar gemacht wird.
-
+\textsl{clearResultListView(View view)} in Zeile \ref{line:clearLVProto} die \textsl{ListView} vom Adapter
+getrennt und unsichtbar gemacht wird.
 \pagebreak
 
 \subsubsection*{DatabaseConnectionLib}\label{subsub:DBConLibProto}
@@ -552,8 +552,8 @@ else {
 \end{lstlisting}
 \end{minipage}
 
-Die so verpackte Tabelle, wird dann mit einer \verb!for!-Schleife (Zeile \ref{line:parseJsonProto} in die einzelnen Zeilen zerlegt und von der Funktion
-\textsl{addTestRow(\ldots{})} (Zeile \ref{line:addTstRw()Proto}) in die lokale \verb!SQLite!-Datenbank geschrieben
+Die so verpackte Tabelle, wird dann mit einer \verb!for!-Schleife (Zeile \ref{line:parseJsonProto}) in die einzelnen Zeilen zerlegt und von der Funktion
+\textsl{addTestRow(\ldots{})} (Zeile \ref{line:addTstRwProto}) in die lokale \verb!SQLite!-Datenbank geschrieben
 (Zeile \ref{line:addTestRowProto}). Dazu werden die einzelnen Werte in zunächst mit den zugehörigen Spaltennamen in ein
 sogenanntes \texttt{ContentValues}-Objekt geschrieben, was im Groben einer Tabellenzeile entspricht.
 Eine solche Kapselung ist theoretisch nicht nötig, da die Möglichkeit besteht,
@@ -566,7 +566,7 @@ Verwendung der \textsl{insert()}-Methode wie in Zeile \ref{line:insertProto}, wo
 \begin{lstlisting}[caption=Auszug aus der DatabaseHandler.java, captionpos=below, label=java:DBHandlerProto, language=java, escapechar=|]
 [|\ldots{}|]        
 public void addTestRow(int id, String text, int number, 
-    String created_at) { |\label{line:addTstRw()Proto}|
+    String created_at) { |\label{line:addTstRwProto}|
   SQLiteDatabase db = this.getWritableDatabase();
   ContentValues vals = new ContentValues(); |\label{line:cntntValsProto}|
   if (id > 0 & created_at != null & !created_at.equals("")) {

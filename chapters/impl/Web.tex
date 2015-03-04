@@ -1,9 +1,10 @@
 \section{Weboberfläche}\label{section:WebUI}
-Der Administrator einer WG muss in der Lage sein, die Eigenschaften der WG zu konfigurieren und die Funktionen zu verwalten. Wir haben uns dazu entschieden, eine extern jederzeit erreichbare Weboberfläche dafür bereit zu stellen. Wir hätten uns genauso gut für die Implementierung in die Android App entscheiden können, haben uns jedoch bewusst dagegen entschieden. Wir möchten mit den unterschiedlichen Programmiersprachen und den daraus resultierenden Herangehensweisen eine möglichst große Vielfalt der Informatik widerspiegeln und die Aufgaben fair auf die Teammitglieder verteilen, die bisher noch keine Erfahrung mit der Programmierung für die Android Plattform sammeln konnten.\\
-Im folgenden Kapitel wird die Struktur der Weboberfläche mit Hilfe von einzelnen Auszügen des Quellcodes erläutert.
+Der Administrator einer WG muss in der Lage sein, die Eigenschaften der WG zu konfigurieren und die Funktionen zu verwalten. Wir haben uns dazu entschieden, eine extern jederzeit erreichbare Weboberfläche dafür bereitzustellen. Wir hätten uns genauso gut für die Implementierung in die Android App entscheiden können, haben uns jedoch bewusst dagegen entschieden. Wir möchten mit den unterschiedlichen Programmiersprachen und den daraus resultierenden Herangehensweisen eine möglichst große Vielfalt der Informatik widerspiegeln und die Aufgaben fair auf die Teammitglieder verteilen, die bisher noch keine Erfahrung mit der Programmierung für die Android Plattform sammeln konnten.\\
+Im folgenden Kapitel wird die Struktur der Weboberfläche mit Hilfe von einzelnen Auszügen aus dem Quellcode erläutert.
 
 \subsection{Umsetzung}\label{subSec:WebUmsetz}
 Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete Skriptsprache PHP entschieden. PHP bietet durch den Einfluss von Java, C++ und Perl einen leichten Einstieg für diejenigen, die bereits erste Erfahrungen mit einer der Programmiersprachen sammeln konnten. Ausserdem bietet PHP die einfache Umsetzung von dynamischen Webseiten und eine sehr gute Unterstützung von Datenbankverbindungen. Mit PHP ist automatisch sichergestellt, dass die Weboberfläche von jedem gängigen Browser aus in deren Desktop- sowie Mobilversion angezeigt werden kann.\\
+
 \begin{description}
 \item Die Weboberfläche gliedert sich in neun Seiten:
 \dirtree{%
@@ -19,8 +20,13 @@ Als Programmiersprache haben wir uns für die sehr beliebte und weit verbreitete 
 .2 system.php.
 }
 \end{description}
-Jede dieser PHP Dateien stellt eine Seite der Weboberfläche dar. Jede Datei beinhaltet gewöhnlichen HTML Code für die Anzeige im Browser und PHP Code für den dynamischen Teil der Datenabfrage von der Datenbank.\\
-Mehrzeilige Abfragen in PHP sind in externe Dateien ausgelagert. So ist z.B. die Abfrage zum löschen eines WG Mitglieds in der Datei  \textit{benutzer\textunderscore edit\textunderscore delete.php} zu finden. So verfahren wir mit allen weiteren Abfragen. Dies soll die Übersichtlichkeit erhöhen.\\
+
+Jede dieser PHP Dateien stellt eine Seite der Weboberfläche dar. Jede Datei beinhaltet gewöhnlichen HTML Code für die
+Anzeige im Browser und PHP Code für die dynamische Datenabfrage von der Datenbank.\\
+Mehrzeilige Abfragen in PHP sind in externe Dateien ausgelagert. So ist zum Beispiel die Abfrage zum Löschen eines WG
+Mitglieds in der Datei \textit{benutzer\textunderscore edit\textunderscore delete.php} zu finden. Dadurch wird die
+Übersichtlichkeit erhöht und wurde deshalb bei allen weiteren Abfragen so beibehalten.
+
 \begin{figure}
 \begin{description}
 \item Daraus ergibt sich folgende Struktur für die Weboberfläche mit ihren Seiten inklusive aller ausgelagerten PHP Abfragen:
@@ -59,21 +65,26 @@ Mehrzeilige Abfragen in PHP sind in externe Dateien ausgelagert. So ist z.B. die
 }
 \end{description}
 \end{figure}
-Alle Eingaben die der Benutzer in der Weboberfläche machen kann, werden durch Textfelder oder Checkboxen erfasst. Wir verwenden für alle zu übertragenden Daten die Methode POST. Damit werden die Daten für die Benutzer unsichtbar im Rumpf des HTTP-Requests gesendet. Die Methode GET, die die Daten für alle sichtbar an die URI anhängen würde, könnte theoretisch ebenfalls genutzt werden. Jedoch würde das in unserem Fall ein erhöhtes Sicherheitsrisiko darstellen. Darum verzichten wie, für bis auf wenige ID's, auf die Methode GET.\\ \\
 
-Auf jeder HTML Seite und in jedem PHP Skript wird zu Beginn überprüft, ob der Nutzer im System angemeldet ist. Falls die Prüfung fehlschlägt, wird ihm mit dem Hinweis \textit{Bitte loggen Sie sich erst ein!} die Anzeige der Seite verwehrt und das PHP Script wird mit \textit{exit;} gestoppt.
+Alle Eingaben die der Benutzer auf der Weboberfläche machen kann, werden durch Textfelder oder Checkboxen erfasst. Wir
+verwenden für alle zu übertragenden Daten die Methode POST. Damit werden die Daten für die Benutzer unsichtbar im Rumpf
+des HTTP-Requests gesendet. Die Methode GET, die die Daten für alle sichtbar an die URI anhängen würde, könnte
+theoretisch ebenfalls genutzt werden. Jedoch würde das in unserem Fall ein erhöhtes Sicherheitsrisiko darstellen. Darum
+verzichten wir, bis auf wenige Ausnahmen, auf die GET-Methode.
+\\
+
+Auf jeder HTML Seite und in jedem PHP Skript wird zu Beginn überprüft, ob der Nutzer im System angemeldet ist. Falls die Prüfung fehlschlägt wird ihm mit dem Hinweis \textit{Bitte loggen Sie sich erst ein!} die Anzeige der Seite verwehrt und das PHP Script wird mit \textit{exit;} gestoppt.
 
 \begin{figure}
 \begin{lstlisting}[language=PHP, caption=Login des Benutzers überprüfen, captionpos=below, label=WEBLogin]
-if(!isset($_SESSION["email"]))
-{
-	echo("<a href=\"login.php\" />Bitte loggen sie sich erst ein!</a>");
-	exit;
+if(!isset($_SESSION["email"])) {
+  echo("<a href=\"login.php\" />Bitte loggen sie sich erst ein!</a>");
+  exit;
 }
 \end{lstlisting}
 \end{figure}
 
-Ist der Benutzer eingeloggt, wird das PHP Skript nicht gestoppt, sondern weiter verarbeitet. Mit einem \textit{require\textunderscore once 'db\textunderscore inc.php} wird die Datei db\textunderscore inc.php eingebunden und ausgeführt. Das passiert nur, wenn die Datei nicht schon im vorhergehenden Teil des Codes  eingebunden wurde.
+Ist der Benutzer eingeloggt, wird das PHP Skript nicht gestoppt, sondern weiter verarbeitet. Mit einem \textit{require\textunderscore once 'db\textunderscore inc.php} wird die Datei db\textunderscore inc.php eingebunden und ausgeführt. Das passiert nur, wenn die Datei nicht schon im vorhergehenden Teil des Codes eingebunden wurde.
 
 \begin{figure}
 \begin{lstlisting}[language=PHP, caption=Verbindung aufbauen\, falls noch nicht geschehen, captionpos=below,
@@ -82,13 +93,14 @@ require_once 'db_inc.php';
 \end{lstlisting}
 \end{figure}
 
-Im Anschluss können die über die Methoden POST und GET übergebenden Variablen abgefragt und zwischengespeichert werden. In dem Beispiel wird mit einer if-Abfrage geprüft, ob eine Variable "einkaufsliste\textunderscore id" an das PHP Skript geliefert wurde. Falls dies der Fall ist, wird der Inhalt der Variablen lokal zwischengespeichert.
+Im Anschluss können die über die Methoden POST und GET übergebenen Variablen abgefragt und zwischengespeichert werden.
+In dem Beispiel wird mit einer if-Abfrage geprüft, ob eine Variable "einkaufsliste\textunderscore id" an das PHP Skript
+übertragen wurde. Falls dies der Fall ist, wird der Inhalt der Variablen lokal zwischengespeichert.
 
 \begin{figure}
 \begin{lstlisting}[language=PHP, caption=Variable \textit{einkaufsliste\textunderscore id} lokal zwischenspeichern,
 captionpos=below, label=Variable]
-if(isset($_POST['einkaufsliste_id']))
-{
+if(isset($_POST['einkaufsliste_id'])) {
 	$einkaufsliste_id = $_POST['einkaufsliste_id'];
 }
 \end{lstlisting}
