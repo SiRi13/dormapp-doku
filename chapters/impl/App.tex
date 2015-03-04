@@ -1,43 +1,43 @@
 \section{App}\label{section:App}
 Dieses Kapitel umfasst die Implementierung der App, auf der die weiteren Teile aufbauen. Dabei wird näher auf die
 service-ähnliche Struktur und deren Umsetzung, sowie die sichere Speicherung von Benutzerinformationen eingegangen. 
-Anfangs wird noch der Ablauf beim ersten Start, den folgenden Starts sowohl mit als auch ohne angemeldetem
+Anfangs wird der Ablauf beim ersten Start, den folgenden Starts sowohl mit als auch ohne angemeldetem
 Benutzer beschrieben.
 \\*
 Da eine Verwendung der App ohne Anmeldung, sprich ohne personalisierte Daten, nicht vorgesehen ist, wird zunächst der
 App-Speicher auf vorhandene Login-Informationen überprüft. Aufgrund der Annahme, dass es sich um die erste Verwendung
 nach der Installation handelt, können noch keine Benutzerdaten vorhanden sein und es wird direkt in die
 \textsl{LoginActivity} weitergeleitet, die ohne Anmeldung nicht verlassen werden kann. Hat sich der Benutzer erfolgreich
-authentifiziert, startet die Synchronisierung aller Tabellen um die aktuellsten Daten zu erhalten. Ein Beenden ohne
-Logout hat zur folge, dass E-Mailadresse und Passwort über die \texttt{Secure-Preferences}-Schnittstelle verschlüsselt
-im Speicherbereich abgelegt werden. Die erfolgt in der \textsl{onPause()}-Methode, um den Verlust der Daten beim
-Zerstören der App aufgrund von Ressourcenknappheit, zu verhindern. Beim darauffolgenden Start wird in der
+authentifiziert, startet die Synchronisierung aller Tabellen, um die aktuellsten Daten zu erhalten. Ein Beenden ohne
+Logout hat zur Folge, dass E-Mailadresse und Passwort über die \texttt{Secure-Preferences}-Schnittstelle verschlüsselt
+im Speicherbereich abgelegt werden. Dies erfolgt in der \textsl{onPause()}-Methode, um den Verlust der Daten beim
+Zerstören der App aufgrund von Ressourcenknappheit zu verhindern. Beim darauffolgenden Start wird in der
 \textsl{onResume()}-Methode geprüft, ob verschlüsselte Credentials im Speicher hinterlegt sind. Nach dem Auslesen werden
-damit direkt die aktuellen Bewegungsdaten aus der Datenbank abgerufen und lokal gespeichert. Hat sich der Benutzer vor
+damit die aktuellen Bewegungsdaten aus der Datenbank abgerufen und lokal gespeichert. Hat sich der Benutzer vor
 dem Beenden der App abgemeldet, wurden beim Schließen keine Informationen im App-Speicher abgelegt. Dadurch landet der
 Benutzer, wie beim Erststart, wieder in der Loginmaske.
 
 \subsection{Probleme}\label{subsec:AppProbl}
-Neben denen im Prototyp \ref{chp:Prototyp} gelösten Problemen, die schon vor dem Beginn der Implementierung erkannt 
-wurden, sind auch während der Umsetzung einige Stolperfallen aufgetreten. Dazu gehört zunächst das Problem, die
-Logininformationen so sicher wie möglich zu speichern. Desweiteren sollte die Server- und Datenbankkommunikation
+Neben denen in Kapitel \ref{chp:Prototyp} - \nameref{chp:Prototyp} gelösten Problemen, die schon vor dem Beginn der Implementierung erkannt 
+wurden, sind auch während der Umsetzung einige Stolperfallen aufgetreten. Dazu gehört zunächst die Herausforderung, die
+Logininformationen so sicher wie möglich zu speichern. Des Weiteren sollte die Server- und Datenbankkommunikation
 möglichst unabhängig vom Darstellungsteil der App gehalten werden.
 
 \paragraph*{Unsichere App-Speicher}\label{para:unsafeStorage}
-Da der \verb!SharedPreference!-Speicher nicht verschlüsselt ist und durch einfache Mittel ausgelesen werden kann, können
+Da der \verb!SharedPreference!-Speicher nicht verschlüsselt ist und durch einfache Mittel ausgelesen werden kann, dürfen
 dort keine sensiblen Daten ohne weiteres gespeichert werden. Die sicherste Art wäre es, die Logininformationen nicht zu
 speichern, was aber dazu führen würde, dass sich der Benutzer bei jedem Start der App neu anmelden müsste. Das ist dem
 Benutzer aber unter keinerlei Umständen zumutbar.
 
 \paragraph*{Datenbank-Service}\label{para:dbService}
-Das Trennen der Oberfläche von der Datenhaltung hat mehrere Vorteile und wurde deswegen auch in diesem Projekt
+Das Trennen der Oberfläche von der Datenhaltung hat mehrere Vorteile und wurde deswegen in diesem Projekt
 umgesetzt. Zunächst ist es dadurch möglich die Kommunikation zwischen App und Datenbank zu ändern, ohne dass die
-Oberfläche angepasst werden muss. Weiterhin ist es dadurch einfacher möglich die Umsetzung auf verschiedene Entwickler
-aufzuteilen, da keine ständige Rücksprache nötig ist, sondern nur zu Beginn die Schnittstelle definiert werden muss.
+Oberfläche angepasst werden muss. Weiterhin ist es dadurch einfacher die Umsetzung auf verschiedene Entwickler
+aufzuteilen, da keine ständige Rücksprache nötig ist, sondern nur zu Beginn die Schnittstelle bereits definiert sein muss.
 
 \subsection{Lösungen}\label{subsec:AppSol}
 Zur Lösung der vorangegangenen Probleme, sind nachfolgend kurze Auszüge aus dem Quelltext mit einer knappen 
-Erläuterung der Funktion
+Erläuterung der Funktion.
 
 \paragraph*{Secure-Preferences}\label{para:secPrefs}
 Wie zuvor erwähnt, ist der App-Speicher nicht verschlüsselt und somit eigentlich für die Ablage von Passwörtern
@@ -50,22 +50,22 @@ Standard-\verb!SharedPreferences!. Das physikalische erstellen der Datei auf dem
 Instanziieren der Klasse \texttt{SecurePreferences} im \verb!Context! der App. Wie auch bei den \verb!SharedPreferences!
 kann auch hier optional ein eigener Name für die Datei übergeben werden, ist hier jedoch nicht notwendig. Hat sich ein
 Benutzer angemeldet und wird die App geschlossen, wird die Funktion \textsl{storeCredentials(\ldots{})}
-\ref{line:secPrefsStore} aufgerufen und die Referenz zum \emph{SecurePreferences}-Objekt übergeben, sowie die
-\texttt{AuthCredentials}. Damit überhaupt Daten geschrieben werden können, muss zunächst ein \texttt{Editor}-Objekt
+(Zeile \ref{line:secPrefsStore}) aufgerufen und die Referenz zum \emph{SecurePreferences}-Objekt sowie die
+\texttt{AuthCredentials} übergeben. Damit überhaupt Daten geschrieben werden können, muss zunächst ein \texttt{Editor}-Objekt
 erstellt werden, was durch \verb!.edit()! in Zeile \ref{line:secPrefsEdit} geschieht. Damit einen eventuell verwaister Eintrag
 keine Probleme bereitet, wird der Speicher in der folgenden Zeile sicherheitshalber komplett gelöscht. Danach werden die
 Attribute aus dem \texttt{AuthCredentials}-Objekt ausgelesen und zusammen mit einem eindeutigen Bezeichner durch den
 \verb!.put(\ldots{})!-Befehl dem \verb!Editor! zum Speichern übergeben (vgl. Zeile \ref{line:secPrefsPut} ff). Um die
-Daten nun physikalisch zu schreiben, wird auf dem \verb!Editor! der \verb!.commit()! (vgl. Zeile
+Daten nun physikalisch zu schreiben, wird auf dem \verb!Editor! \verb!.commit()! (vgl. Zeile
 \ref{line:secPrefsCommit})
 ausgeführt. Ausgelesen werden die Daten einfach in der umgekehrten Reihenfolge, mit dem einzigen Unterschied, dass
 hierzu kein \verb!Editor! benötigt wird. Wird zum Beispiel die App gestartet, ruft die
-\textsl{onResume()}-Methode die \textsl{loggedInUser(\ldots{})} in Zeile \ref{line:secPrefsLogged} auf.
+\textsl{onResume()}-Methode die Methode \textsl{loggedInUser(\ldots{})} in Zeile \ref{line:secPrefsLogged} auf.
 Darin wird nach dem Sicherstellen ob Zugangsdaten vorhanden sind, die einzelnen Schlüssel-Wert-Paare wieder ausgelesen
 (siehe Zeile \ref{line:secPrefsGet} ff). Ist keiner der Werte \verb!null!, werden sie in einem \texttt{AuthCredentials}
 verpackt zurückgegeben.
 
-\begin{figure}
+\begin{figure}[H]
   \centering
   
   \begin{lstlisting}[language=java,escapechar=|]
@@ -119,12 +119,12 @@ Mit dieser Klasse ist die Implementierung eines \verb!gebundenen Service! einfac
 Der Aufbau der \emph{Messenger}-Schnittstelle ist übersichtlich und mit wenigen Schritten erreicht. Zunächst wird eine
 \texttt{MessengerService}-Klasse erstellt, die von der \texttt{Service}-Klasse erbt. Somit muss die Methode 
 \textsl{onBind(\ldots{})} (vgl. Zeile \ref{line:MsgBinder}) implementiert werden, welche als \verb!Binder!
-eine Instanz der inneren Klasse \texttt{IncomingHandler} zurückgibt (vgl. Zeile \ref{line:newMessngr}.
+eine Instanz der inneren Klasse \texttt{IncomingHandler} zurückgibt (vgl. Zeile \ref{line:newMessngr}).
 Der \texttt{IncomingHandler} arbeitet die eingehenden Anfragen 
-seriell ab und führt mittels einer \verb!switch-case! die erwünschten
-Operationen aus wie in Zeile \ref{line:handleMsg} ff zu sehen ist.
+seriell ab und führt mittels einer \verb!switch-case!-Anweisung die erwünschten
+Operationen aus (wie in Zeile \ref{line:handleMsg} ff zu sehen).
 
-\begin{figure}
+\begin{figure}[H]
   \centering
   \begin{lstlisting}[language=java,escapechar=|]
 [|\ldots{}|]

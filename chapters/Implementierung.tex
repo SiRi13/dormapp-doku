@@ -1,16 +1,13 @@
 \chapter{Implementierung von \textsl{\textbf{DorMApp}}}\label{chp:Impl}
-Die App wurde zum Großteil in der aktuell von Google empfohlenen Umgebung Android Studio 
-umgesetzt. Zu Beginn fand die Entwicklung noch in Eclipse mit dem entsprechenden Plug-In
-statt. Jedoch erschwerten die Bugs und die Behäbigkeit der Eclipse-IDE den zügigen 
+Die App wurde zum Großteil in der aktuell von Google empfohlenen Umgebung \emph{Android Studio} \cite{androidStudio:15} umgesetzt. Zu Beginn fand die Entwicklung noch in \emph{Eclipse} \cite{eclipse:14} mit dem entsprechenden Plug-In \emph{Android Developer Tools} \cite{eclipsePlugIn:14} statt. Jedoch erschwerten die Bugs und die Behäbigkeit der Eclipse-IDE den zügigen 
 Fortschritt. Aus diesem Grund wurde nach dem Legen des Grundsteins das Projekt auf die
 neue Entwicklungsumgebung migriert, wo es auch fertiggestellt wurde. \\*
 
 \section{Entwicklungsgrundlagen}\label{section:ImplGrundlagen}
-Durch die Prototyp-Enwicklung konnte zu Beginn der Implementierung schon auf einige Bausteine zurückgegriffen werden.
+Durch die Prototyp-Entwicklung konnte zu Beginn der Implementierung schon auf einige Bausteine zurückgegriffen werden.
 Zunächst wurde die Kommunikation mit der Datenbank nicht verändert. Somit ruft die App weiterhin ein PHP-Skript auf,
 welches dann die Tabelleninhalte ausliest, aufbereitet und im \emph{JSON}-Format zurücksendet. 
-Die von der \textsl{\textbf{DorMApp}}-App benötigten Skripte, sowie der Zugriff auf die Datenbank werden im Kapitel
-\nameref{section:AppDbInterface}~\ref{section:AppDbInterface} genauer erläutert. Sollte es das Verständnis eines Sachverhaltes 
+Die von der \textsl{\textbf{DorMApp}}-App benötigten Skripte, sowie der Zugriff auf die Datenbank werden im Kapitel \ref{section:AppDbInterface} - \nameref{section:AppDbInterface} genauer erläutert. Sollte es das Verständnis eines Sachverhaltes 
 fordern, so wird auf das entsprechende Kapitel vorgegriffen und mit in die Erklärung aufgenommen.
 
 \paragraph*{Externe Bibliotheken}\label{para:ExtLibs}
@@ -19,13 +16,13 @@ die Logindaten der Benutzer unverschlüsselt im \verb!SharedPreferences!-Bereich 
 \emph{secure-preferences} \cite{scottyab:14} eingebunden. Diese Bibliothek stellt eine Schnittstelle für die
 eigentlichen \verb!SharedPreferences! bereit, die zwar die gleichen Methoden bereitstellt, aber alle Daten
 verschlüsselt im App-Speicherbereich ablegt. Das bringt, neben der gleichen Verwendung, den Vorteil, dass die vom
-Android-Betriebssystem bereitgestellten \verb!SharedPreferences! weiterhin für unsensible Daten genutzt werden kann.
+Android-Betriebssystem bereitgestellten \verb!SharedPreferences! weiterhin für unsensible Daten genutzt werden können.
 \\*
-Weiterhin wurde auf die Bibliothek \emph{UndoBar} \cite{soarcn:13} zurückgegriffen. Dadurch wird ein einfache und
-schnelle Möglichkeit zum Erstellen der \texttt{Toasts} mit \verb!Undo!-Button integriert. Neben der visuellen Komponente
-stellt \emph{UndoBar} auch noch die Logik hinter dieser intuitiven Art der Benutzerführung dem Entwickler zur Verfügung.
-Bei Bedarf kann nach dem Verschwinden des \texttt{Toasts} direkt die Änderung speichern oder, wenn der Benutzer die
-Änderung rückgängig machen will, bei Buttonklick den vorigen Zustand wiederherstellen. 
+Weiterhin wurde auf die Bibliothek \emph{UndoBar} \cite{soarcn:13} zurückgegriffen. Dadurch wird eine einfache und
+schnelle Möglichkeit zum Erstellen der \texttt{Toasts} mit einem \verb!Undo!-Button integriert. Neben der visuellen Komponente
+stellt \emph{UndoBar} auch die Logik hinter dieser intuitiven Art der Benutzerführung dem Entwickler zur Verfügung.
+Bei Bedarf kann nach dem Verschwinden des \texttt{Toasts} direkt die Änderung gespeichert oder, wenn der Benutzer die
+Änderung rückgängig machen will, bei Buttonklick den vorherigen Zustand wiederhergestellt werden. 
 \\*
 Zu Testzwecken wurden die Bibliotheken \emph{android-test-kit} \cite{atk:13}, die auch als \emph{Espresso}-Testkit
 bekannt ist, und \emph{mockwebserver} \cite{okhttp:14} in das Projekt aufgenommen. In dieser Kombination lassen sich
@@ -33,8 +30,7 @@ ohne großen Aufwand die Abläufe auf der GUI testen, sowie durch gestellte Server
 verschiedenen Testfällen testen. 
 \\*
 Abgesehen von diesen externen Lösungen, flossen noch Teile der Android-Samples \cite{google:14} mit in die Entwicklung
-ein und eine anfängliche Hilfestellung bei der Entwicklung bot die Seite \emph{learn2crack.com} \cite{Learn2Crack:13}
-konsultiert, die eine Vielzahl an Beispielprojekten und Lösungsansätzen aufweist.
+ein. Eine anfängliche Hilfestellung bei der Entwicklung bot die Seite \emph{learn2crack.com} \cite{Learn2Crack:13}, die eine Vielzahl an Beispielprojekten und Lösungsansätzen aufweist.
 
 \begin{comment}
 \paragraph{Projektstruktur}\label{para:ProjektStrukt}

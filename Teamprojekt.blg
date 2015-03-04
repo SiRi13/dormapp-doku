@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2012/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2014)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: Teamprojekt.aux
 A level-1 auxiliary file: chapters/impl/App.aux
@@ -11,44 +11,44 @@ The style file: geralpha.bst
 A level-1 auxiliary file: chapters/Glossar.aux
 A level-1 auxiliary file: chapters/Selbststaendigkeitserklaerung.aux
 Database file #1: literatur.bib
-You've used 12 entries,
+You've used 15 entries,
             2768 wiz_defined-function locations,
-            660 strings with 6320 characters,
-and the built_in function-call counts, 3387 in all, are:
-= -- 336
-> -- 89
-< -- 11
-+ -- 23
-- -- 22
-* -- 196
-:= -- 498
-add.period$ -- 20
-call.type$ -- 12
-change.case$ -- 48
-chr.to.int$ -- 11
-cite$ -- 12
-duplicate$ -- 155
-empty$ -- 333
-format.name$ -- 42
-if$ -- 759
+            670 strings with 6466 characters,
+and the built_in function-call counts, 4227 in all, are:
+= -- 417
+> -- 113
+< -- 14
++ -- 29
+- -- 28
+* -- 244
+:= -- 618
+add.period$ -- 23
+call.type$ -- 15
+change.case$ -- 60
+chr.to.int$ -- 14
+cite$ -- 15
+duplicate$ -- 194
+empty$ -- 417
+format.name$ -- 54
+if$ -- 948
 int.to.chr$ -- 2
 int.to.str$ -- 0
 missing$ -- 0
-newline$ -- 47
-num.names$ -- 33
-pop$ -- 122
+newline$ -- 56
+num.names$ -- 42
+pop$ -- 152
 preamble$ -- 1
-purify$ -- 72
+purify$ -- 90
 quote$ -- 0
-skip$ -- 148
+skip$ -- 190
 stack$ -- 0
-substring$ -- 86
-swap$ -- 35
-text.length$ -- 11
-text.prefix$ -- 10
+substring$ -- 107
+swap$ -- 44
+text.length$ -- 14
+text.prefix$ -- 13
 top$ -- 0
-type$ -- 96
+type$ -- 120
 warning$ -- 0
-while$ -- 22
-width$ -- 14
-write$ -- 121
+while$ -- 28
+width$ -- 17
+write$ -- 148

@@ -1,24 +1,26 @@
 \section{Putzplan}\label{section:Putzplan}
 Der Putzplan soll den Benutzern zeigen, wer als nächstes für eine Aufgabe an der Reihe ist. Dabei werden bei der
 Synchronisierung die für die gesamte WG anfallenden Aufgaben kopiert. Somit ist es auch möglich die Arbeiten eines
-anderen WG-Mitbewohners abzuarbeiten. Für die einzelnen Aufgaben, wie Küche oder Badezimmer, können noch Schritte
+anderen WG-Mitbewohners abzuarbeiten. Für die einzelnen Aufgaben, wie Küche oder Badezimmer, können weitere Schritte
 definiert werden. Diese sind zu erledigen, bevor die Aufgabe als erledigt angesehen wird. Sobald alle Schritte markiert 
-sind, wird beim Übertragen automatisch die Aufgabe auf erledigt gesetzt.
+sind, wird beim übertragen automatisch die Aufgabe auf erledigt gesetzt.
 
 \subsection{Umsetzung}\label{subSec:PPUmsetz}
-Die Anzeige der Aufgaben wurde durch ein, von \verb!Fragment! abgeleitetes, \\* 
+Die Anzeige der Aufgaben wurde durch ein von \verb!Fragment! abgeleitetes \\* 
 \texttt{ChorePlanFragment} realisiert. Wechselt man zu dem Besagten
 \verb!Fragment!, wird zunächst das passende Layout geladen (vgl. Zeile
-\ref{line:inflateFragChore}). Danach wird aus der \textsl{onViewCreated(\ldots{})} der Inhalt des Fragments
+\ref{line:inflateFragChore}). Danach wird aus \textsl{onViewCreated(\ldots{})} der Inhalt des \verb!Fragments!
 initialisiert. Dabei wird sowohl für die Aufgaben als auch die Schritte eine \verb!SQL!-Statement auf der
 \verb!SQLite!-Datenbank ausgeführt und in einen Cursor geladen. Die aus der Datenbank geladenen Daten werden
 anschließend in eine \verb!ArrayList! hinzugefügt, beziehungsweise in eine \verb!HashMap! gesetzt. Diese können dann dem
 \texttt{ChorePlanAdapter} übergeben werden, der die Daten für die Anzeige aufbereitet und dem \texttt{ListView}-Element
 im \texttt{ChorePlanFragment} anhängt. 
 Schlussendlich wird dem \textit{Erledigt}-Button die Funktion hinterlegt, die Schritte mit geänderter Markierung aus dem
-\texttt{ChorePlanAdapter} auszulesen und in der lokalen Datenbank zu speichern.
+\texttt{ChorePlanAdapter} auszulesen und in der lokalen Datenbank zu speichern.\\
 
-\begin{lstlisting}[float,caption=ChorePlanFragment.java,label=java:ChorePlanFrag2,language=java,escapechar=|,captionpos=below]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=ChorePlanFragment.java,label=java:ChorePlanFrag2,language=java,escapechar=|,captionpos=below]
 [|\ldots{}|]
 @Override
 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,29 +63,32 @@ btnChoreDone.setOnClickListener(new View.OnClickListener() {
     token.putIntegerArrayList("choreStepId", choreStepIds); |\label{line:lastChorePlanLine}|
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 \subsection{Probleme und Lösungen}\label{subSec:PPSol}
 Bei diesem Teil der App kam es an zwei Stellen zu leichten Problemen. Dazu zählt zum einen das Aufklappen der
 \verb!ListView!-Zeilen, zum anderen war das nicht-persistente Ändern eine kleine Herausforderung.
 
 \paragraph*{Probleme}\label{para:ProbChorePlanFrag}
-Um die Liste der anfallenden Aufgaben übersichtlicht zu halten, aber trotzdem die Schritte bei den zugehörigen Aufgaben
-anzuzeigen, bewerkstelligen zu können, wurden die einzelnen \verb!ListView!-Elemente klappbar gemacht. Somit klappt beim
-klick auf eine Zeile der Teil mit den Aufgabeschritten auf. Womit die Zusammengehörigkeit symbolisiert wird und die
+Um die Liste der anfallenden Aufgaben übersichtlich zu halten, aber trotzdem die Schritte bei den zugehörigen Aufgaben
+anzeigen zu können, wurden die einzelnen \verb!ListView!-Elemente klappbar gemacht. Somit klappt bei einem
+Klick auf eine Zeile der Teil mit den Aufgabeschritten auf. Womit die Zusammengehörigkeit symbolisiert wird und die
 Bedienbarkeit intuitiv ist.\\*
-Wie im Sourcecode-Auszug \ref{java:ChorePlanFrag2} in der letzten Zeile zu erkennen ist, werden dort noch keine Daten
+Wie im Listing \ref{java:ChorePlanFrag2} in der letzten Zeile zu erkennen ist, werden dort noch keine Daten
 geschrieben, sondern nur ein \verb!Bundle! mit den geänderten Daten erzeugt. An diese Stelle soll die Funktion des
-\emph{Undo}-Buttons kommen. Das bedeutet, eine Art \verb!Toast!, der erzeugt wird sobald der Benutzer Daten geändert
-hat, und über einen Button verfügt, mit dem die Änderungen wieder rückgängig gemacht werden können. Bis dato stellt die
-\textsc{android}-API keine derartige Funktion direkt bereit, noch wird auf der Developer-Homepage \cite{google:14} ein Lösung für das
+\emph{Undo}-Buttons kommen. Das bedeutet, eine Art \verb!Toast!, der erzeugt wird, sobald der Benutzer Daten geändert
+hat und über einen Button verfügt, mit dem die Änderungen wieder rückgängig gemacht werden können. Bis dato stellt die
+\textsc{android}-API keine derartige Funktion direkt bereit, noch wird auf der Developer-Homepage \cite{google:14} eine Lösung für das
 Problem angeboten. 
 
 \paragraph*{Lösungen}\label{para:ChorePlanSol}
-Um ein Aufklappen des Eintrags zu simulieren wurde zunächst eine Animations-Klasse \ref{java:ExpandAnim} geschrieben.
-Die sorgt dafür, dass die übergebene \verb!View! über eine angegebene Zeitspann hinweg aufgeklappt wird (Zeile
-\ref{line:ConstructExpandAnim}). 
+Um ein Aufklappen des Eintrags zu simulieren, wurde zunächst eine Animations-Klasse (siehe Listing \ref{java:ExpandAnim}) geschrieben.
+Die sorgt dafür, dass die übergebene \verb!View! über eine angegebene Zeitspanne hinweg aufgeklappt wird (siehe Zeile
+\ref{line:ConstructExpandAnim}). \\
 
-\begin{lstlisting}[float, caption=ExpandAnimation.java, captionpos=below, label=java:ExpandAnim, language=java,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=ExpandAnimation.java, captionpos=below, label=java:ExpandAnim, language=java,
 escapechar=|]
 \centering
 public ExpandAnimation(View view, int duration) { |\label{line:ConstructExpandAnim}|
@@ -99,18 +104,21 @@ public ExpandAnimation(View view, int duration) { |\label{line:ConstructExpandAn
   view.setVisibility(View.VISIBLE);
 }
 \end{lstlisting}
+\end{minipage}
 
 Diese Animation wird bei einem Klick auf einen beliebigen Punkt in der Zeile der \verb!ListView! ausgelöst. Der dafür
-benötigten \texttt{onClickListener(\ldots{})} wird im \textsl{ChorePlanAdapter} an die einzelnen \verb!Views! gehängt
+benötigte Listener \texttt{onClickListener(\ldots{})} wird im \textsl{ChorePlanAdapter} an die einzelnen \verb!Views! gehängt
 (Zeile \ref{line:onClickChorePlanAdapter}).
-Da es immer nur eine aufgeklapte Zeile geben soll, muss noch überprüft werden ob, es eine offene gibt, die geklickte
-die offene oder ob noch keine geöffnet Zeile in der Liste war (vgl. Zeile \ref{line:AnimLogic}).
+Da es immer nur eine aufgeklappte Zeile geben soll, muss überprüft werden, ob es bis zu diesem Zeitpunkt bereits eine geöffnete Zeile gab oder zur Zeit eine Zeile geöffnet ist (vgl. Zeile \ref{line:AnimLogic}).
 Außerdem wird im Falle eines Zeilenwechsels die Auswahl der Schritte zurückgesetzt, um beim späteren Speichern der
-Änderungen nicht die falschen Schritte auf 'erledigt' zu setzen, wozu in Zeile \ref{line:resetSel} ein
-\textsl{resetSelection()} aufgerufen wird. In Zeile \ref{line:startAnim} wird dann die Animation auf dem entsprechenden
-Element ausfgeführt.
+Änderungen nicht die falschen Schritte auf 'erledigt' zu setzen, wozu in Zeile \ref{line:resetSel} die Methode
+\textsl{resetSelection()} aufgerufen wird. In Zeile \ref{line:startAnim} wird die Animation auf dem entsprechenden
+Element ausgeführt.
 
-\begin{lstlisting}[float, caption=ChorePlanAdapter.java, captionpos=below, label=java:ChorePlanAdap, language=java,
+
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=ChorePlanAdapter.java, captionpos=below, label=java:ChorePlanAdap, language=java,
 escapechar=|]
 convertView.setOnClickListener(new View.OnClickListener() { |\label{line:onClickChorePlanAdapter}|
 
@@ -148,16 +156,17 @@ public void onClick(View v) {
 }
 });
 \end{lstlisting}
+\end{minipage}
 
-Das Problem mit dem rückgängig machen der letzten Änderung über ein \verb!Toast! zieht sich durch das gesamte Projekt
-und wird hier nun beispielweise erklärt.
-Nachdem in \ref{java:ChorePlanFrag2} in Zeile \ref{line:lastChorePlanLine} die Daten soweit aufbereitet wurden, dass ein
-umsetzen der Änderungen möglich ist, folgt nun der Einsatz der \emph{UndoBar} \ref{java:UndoChorePlan}. 
+Das Problem mit dem rückgängig machen der letzten Änderung über ein \verb!Toast!, zieht sich durch das gesamte Projekt
+und wird hier nun beispielweise erläutert.\\
+Nachdem in Listing \ref{java:ChorePlanFrag2} in Zeile \ref{line:lastChorePlanLine} die Daten soweit aufbereitet wurden, dass ein
+Umsetzen der Änderungen möglich ist, folgt nun in Listing \ref{java:UndoChorePlan} der Einsatz der \emph{UndoBar}. 
 Zunächst wird ein neues Objekt des \texttt{UndoBarController.UndoBar} erstellt. Dieses wird keiner Variablen zugewiesen,
-da kein weiterer Zugriff darauf erfolgt. Nacheinander werden der Schaltfläche nun die Eigenschaften zugewiesen. Zunächst
-das in \ref{java:ChorePlanFrag2} in Zeile \ref{line:lastChorePlanLine} erstellte \verb!Bundle!, in dem die zu ändernden
-Objekte stecken. In Zeile \ref{line:msgUndoBar} wird die anzuzeigende Nachricht gesetzt, in diesem Fall ein aus den
-Ressourcen geladener String. Nun folgen die besonderen Eigenschaften, der \verb!Listener! zum Persistieren (Zeile
+da kein weiterer Zugriff darauf erfolgt. Nacheinander werden der Schaltfläche nun die Eigenschaften zugeordnet. Zunächst
+das in Listing \ref{java:ChorePlanFrag2} in Zeile \ref{line:lastChorePlanLine} erstellte \verb!Bundle!, in dem die zu ändernden
+Objekte zu finden sind. In Zeile \ref{line:msgUndoBar} wird die anzuzeigende Nachricht gesetzt, welcher in diesem Fall ein aus den
+Ressourcen geladener String ist. Nun folgen die besonderen Eigenschaften, der \verb!Listener! zum Persistieren (Zeile
 \ref{line:onHideUndoBar}), beziehungsweise in Zeile \ref{line:onUndoUndoBar} die Undo-Funktion. 
 Möchte der Benutzer die Änderung nicht rückgängig machen, werden in diesem Fall mit der 
 \textsl{onHide(\ldots{})}-Methode die ausgewählten Schritte über das im Kapitel
@@ -168,9 +177,11 @@ Wünscht der Benutzer jedoch, die getätigten Änderunge zu annulieren, kann er das
 (Zeile \ref{line:readToken}). Darauf folgt die Löschung der Einträge aus der \verb!SQLite!-Datenbank in Zeile
 \ref{line:delRows} sowie die Entfernung der Markierung auf der grafischen Oberfläche (vgl. Zeile \ref{line:setChecked}).
 Abschließend wird noch durch einen simulierten Klick auf die \verb!ListView!-Zeile das Schließen der aufgeklappten
-Schritte (Zeile \ref{line:closeToggledLine}) erwirkt.
+Schritte (Zeile \ref{line:closeToggledLine}) erwirkt.\\
 
-\begin{lstlisting}[float, caption=ChorePlanFragment.java, captionpos=below, label=java:UndoChorePlan, language=java,
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=ChorePlanFragment.java, captionpos=below, label=java:UndoChorePlan, language=java,
 escapechar=|]
 [|\ldots{}|]
 new UndoBarController.UndoBar(getActivity())
@@ -211,5 +222,6 @@ new UndoBarController.UndoBar(getActivity())
     } } }).show();
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 

@@ -26,7 +26,9 @@ Dazu wurden zwei einfache Tabellen angelegt. Die Tabelle \verb!tp_test! in Abb. 
 verwendet. Um alle nötigen Datentypen testen zu können, wurden verschiedene Spalten verwendet. 
 Dadurch konnte der spätere Einsatz besser simuliert werden.
 
-\begin{lstlisting}[float=h, caption=Aufbau der Tabelle tp\_test, captionpos=below, label=sql:tptest, language=sql, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Aufbau der Tabelle tp\_test, captionpos=below, label=sql:tptest, language=sql, escapechar=|]
 CREATE TABLE IF NOT EXISTS `test_tp` (
   `uid` VARCHAR(23) NOT NULL,
   `msg` TEXT,
@@ -34,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `test_tp` (
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 \end{lstlisting}
+\end{minipage}
 
 Um die Benutzerverwaltung für den Prototypen zu simulieren wurden außerdem noch eine Tabelle \verb!users!
 (siehe Abb. \ref{sql:usersTest}) angelegt.
@@ -41,7 +44,9 @@ Darin wurden Informationen zu den Benutzern hinterlegt. Zum Beispiel eine eindeu
 Zum Authentifizieren wurde die E-Mailadresse und ein beliebiges Passwort verwendet.
 Um das Passwort nicht im Klartext zu speichern, wurde es zusammen mit einem Salt als Hash-Wert abgelegt.
 
-\begin{lstlisting}[float=h, caption=Aufbau der Tabelle users, captionpos=below, label=sql:usersTest, language=sql, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Aufbau der Tabelle users, captionpos=below, label=sql:usersTest, language=sql, escapechar=|]
 CREATE TABLE IF NOT EXISTS `users` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `unique_id` varchar(23) NOT NULL,
@@ -56,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 \end{lstlisting}
+\end{minipage}
 
 \subsection{PHP-Skripte}\label {subsect:PHPrototyp}
 Der Aufbau der PHP-Schnittstelle ist simpel umgesetzt, da nicht viele Funktionen für den Prototyp benötigt werden.
@@ -65,7 +71,7 @@ Funktionen, die direkt auf der Datenbank ausgeführt werden, sowie das Verbinden 
 übernehmen, sind im Ordner \verb!php/include! untergebracht.
 Alle weiteren Funktionen die aus der App heraus erreichbar sein sollen, befinden sich im Hauptordner \verb!php!.
 
-\begin{figure} %[hbtp] 
+\begin{figure}[H]
   \centering
   \begin{minipage}{1.0\textwidth} \small
     \dirtree{%
@@ -113,7 +119,9 @@ Dieser generierte Hash wird dann mit dem in der Datenbank gespeichertem \verb!en
 die beiden Hashs überein, wird der geladene Datensatz an die Login-Funktion zurückgeliefert, ansonsten liefert die
 Funktion \\* \verb!getUserByEmailAndPassword() -> false!.
 
-\begin{lstlisting}[float=h, caption=Auszug aus login.php, captionpos=below, label=php:loginProto, language=php, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus login.php, captionpos=below, label=php:loginProto, language=php, escapechar=|]
 <?php
 [|\ldots{}|]
 if (isset($tag) && $tag != `') {
@@ -139,8 +147,11 @@ if (isset($tag) && $tag != `') {
 else if ($tag == 'chgpass') {
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
-\begin{lstlisting}[float=h, caption=Auszug aus DB\_Functions.php, captionpos=below, label=php:dbFuncProto, language=php, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus DB\_Functions.php, captionpos=below, label=php:dbFuncProto, language=php, escapechar=|]
 [|\ldots{}|]
 private $db;
 function __construct() {
@@ -162,6 +173,7 @@ public function getUserByEmailAndPassword($email, $password) {
     }
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 %Im Kapitel ref{sec:App} werden noch weitere Funktionen erläutert, die in diesem Kapitel noch keine Rolle spielen.
 Die Skripte befinden sich in vollem Umfang als Anhang an diese Dokumentation.
@@ -179,7 +191,7 @@ Ordnerhirarchie. Da nicht alle für diese Implementierung relevant sind, werden n
 näher erläutert. \\
 Der Ordnerbaum in Abb. \ref{dirtree:dbProto} zeigt die wichtigen Ordner und Dateien, und erläutert kurz deren Funktion.
 
-\begin{figure} %[hbtp] 
+\begin{figure}[H] 
   \centering
   \begin{minipage}{1.0\textwidth} \small
     \dirtree{%
@@ -235,7 +247,9 @@ Zum Beispiel wurde für den Login ein Menüpunkt in der \verb!MainAcitivity! angel
 In der \verb!main.xml! wird dafür ein neues Element erstellt mit Attribute für den Namen, die Sortierung oder welche
 Kategorie dieser Menüpunkt angehört (vgl. \ref{xml:mainMenuProto}).
 
-\begin{lstlisting}[float=h, caption=Auszug aus menu/main.xml, captionpos=below, label=xml:mainMenuProto, language=xml, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus menu/main.xml, captionpos=below, label=xml:mainMenuProto, language=xml, escapechar=|]
 [|\ldots{}|] 
 <item android:id="@+id/action_settings" android:orderInCategory="100"
   android:title="@string/action_settings" app:showAsAction="never" 
@@ -243,13 +257,16 @@ Kategorie dieser Menüpunkt angehört (vgl. \ref{xml:mainMenuProto}).
   android:actionLayout="@layout/activity_login" />
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 Um diesen Menüpunkt noch mit einer Funktion zu versehen, muss in der \verb!MainActivity.java! \ref{java:MainActivityProto} das Menü zunächst generiert werden
 (Zeile ~\ref{line:onCreateOptionsMenuProto}). Wird der Eintrag ausgewählt, ruft ein Listener die Methode \verb!onOptionsItemSelected!
 ~\ref{line:onOptionsItemSelProto} auf, in welcher dann mittels dem übergebenen \verb!MenuItem!-Objekt die gewünschte
 Operation, in diesem Fall das Starten der \verb!LoginActivity.java!, ausgeführt wird.
 
-\begin{lstlisting}[float=h, caption=Auszug aus MainActivity.java, captionpos=below, label=java:MainActivityProto, language=java, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus MainActivity.java, captionpos=below, label=java:MainActivityProto, language=java, escapechar=|]
 [|\ldots{}|]
 @Override
 public boolean onCreateOptionsMenu(Menu menu) { |\label{line:onCreateOptionsMenuProto}|
@@ -271,6 +288,7 @@ public boolean onOptionsItemSelected(MenuItem item) { |\label{line:onOptionsItem
   return super.onOptionsItemSelected(item);  }
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 weiter ausführen?
 
@@ -287,7 +305,7 @@ Für die Funktion des Prototypen und das Umsetzen der definierten Schwerpunkte si
 Beim Start der App wird zunächst die \verb!MainActivity.java! mit dem Layout \verb!activity_main.xml! geladen (siehe Abb. \ref{pic:MainActivityProto}). \\* Das geschieht in Zeile \ref{line:setContentViewProto} durch
 \verb!setContentView(R.layout.activity_main)! in der \verb!onCreate()! Methode.
 
-\begin{figure} [H]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.4\textwidth]{images/prototyp/MainActivityEmpty.png}
   \caption{Start-Oberfläche}
@@ -298,7 +316,7 @@ Ist alles vollständig geladen, kann man sich über das Menü anmelden. Dafür wird 
 \verb!startActivity()! aufgerufen, welches die \verb!LoginActivity.java! startet (siehe Abb.
 \ref{pic:LoginActivityProto}).
 
-\begin{figure} [h]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.4\textwidth]{images/prototyp/LoginActivity.png}
   \caption{Login-Oberfläche}
@@ -311,7 +329,9 @@ Dies generiert ein Objekt der Klasse \verb!SyncRemoteDatabase.java! (siehe Abb. 
 abgeleitete Klasse, welche die Testdaten über das PHP-Skript aus der Datenbank abruft und anschließend in die lokale
 \verb!SQLite!-Datenbank schreibt. Diese Klasse wird in dem Kapitel \ref{subsub:DBConLibProto} \verb!DBConnectionLib! genauer erläutert.
 
-\begin{lstlisting}[float=h, caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto, language=java, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto, language=java, escapechar=|]
 [|\ldots{}|]
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -326,6 +346,7 @@ public void synchronizeDbs(View view) { |\label{line:synchDbsProto}|
 }
 [|\ldots{}|]
 \end{lstlisting}
+\end{minipage}
 
 Wurden die Tabellen erfolgreich synchronisiert, können über die beiden Felder Testwerte eingegeben werden. Durch einen
 Klick auf den Button \texttt{Save to DB} werden die Daten zunächst in der Methode \verb!saveToDb(View view)!(Zeile ~\ref{line:saveToDbProto})
@@ -345,8 +366,8 @@ gewünschte Layout der einzelnen Zeilen (\verb!R.Layout.list_item!) sowie der \te
 Damit der Adapter weiß, welche Werte er in welche \textsl{TextView} packen soll, werden dem Konstruktor noch \verb!from!
 und \verb!to! übergeben. 
 
-\begin{minipage}{\linewidth}
-\begin{lstlisting}[caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto3, language=java, escapechar=|]
+\noindent
+\begin{minipage}{\linewidth}\begin{lstlisting}[caption=Auszug aus der MainActivity.java, captionpos=below, label=java:MainActivityProto3, language=java, escapechar=|]
 [|\ldots{}|]        
 public void saveToDb(View view) { |\label{line:saveToDbProto}|
   {|\ldots{}|}
@@ -427,6 +448,7 @@ Nachricht versehen werden (Zeile \ref{line:pDialogPostProto}) und die erhaltenen
 extrahieren (Zeile ~\ref{line:parseJsonProto}). Im selben Schritt werden die Testdaten der Testtabelle als neuen
 Datensatz angefügt (siehe Zeile ~\ref{line:addTestRowProto}). \\
 
+\noindent
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[caption=Auszug aus SyncRemoteDatabase.java, captionpos=below, label=java:SyncRemoteDBProto, language=java, escapechar=|]
 [|\ldots{}|]        
@@ -473,6 +495,7 @@ der Testdaten aus der MySQL-Datenbank verwendet wird. \\*
 Dazu werden zunächst die \emph{POST}-Parameter in eine Liste aus \texttt{BasicNameValuePair}-Objekten gepackt, wie in
 den Zeilen \ref{line:POSTParaVonProto} bis \ref{line:POSTParaBisProto} zu sehen.\\
 
+\noindent
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[caption=Auszug aus UserFunctions.java, captionpos=below, label=java:UsrFuncsProto, language=java, escapechar=|]
 [|\ldots{}|]        
@@ -499,6 +522,7 @@ Lesen ermöglicht wird, was bei \emph{HTTP}-Kommunikationen das Standardverfahren
 \ref{line:readLineProto}). Jede Zeile wird an einen \textsl{StringBuilder} gehängt und nach dem Lesen der
 letzten Zeile von einem \verb!String! (Zeile \ref{line:sb.toString(Proto)}) in das gewünschte \textsl{JSONObject} umgewandelt.\\
 
+\noindent
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[caption=Auszug aus JSONParser.java, captionpos=below, label=java:JSONParserProto, language=java, escapechar=|]
 public JSONObject getJSONFromUrl(String url, 
@@ -537,6 +561,7 @@ die Werte durch ein zusammengesetzten SQL-Statement in die Datenbank zu schriebe
 Verwendung der \textsl{insert()}-Methode wie in Zeile \ref{line:insertProto}, wodurch der Code nicht nur weniger fehleranfällig, sondern auch
 übersichtlicher und sicherer wird. \\
 
+\noindent
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[caption=Auszug aus der DatabaseHandler.java, captionpos=below, label=java:DBHandlerProto, language=java, escapechar=|]
 [|\ldots{}|]        
